@@ -469,6 +469,7 @@ def main(db, out, write_reads=False, only=None):
     global ME
     os.makedirs(out, exist_ok=True)
     con = sqlite3.connect(db); con.row_factory = sqlite3.Row
+    SP.load_cuts(con)   # calibrated spectra cut points, as the ingest uses
     allD = C.defaultdict(list); allS = []
     if only:
         rows = []

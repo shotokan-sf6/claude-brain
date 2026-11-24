@@ -5,7 +5,8 @@ sets, games, the analyzer's hits / events / timings, per-set stats, player reads
 
   python shared_core_db.py init  DB
   python shared_core_db.py ingest DB ANALYZER_OUTDIR META.json      # one set; META describes it (see ingest_set); also
-                                                          # computes its spectra (spectra_backfill.py), --no-spectra to skip
+                                                          # computes its spectra (spectra_backfill.py), --no-spectra to skip,
+                                                          # and refreshes the personal baseline (player_baseline.py)
   python shared_core_db.py sql   DB "SELECT ..."                   # ad-hoc query, prints rows
   python shared_core_db.py predict DB PREDICTION.json [--replace]  # store a blind prediction BEFORE the analyzer runs
   python shared_core_db.py history DB --opp NAME|CFN [--opp-char C] [--player NAME|CFN (default: shotokan.json)] [--my-char C] [--before ISO] [--exclude ID,ID]
@@ -407,6 +408,8 @@ if __name__ == '__main__':
         if '--no-spectra' not in sys.argv:   # the eight player spectra (spectra table + review_docs archetypes)
             import spectra_backfill
             spectra_backfill.backfill(db, [key], local=meta.get('captures_local'))
+            import player_baseline   # the configured player vs their own last 7 days (player_baseline table)
+            player_baseline.update(db)
     elif cmd == 'predict':
         pid = store_prediction(con, json.load(open(sys.argv[3], encoding='utf-8')), replace='--replace' in sys.argv)
         print('stored prediction', pid)

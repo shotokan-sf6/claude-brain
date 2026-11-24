@@ -36,6 +36,8 @@ def ensure_behavior(con, key, local=None):
 
 def backfill(db, keys=None, me=None, local=None):
     con = sqlite3.connect(db); con.row_factory = sqlite3.Row
+    SP.load_cuts(con)   # calibrated cut points (spectra_calibrate.py), else the built-in ones
+    con.execute('CREATE TABLE IF NOT EXISTS spectra_raw (set_key TEXT, player_id INTEGER, axis_key TEXT, raw REAL, PRIMARY KEY (set_key, player_id, axis_key))')
     if not keys:
         keys = [r[0] for r in con.execute('select set_key from sets s where not exists (select 1 from spectra p where p.set_key = s.set_key)')]
     for key in keys:
@@ -54,6 +56,9 @@ def backfill(db, keys=None, me=None, local=None):
             by_player[a['player']] = a['spectra']
             for sp in a['spectra']:
                 con.execute('INSERT OR REPLACE INTO spectra VALUES (?,?,?,?,?,?)', (key, pid[a['player']], sp['axis'], sp['score'], sp['label'], sp['evidence']))
+                con.execute('DELETE FROM spectra_raw WHERE set_key=? AND player_id=? AND axis_key=?', (key, pid[a['player']], sp['key']))
+                if sp.get('raw') is not None:   # the raw value behind the score (personal baseline, recalibration)
+                    con.execute('INSERT INTO spectra_raw VALUES (?,?,?,?)', (key, pid[a['player']], sp['key'], sp['raw']))
         r = con.execute("select rows from review_docs where set_key=? and dataset='archetypes'", (key,)).fetchone()
         if r:   # hand-written reads: keep them, attach the computed spectra
             rows = json.loads(r['rows'])

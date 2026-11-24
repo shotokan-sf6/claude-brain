@@ -2,6 +2,9 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 2026-11-24 (0.2.1)
+- Bundled tools: spectra scored against everyone except the configured player (`spectra_calibrate.py`), the 7-day personal baseline (`player_baseline.py`, run by ingest) and `character_baselines.py`. shared-core-player-spectra reference updated. sf6-character-notes: Marisa notes and baselines without the player.
+
 ## 2026-11-24 (0.2.0)
 - Reviews run in tiers: `sf6-replay-analysis` loads `shared-core-review`, then `quick-review-report`, then (Full and Tournament) `full-review-report`, each with its own `references/` (files renamed `shared-core-*` and `full-review-*`).
 - quick-review-report loads `sf6-character-notes` for character baselines; the guideline skills (and `sf6-coach-shog`) load in full-review-report.

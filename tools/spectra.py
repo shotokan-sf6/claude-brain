@@ -2,8 +2,9 @@
 
 Each axis is a 1-5 scale between two opposite ends (3 = in between). Scores are computed from the
 capture data of one set, for one player, and compared with every player-set reviewed so far
-(the cut points below are the 20/40/60/80th percentiles of the 33 player-sets in sf6.db on 2026-11-18;
-recalibrate as the pool grows).
+(the built-in cut points below are the 20/40/60/80th percentiles of the 33 player-sets in sf6.db on 2026-11-18;
+spectra_calibrate.py recalibrates them from every player-set except the configured player's, stored in sf6.db and
+loaded with load_cuts()).
 
 Axes
 - Temperament (defense): Impulsive (1) <-> Mindful (5). Share of after-block / wake-up situations where
@@ -50,6 +51,35 @@ CUTS = {
     'variety': [0.51, 0.57, 0.6, 0.69],         # normalized entropy of after-block / wake-up choices
     'resources': [1.26, 1.5, 1.7, 1.94],        # gauge bars spent per round (recalibrated 2026-11-18 after counting the spend that triggers burnout)
 }
+DEFAULT_CUTS = {k: list(v) for k, v in CUTS.items()}
+CUTS_META = {'source': 'built-in (2026-11-18, 33 player-sets)'}
+
+
+def load_cuts(con):
+    """Use the cut points calibrated by spectra_calibrate.py (settings 'spectra_cuts' in sf6.db) when there are any.
+    They are the 20/40/60/80th percentiles of every player-set except the configured player's, each other player
+    weighted equally (less below 10 games). Falls back to the built-in cut points."""
+    global CUTS_META
+    try:
+        row = con.execute("select value from settings where key='spectra_cuts'").fetchone()
+    except Exception:
+        row = None
+    if not row:
+        return CUTS_META
+    d = json.loads(row[0])
+    for k, v in (d.get('cuts') or {}).items():
+        if k in CUTS and len(v) == 4: CUTS[k] = v
+    CUTS_META = {k: v for k, v in d.items() if k != 'cuts'}
+    return CUTS_META
+
+
+def score(key, v):
+    """1-5 score for a raw value on one axis (None stays None)."""
+    if v is None: return None
+    b = _bucket(v, CUTS[key])
+    return 6 - b if key in REVERSED else b
+
+
 WORDS = {'risk': ['Very low', 'Low', 'Medium', 'High', 'Very high']}
 for _a in AXES:
     WORDS.setdefault(_a['key'], [f"Very {_a['left'].lower()}", f"Leans {_a['left'].lower()}", 'In between', f"Leans {_a['right'].lower()}", f"Very {_a['right'].lower()}"])
@@ -178,9 +208,8 @@ def spectra(player, games, hits, tim, ev, use):
             out.append(dict(a, score=3, label='Kept a winning plan', evidence=evs[a['key']])); continue
         if v is None:
             out.append(dict(a, score=None, label='Not enough evidence', evidence=evs[a['key']])); continue
-        b = _bucket(v, CUTS[a['key']])
-        score = 6 - b if a['key'] in REVERSED else b
-        out.append(dict(a, score=score, label=WORDS[a['key']][score - 1], evidence=evs[a['key']]))
+        sc = score(a['key'], v)
+        out.append(dict(a, score=sc, label=WORDS[a['key']][sc - 1], evidence=evs[a['key']], raw=round(v, 4)))
     return out
 
 
