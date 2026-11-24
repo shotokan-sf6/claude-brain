@@ -1,0 +1,2356 @@
+{
+    "char_id": 7,
+    "char_name": "JP",
+    "moves": {
+        "0001": {
+            "enum": "GRD_LOOP_OFS",
+            "id": 1,
+            "motion": "esf007_BAS_STD_Loop",
+            "name": "BAS_STD_Loop",
+            "style": 0
+        },
+        "0002": {
+            "enum": "GRD_END_OFS",
+            "id": 2,
+            "motion": "esf007_BAS_STD_IDLING",
+            "name": "BAS_STD_IDLING",
+            "style": 0
+        },
+        "0004": {
+            "enum": "GRD_OFS_M",
+            "id": 4,
+            "motion": "esf007_BAS_CRH_Loop",
+            "name": "BAS_CRH_Loop",
+            "style": 0
+        },
+        "0005": {
+            "enum": "GRD_OFS_H",
+            "id": 5,
+            "motion": "esf007_BAS_STD_CRH",
+            "name": "BAS_STD_CRH",
+            "style": 0
+        },
+        "0006": {
+            "enum": "GRD_OFS_S",
+            "id": 6,
+            "motion": "esf007_BAS_CRH_STD",
+            "name": "BAS_CRH_STD",
+            "style": 0
+        },
+        "0007": {
+            "enum": "GRD_CROUCH_OFS_L",
+            "id": 7,
+            "motion": "esf007_BAS_TRN_STD",
+            "name": "BAS_TRN_STD",
+            "style": 0
+        },
+        "0008": {
+            "enum": "TURN_CROUCH",
+            "id": 8,
+            "motion": "esf007_BAS_TRN_CRH",
+            "name": "BAS_TRN_CRH",
+            "style": 0
+        },
+        "0009": {
+            "enum": "WALK_F_BGN",
+            "id": 9,
+            "motion": "esf007_BAS_FORWARD_START",
+            "name": "BAS_FORWARD_START",
+            "style": 0
+        },
+        "0010": {
+            "enum": "WALK_FORWARD",
+            "id": 10,
+            "motion": "esf007_BAS_FORWARD_Loop",
+            "name": "BAS_FORWARD_Loop",
+            "style": 0
+        },
+        "0011": {
+            "enum": "WALK_F_END",
+            "id": 11,
+            "motion": "esf007_BAS_FORWARD_END",
+            "name": "BAS_FORWARD_END",
+            "style": 0
+        },
+        "0013": {
+            "enum": "WALK_B_BGN",
+            "id": 13,
+            "motion": "esf007_BAS_BACKWARD_START",
+            "name": "BAS_BACKWARD_START",
+            "style": 0
+        },
+        "0014": {
+            "enum": "GRD_STAND_OFS_L",
+            "id": 14,
+            "motion": "esf007_BAS_BACKWARD_Loop",
+            "name": "BAS_BACKWARD_Loop",
+            "style": 0
+        },
+        "0015": {
+            "enum": "WALK_B_END",
+            "id": 15,
+            "motion": "esf007_BAS_BACKWARD_END",
+            "name": "BAS_BACKWARD_END",
+            "style": 0
+        },
+        "0017": {
+            "enum": "DASH_F",
+            "id": 17,
+            "motion": "esf007_BAS_DASH_F",
+            "name": "BAS_DASH_F",
+            "style": 0
+        },
+        "0018": {
+            "enum": "DASH_B",
+            "id": 18,
+            "motion": "esf007_BAS_DASH_B",
+            "name": "BAS_DASH_B",
+            "style": 0
+        },
+        "0033": {
+            "enum": "JUMP_V_BGN",
+            "id": 33,
+            "motion": "esf007_BAS_JUMP_N_START",
+            "name": "BAS_JUMP_N_START",
+            "style": 0
+        },
+        "0034": {
+            "enum": "JUMP_F_BGN",
+            "id": 34,
+            "motion": "esf007_BAS_JUMP_F_START",
+            "name": "BAS_JUMP_F_START",
+            "style": 0
+        },
+        "0035": {
+            "enum": "JUMP_B_BGN",
+            "id": 35,
+            "motion": "esf007_BAS_JUMP_B_START",
+            "name": "BAS_JUMP_B_START",
+            "style": 0
+        },
+        "0036": {
+            "enum": "JUMP_V",
+            "id": 36,
+            "motion": "esf007_BAS_JUMP_N_AIR",
+            "name": "BAS_JUMP_N_AIR",
+            "style": 0
+        },
+        "0037": {
+            "enum": "JUMP_F",
+            "id": 37,
+            "motion": "esf007_BAS_JUMP_F_AIR",
+            "name": "BAS_JUMP_F_AIR",
+            "style": 0
+        },
+        "0038": {
+            "enum": "JUMP_B",
+            "id": 38,
+            "motion": "esf007_BAS_JUMP_B_AIR",
+            "name": "BAS_JUMP_B_AIR",
+            "style": 0
+        },
+        "0039": {
+            "enum": "JUMP_V_END",
+            "id": 39,
+            "motion": "esf007_BAS_JUMP_N_LAND",
+            "name": "BAS_JUMP_N_LAND",
+            "style": 0
+        },
+        "0040": {
+            "enum": "JUMP_F_END",
+            "id": 40,
+            "motion": "esf007_BAS_JUMP_F_LAND",
+            "name": "BAS_JUMP_F_LAND",
+            "style": 0
+        },
+        "0041": {
+            "enum": "JUMP_B_END",
+            "id": 41,
+            "motion": "esf007_BAS_JUMP_B_LAND",
+            "name": "BAS_JUMP_B_LAND",
+            "style": 0
+        },
+        "0100": {
+            "enum": "GRD_STAND_H_BGN",
+            "id": 100,
+            "motion": "esf007_5000_GRD_STD_START",
+            "name": "5000_GRD_STD_START",
+            "style": 0
+        },
+        "0101": {
+            "enum": "GRD_STAND_H",
+            "id": 101,
+            "motion": "esf007_5010_GRD_STD_Loop",
+            "name": "5010_GRD_STD_Loop",
+            "style": 0
+        },
+        "0102": {
+            "enum": "GRD_STAND_H_END",
+            "id": 102,
+            "motion": "esf007_5020_GRD_STD_END",
+            "name": "5020_GRD_STD_END",
+            "style": 0
+        },
+        "0103": {
+            "enum": "GRD_STAND_H_DM_L",
+            "id": 103,
+            "motion": "esf007_5150_GRD_HL_ST",
+            "name": "5150_GRD_HL_ST",
+            "style": 0
+        },
+        "0104": {
+            "enum": "GRD_STAND_H_DM_M",
+            "id": 104,
+            "motion": "esf007_GRD_HM",
+            "name": "GRD_HM",
+            "style": 0
+        },
+        "0105": {
+            "enum": "GRD_STAND_H_DM_H",
+            "id": 105,
+            "motion": "esf007_GRD_HM",
+            "name": "GRD_HM",
+            "style": 0
+        },
+        "0106": {
+            "enum": "GRD_STAND_H_DM_S",
+            "id": 106,
+            "motion": "esf007_GRD_HH",
+            "name": "GRD_HH",
+            "style": 0
+        },
+        "0107": {
+            "enum": "GRD_STAND_M_BGN",
+            "id": 107,
+            "motion": "esf007_5000_GRD_STD_START",
+            "name": "5000_GRD_STD_START",
+            "style": 0
+        },
+        "0108": {
+            "enum": "GRD_STAND_M",
+            "id": 108,
+            "motion": "esf007_5010_GRD_STD_Loop",
+            "name": "5010_GRD_STD_Loop",
+            "style": 0
+        },
+        "0109": {
+            "enum": "GRD_STAND_M_END",
+            "id": 109,
+            "motion": "esf007_5020_GRD_STD_END",
+            "name": "5020_GRD_STD_END",
+            "style": 0
+        },
+        "0110": {
+            "enum": "GRD_STAND_M_DM_L",
+            "id": 110,
+            "motion": "esf007_5220_GRD_ML_ST",
+            "name": "5220_GRD_ML_ST",
+            "style": 0
+        },
+        "0111": {
+            "enum": "GRD_STAND_M_DM_M",
+            "id": 111,
+            "motion": "esf007_GRD_MM",
+            "name": "GRD_MM",
+            "style": 0
+        },
+        "0112": {
+            "enum": "GRD_STAND_M_DM_H",
+            "id": 112,
+            "motion": "esf007_GRD_MM",
+            "name": "GRD_MM",
+            "style": 0
+        },
+        "0113": {
+            "enum": "GRD_STAND_M_DM_S",
+            "id": 113,
+            "motion": "esf007_GRD_MH",
+            "name": "GRD_MH",
+            "style": 0
+        },
+        "0114": {
+            "enum": "GRD_STAND_L_BGN",
+            "id": 114,
+            "motion": "esf007_5000_GRD_STD_START",
+            "name": "5000_GRD_STD_START",
+            "style": 0
+        },
+        "0115": {
+            "enum": "GRD_STAND_L",
+            "id": 115,
+            "motion": "esf007_5010_GRD_STD_Loop",
+            "name": "5010_GRD_STD_Loop",
+            "style": 0
+        },
+        "0116": {
+            "enum": "GRD_STAND_L_END",
+            "id": 116,
+            "motion": "esf007_5020_GRD_STD_END",
+            "name": "5020_GRD_STD_END",
+            "style": 0
+        },
+        "0117": {
+            "enum": "GRD_STAND_L_DM_L",
+            "id": 117,
+            "motion": "esf007_5290_GRD_LL_ST",
+            "name": "5290_GRD_LL_ST",
+            "style": 0
+        },
+        "0118": {
+            "enum": "GRD_STAND_L_DM_M",
+            "id": 118,
+            "motion": "esf007_GRD_LM",
+            "name": "GRD_LM",
+            "style": 0
+        },
+        "0119": {
+            "enum": "GRD_STAND_L_DM_H",
+            "id": 119,
+            "motion": "esf007_GRD_LM",
+            "name": "GRD_LM",
+            "style": 0
+        },
+        "0120": {
+            "enum": "GRD_STAND_L_DM_S",
+            "id": 120,
+            "motion": "esf007_GRD_LH",
+            "name": "GRD_LH",
+            "style": 0
+        },
+        "0121": {
+            "enum": "GRD_CROUCH_H_BGN",
+            "id": 121,
+            "motion": "esf007_5090_GRD_CRH_START",
+            "name": "5090_GRD_CRH_START",
+            "style": 0
+        },
+        "0122": {
+            "enum": "GRD_CROUCH_H",
+            "id": 122,
+            "motion": "esf007_5100_GRD_CRH_Loop",
+            "name": "5100_GRD_CRH_Loop",
+            "style": 0
+        },
+        "0123": {
+            "enum": "GRD_CROUCH_H_END",
+            "id": 123,
+            "motion": "esf007_5110_GRD_CRH_END",
+            "name": "5110_GRD_CRH_END",
+            "style": 0
+        },
+        "0124": {
+            "enum": "GRD_CROUCH_H_DM_L",
+            "id": 124,
+            "motion": "esf007_5360_GRD_CL_ST",
+            "name": "5360_GRD_CL_ST",
+            "style": 0
+        },
+        "0125": {
+            "enum": "GRD_CROUCH_H_DM_M",
+            "id": 125,
+            "motion": "esf007_GRD_CM",
+            "name": "GRD_CM",
+            "style": 0
+        },
+        "0126": {
+            "enum": "GRD_CROUCH_H_DM_H",
+            "id": 126,
+            "motion": "esf007_GRD_CM",
+            "name": "GRD_CM",
+            "style": 0
+        },
+        "0127": {
+            "enum": "GRD_CROUCH_H_DM_S",
+            "id": 127,
+            "motion": "esf007_GRD_CH",
+            "name": "GRD_CH",
+            "style": 0
+        },
+        "0128": {
+            "enum": "GRD_CROUCH_L_BGN",
+            "id": 128,
+            "motion": "esf007_5090_GRD_CRH_START",
+            "name": "5090_GRD_CRH_START",
+            "style": 0
+        },
+        "0129": {
+            "enum": "GRD_CROUCH_L",
+            "id": 129,
+            "motion": "esf007_5100_GRD_CRH_Loop",
+            "name": "5100_GRD_CRH_Loop",
+            "style": 0
+        },
+        "0130": {
+            "enum": "GRD_CROUCH_L_END",
+            "id": 130,
+            "motion": "esf007_5110_GRD_CRH_END",
+            "name": "5110_GRD_CRH_END",
+            "style": 0
+        },
+        "0131": {
+            "enum": "GRD_CROUCH_L_DM_L",
+            "id": 131,
+            "motion": "esf007_5430_GRD_DL_ST",
+            "name": "5430_GRD_DL_ST",
+            "style": 0
+        },
+        "0132": {
+            "enum": "GRD_CROUCH_L_DM_M",
+            "id": 132,
+            "motion": "esf007_GRD_DM",
+            "name": "GRD_DM",
+            "style": 0
+        },
+        "0133": {
+            "enum": "GRD_CROUCH_L_DM_H",
+            "id": 133,
+            "motion": "esf007_GRD_DM",
+            "name": "GRD_DM",
+            "style": 0
+        },
+        "0134": {
+            "enum": "GRD_CROUCH_L_DM_S",
+            "id": 134,
+            "motion": "esf007_GRD_DH",
+            "name": "GRD_DH",
+            "style": 0
+        },
+        "0143": {
+            "enum": "GRD_ZUSA_STAND",
+            "id": 143,
+            "motion": "esf007_5500_GRD_STD_ZUSA",
+            "name": "5500_GRD_STD_ZUSA",
+            "style": 0
+        },
+        "0144": {
+            "enum": "GRD_ZUSA_CROUCH",
+            "id": 144,
+            "motion": "esf007_5510_GRD_CRH_ZUSA",
+            "name": "5510_GRD_CRH_ZUSA",
+            "style": 0
+        },
+        "0150": {
+            "enum": "DGD_STAND_H_BGN",
+            "id": 150,
+            "motion": "esf007_5000_DRD_STD_H_START",
+            "name": "5000_DRD_STD_H_START",
+            "style": 0
+        },
+        "0151": {
+            "enum": "DGD_STAND_H",
+            "id": 151,
+            "motion": "esf007_5010_DRD_STD_H_Loop",
+            "name": "5010_DRD_STD_H_Loop",
+            "style": 0
+        },
+        "0152": {
+            "enum": "DGD_STAND_H_END",
+            "id": 152,
+            "motion": "esf007_5020_DRD_STD_H_END",
+            "name": "5020_DRD_STD_H_END",
+            "style": 0
+        },
+        "0153": {
+            "enum": "DGD_STAND_H_DM_L",
+            "id": 153,
+            "motion": "esf007_5150_DRD_HL_ST",
+            "name": "5150_DRD_HL_ST",
+            "style": 0
+        },
+        "0154": {
+            "enum": "DGD_STAND_H_DM_M",
+            "id": 154,
+            "motion": "esf007_DRD_HM",
+            "name": "DRD_HM",
+            "style": 0
+        },
+        "0155": {
+            "enum": "DGD_STAND_H_DM_H",
+            "id": 155,
+            "motion": "esf007_DRD_HM",
+            "name": "DRD_HM",
+            "style": 0
+        },
+        "0156": {
+            "enum": "DGD_STAND_H_DM_S",
+            "id": 156,
+            "motion": "esf007_DRD_HH",
+            "name": "DRD_HH",
+            "style": 0
+        },
+        "0157": {
+            "enum": "DGD_STAND_M_BGN",
+            "id": 157,
+            "motion": "esf007_5030_DRD_STD_M_START",
+            "name": "5030_DRD_STD_M_START",
+            "style": 0
+        },
+        "0158": {
+            "enum": "DGD_STAND_M",
+            "id": 158,
+            "motion": "esf007_5040_DRD_STD_M_Loop",
+            "name": "5040_DRD_STD_M_Loop",
+            "style": 0
+        },
+        "0159": {
+            "enum": "DGD_STAND_M_END",
+            "id": 159,
+            "motion": "esf007_5050_DRD_STD_M_END",
+            "name": "5050_DRD_STD_M_END",
+            "style": 0
+        },
+        "0160": {
+            "enum": "DGD_STAND_M_DM_L",
+            "id": 160,
+            "motion": "esf007_5220_DRD_ML_ST",
+            "name": "5220_DRD_ML_ST",
+            "style": 0
+        },
+        "0161": {
+            "enum": "DGD_STAND_M_DM_M",
+            "id": 161,
+            "motion": "esf007_DRD_MM",
+            "name": "DRD_MM",
+            "style": 0
+        },
+        "0162": {
+            "enum": "DGD_STAND_M_DM_H",
+            "id": 162,
+            "motion": "esf007_DRD_MM",
+            "name": "DRD_MM",
+            "style": 0
+        },
+        "0163": {
+            "enum": "DGD_STAND_M_DM_S",
+            "id": 163,
+            "motion": "esf007_DRD_MH",
+            "name": "DRD_MH",
+            "style": 0
+        },
+        "0164": {
+            "enum": "DGD_STAND_L_BGN",
+            "id": 164,
+            "motion": "esf007_5060_DRD_STD_L_START",
+            "name": "5060_DRD_STD_L_START",
+            "style": 0
+        },
+        "0165": {
+            "enum": "DGD_STAND_L",
+            "id": 165,
+            "motion": "esf007_5070_DRD_STD_L_Loop",
+            "name": "5070_DRD_STD_L_Loop",
+            "style": 0
+        },
+        "0166": {
+            "enum": "DGD_STAND_L_END",
+            "id": 166,
+            "motion": "esf007_5080_DRD_STD_L_END",
+            "name": "5080_DRD_STD_L_END",
+            "style": 0
+        },
+        "0167": {
+            "enum": "DGD_STAND_L_DM_L",
+            "id": 167,
+            "motion": "esf007_5290_DRD_LL_ST",
+            "name": "5290_DRD_LL_ST",
+            "style": 0
+        },
+        "0168": {
+            "enum": "DGD_STAND_L_DM_M",
+            "id": 168,
+            "motion": "esf007_DRD_LM",
+            "name": "DRD_LM",
+            "style": 0
+        },
+        "0169": {
+            "enum": "DGD_STAND_L_DM_H",
+            "id": 169,
+            "motion": "esf007_DRD_LM",
+            "name": "DRD_LM",
+            "style": 0
+        },
+        "0170": {
+            "enum": "DGD_STAND_L_DM_S",
+            "id": 170,
+            "motion": "esf007_DRD_LH",
+            "name": "DRD_LH",
+            "style": 0
+        },
+        "0171": {
+            "enum": "DGD_CROUCH_H_BGN",
+            "id": 171,
+            "motion": "esf007_5090_DRD_CRH_H_START",
+            "name": "5090_DRD_CRH_H_START",
+            "style": 0
+        },
+        "0172": {
+            "enum": "DGD_CROUCH_H",
+            "id": 172,
+            "motion": "esf007_5100_DRD_CRH_H_Loop",
+            "name": "5100_DRD_CRH_H_Loop",
+            "style": 0
+        },
+        "0173": {
+            "enum": "DGD_CROUCH_H_END",
+            "id": 173,
+            "motion": "esf007_5110_DRD_CRH_H_END",
+            "name": "5110_DRD_CRH_H_END",
+            "style": 0
+        },
+        "0174": {
+            "enum": "DGD_CROUCH_H_DM_L",
+            "id": 174,
+            "motion": "esf007_5360_DRD_CL_ST",
+            "name": "5360_DRD_CL_ST",
+            "style": 0
+        },
+        "0175": {
+            "enum": "DGD_CROUCH_H_DM_M",
+            "id": 175,
+            "motion": "esf007_DRD_CM",
+            "name": "DRD_CM",
+            "style": 0
+        },
+        "0176": {
+            "enum": "DGD_CROUCH_H_DM_H",
+            "id": 176,
+            "motion": "esf007_DRD_CM",
+            "name": "DRD_CM",
+            "style": 0
+        },
+        "0177": {
+            "enum": "DGD_CROUCH_H_DM_S",
+            "id": 177,
+            "motion": "esf007_DRD_CH",
+            "name": "DRD_CH",
+            "style": 0
+        },
+        "0178": {
+            "enum": "DGD_CROUCH_L_BGN",
+            "id": 178,
+            "motion": "esf007_5120_DRD_CRH_L_START",
+            "name": "5120_DRD_CRH_L_START",
+            "style": 0
+        },
+        "0179": {
+            "enum": "DGD_CROUCH_L",
+            "id": 179,
+            "motion": "esf007_5130_DRD_CRH_L_Loop",
+            "name": "5130_DRD_CRH_L_Loop",
+            "style": 0
+        },
+        "0180": {
+            "enum": "DGD_CROUCH_L_END",
+            "id": 180,
+            "motion": "esf007_5140_DRD_CRH_L_END",
+            "name": "5140_DRD_CRH_L_END",
+            "style": 0
+        },
+        "0181": {
+            "enum": "DGD_CROUCH_L_DM_L",
+            "id": 181,
+            "motion": "esf007_5430_DRD_DL_ST",
+            "name": "5430_DRD_DL_ST",
+            "style": 0
+        },
+        "0182": {
+            "enum": "DGD_CROUCH_L_DM_M",
+            "id": 182,
+            "motion": "esf007_DRD_DM",
+            "name": "DRD_DM",
+            "style": 0
+        },
+        "0183": {
+            "enum": "DGD_CROUCH_L_DM_H",
+            "id": 183,
+            "motion": "esf007_DRD_DM",
+            "name": "DRD_DM",
+            "style": 0
+        },
+        "0184": {
+            "enum": "DGD_CROUCH_L_DM_S",
+            "id": 184,
+            "motion": "esf007_DRD_DH",
+            "name": "DRD_DH",
+            "style": 0
+        },
+        "0200": {
+            "enum": "DMG_STD_H_FR_L",
+            "id": 200,
+            "motion": "esf007_0010_DMG_HL_ST",
+            "name": "0010_DMG_HL_ST",
+            "style": 0
+        },
+        "0201": {
+            "enum": "DMG_STD_H_FR_M",
+            "id": 201,
+            "motion": "esf007_DMG_HM",
+            "name": "DMG_HM",
+            "style": 0
+        },
+        "0202": {
+            "enum": "DMG_STD_H_FR_H",
+            "id": 202,
+            "motion": "esf007_DMG_HH",
+            "name": "DMG_HH",
+            "style": 0
+        },
+        "0203": {
+            "enum": "DMG_CRT_STD_H_FR",
+            "id": 203,
+            "motion": "esf007_1090_DMG_HC_ST",
+            "name": "1090_DMG_HC_ST",
+            "style": 0
+        },
+        "0204": {
+            "enum": "DMG_STD_M_FR_L",
+            "id": 204,
+            "motion": "esf007_0110_DMG_ML_ST",
+            "name": "0110_DMG_ML_ST",
+            "style": 0
+        },
+        "0205": {
+            "enum": "DMG_STD_M_FR_M",
+            "id": 205,
+            "motion": "esf007_DMG_MM",
+            "name": "DMG_MM",
+            "style": 0
+        },
+        "0206": {
+            "enum": "DMG_STD_M_FR_H",
+            "id": 206,
+            "motion": "esf007_DMG_MH",
+            "name": "DMG_MH",
+            "style": 0
+        },
+        "0207": {
+            "enum": "DMG_CRT_STD_M_FR",
+            "id": 207,
+            "motion": "esf007_1100_DMG_MC_ST",
+            "name": "1100_DMG_MC_ST",
+            "style": 0
+        },
+        "0208": {
+            "enum": "DMG_STD_L_FR_L",
+            "id": 208,
+            "motion": "esf007_0210_DMG_LL_ST",
+            "name": "0210_DMG_LL_ST",
+            "style": 0
+        },
+        "0209": {
+            "enum": "DMG_STD_L_FR_M",
+            "id": 209,
+            "motion": "esf007_DMG_LM",
+            "name": "DMG_LM",
+            "style": 0
+        },
+        "0210": {
+            "enum": "DMG_STD_L_FR_H",
+            "id": 210,
+            "motion": "esf007_DMG_LM",
+            "name": "DMG_LM",
+            "style": 0
+        },
+        "0211": {
+            "enum": "DMG_CRT_STD_L_FR",
+            "id": 211,
+            "motion": "esf007_DMG_LM",
+            "name": "DMG_LM",
+            "style": 0
+        },
+        "0212": {
+            "enum": "DMG_CRO_H_FR_L",
+            "id": 212,
+            "motion": "esf007_0310_DMG_CL_ST",
+            "name": "0310_DMG_CL_ST",
+            "style": 0
+        },
+        "0213": {
+            "enum": "DMG_CRO_H_FR_M",
+            "id": 213,
+            "motion": "esf007_DMG_CM",
+            "name": "DMG_CM",
+            "style": 0
+        },
+        "0214": {
+            "enum": "DMG_CRO_H_FR_H",
+            "id": 214,
+            "motion": "esf007_DMG_CH",
+            "name": "DMG_CH",
+            "style": 0
+        },
+        "0215": {
+            "enum": "DMG_CRT_CRO_H_FR",
+            "id": 215,
+            "motion": "esf007_1110_DMG_CC_ST",
+            "name": "1110_DMG_CC_ST",
+            "style": 0
+        },
+        "0216": {
+            "enum": "DMG_CRO_L_FR_L",
+            "id": 216,
+            "motion": "esf007_0410_DMG_DL_ST",
+            "name": "0410_DMG_DL_ST",
+            "style": 0
+        },
+        "0217": {
+            "enum": "DMG_CRO_L_FR_M",
+            "id": 217,
+            "motion": "esf007_DMG_DM",
+            "name": "DMG_DM",
+            "style": 0
+        },
+        "0218": {
+            "enum": "DMG_CRO_L_FR_H",
+            "id": 218,
+            "motion": "esf007_DMG_DM",
+            "name": "DMG_DM",
+            "style": 0
+        },
+        "0219": {
+            "enum": "DMG_CRT_CRO_L_FR",
+            "id": 219,
+            "motion": "esf007_1110_DMG_CC_ST",
+            "name": "1110_DMG_CC_ST",
+            "style": 0
+        },
+        "0261": {
+            "enum": "DMG_HM_DOWN",
+            "id": 261,
+            "motion": "esf007_1050_DMG_HM_DN",
+            "name": "1050_DMG_HM_DN",
+            "style": 0
+        },
+        "0262": {
+            "enum": "DMG_HH_DOWN",
+            "id": 262,
+            "motion": "esf007_1060_DMG_HH_DN",
+            "name": "1060_DMG_HH_DN",
+            "style": 0
+        },
+        "0264": {
+            "enum": "DMG_CM_DOWN",
+            "id": 264,
+            "motion": "esf007_1070_DMG_CM_DN",
+            "name": "1070_DMG_CM_DN",
+            "style": 0
+        },
+        "0265": {
+            "enum": "DMG_CH_DOWN",
+            "id": 265,
+            "motion": "esf007_1080_DMG_CH_DN",
+            "name": "1080_DMG_CH_DN",
+            "style": 0
+        },
+        "0267": {
+            "enum": "DMG_HM_UPPER",
+            "id": 267,
+            "motion": "esf007_1010_DMG_HU_UP",
+            "name": "1010_DMG_HU_UP",
+            "style": 0
+        },
+        "0268": {
+            "enum": "DMG_HH_UPPER",
+            "id": 268,
+            "motion": "esf007_1020_DMG_HU_UP_H",
+            "name": "1020_DMG_HU_UP_H",
+            "style": 0
+        },
+        "0270": {
+            "enum": "DMG_BM_UPPER",
+            "id": 270,
+            "motion": "esf007_1030_DMG_MM_UP",
+            "name": "1030_DMG_MM_UP",
+            "style": 0
+        },
+        "0271": {
+            "enum": "DMG_BH_UPPER",
+            "id": 271,
+            "motion": "esf007_1040_DMG_MH_UP",
+            "name": "1040_DMG_MH_UP",
+            "style": 0
+        },
+        "0320": {
+            "enum": "THROWBREAK_TO",
+            "id": 320,
+            "motion": "esf007_NGE",
+            "name": "NGE",
+            "style": 0
+        },
+        "0321": {
+            "enum": "THROWBREAK_DONE",
+            "id": 321,
+            "motion": "esf007_NGF",
+            "name": "NGF",
+            "style": 0
+        },
+        "0322": {
+            "enum": "GUARD_BREAK_STAND",
+            "id": 322,
+            "motion": "esf007_5520_GRD_Crash",
+            "name": "5520_GRD_Crash",
+            "style": 0
+        },
+        "0323": {
+            "enum": "GUARD_BREAK_CROUCH",
+            "id": 323,
+            "motion": "esf007_5520_GRD_Crash",
+            "name": "5520_GRD_Crash",
+            "style": 0
+        },
+        "0340": {
+            "enum": "GETUP_FU",
+            "id": 340,
+            "motion": "esf007_BAS_DN_STD_AO",
+            "name": "BAS_DN_STD_AO",
+            "style": 0
+        },
+        "0341": {
+            "enum": "GETUP_FD",
+            "id": 341,
+            "motion": "esf007_BAS_DN_STD_UT",
+            "name": "BAS_DN_STD_UT",
+            "style": 0
+        },
+        "0342": {
+            "enum": "GETUP_F_FU",
+            "id": 342,
+            "motion": "esf007_BAS_TECH_FN_AO",
+            "name": "BAS_TECH_FN_AO",
+            "style": 0
+        },
+        "0343": {
+            "enum": "GETUP_F_FD",
+            "id": 343,
+            "motion": "esf007_BAS_TECH_FN_UT",
+            "name": "BAS_TECH_FN_UT",
+            "style": 0
+        },
+        "0344": {
+            "enum": "GETUP_B_FU",
+            "id": 344,
+            "motion": "esf007_BAS_TECH_BR_AO",
+            "name": "BAS_TECH_BR_AO",
+            "style": 0
+        },
+        "0345": {
+            "enum": "GETUP_B_FD",
+            "id": 345,
+            "motion": "esf007_BAS_TECH_BR_UT",
+            "name": "BAS_TECH_BR_UT",
+            "style": 0
+        },
+        "0400": {
+            "enum": "APPEAR",
+            "id": 400,
+            "motion": "esf007_DEM_START_VS",
+            "name": "DEM_START_VS",
+            "style": 0
+        },
+        "0401": {
+            "enum": "APPEAR_END",
+            "id": 401,
+            "motion": "esf007_DEM_START_VS",
+            "name": "DEM_START_VS",
+            "style": 0
+        },
+        "0405": {
+            "enum": "LOSE",
+            "id": 405,
+            "motion": "esf007_DEM_LOSE_01",
+            "name": "DEM_LOSE_01",
+            "style": 0
+        },
+        "0412": {
+            "enum": "RESULT",
+            "id": 412,
+            "motion": "esf007_DEM_RESULT_WIN_01",
+            "name": "DEM_RESULT_WIN_01",
+            "style": 0
+        },
+        "0413": {
+            "enum": "_413",
+            "id": 413,
+            "motion": "esf007_DEM_RESULT_WIN_01_Opponent",
+            "name": "DEM_RESULT_WIN_01_Opponent",
+            "style": 0
+        },
+        "0416": {
+            "enum": "WIN_PERFECT",
+            "id": 416,
+            "motion": "esf007_DEM_WIN_01",
+            "name": "DEM_WIN_01",
+            "style": 0
+        },
+        "0417": {
+            "enum": "WIN_HI",
+            "id": 417,
+            "motion": "esf007_DEM_WIN_02",
+            "name": "DEM_WIN_02",
+            "style": 0
+        },
+        "0418": {
+            "enum": "WIN_MID",
+            "id": 418,
+            "motion": "esf007_DEM_WIN_03",
+            "name": "DEM_WIN_03",
+            "style": 0
+        },
+        "0419": {
+            "enum": "WIN_LOW",
+            "id": 419,
+            "motion": "esf007_DEM_WIN_04",
+            "name": "DEM_WIN_04",
+            "style": 0
+        },
+        "0470": {
+            "enum": "ASSIST_ENTRY",
+            "id": 470,
+            "motion": "esf007_BAS_JUMP_F_AIR",
+            "name": "BAS_JUMP_F_AIR",
+            "style": 0
+        },
+        "0477": {
+            "enum": "TOUCH_NOKI",
+            "id": 477,
+            "motion": "esf007_BAS_JUMP_B_START",
+            "name": "BAS_JUMP_B_START",
+            "style": 0
+        },
+        "0480": {
+            "enum": "PARRY_BGN",
+            "id": 480,
+            "motion": "esf007_DPA_STD_START",
+            "name": "DPA_STD_START",
+            "style": 0
+        },
+        "0481": {
+            "enum": "PARRY_LOOP",
+            "id": 481,
+            "motion": "esf007_DPA_STD_Loop",
+            "name": "DPA_STD_Loop",
+            "style": 0
+        },
+        "0482": {
+            "enum": "PARRY_END",
+            "id": 482,
+            "motion": "esf007_DPA_STD_END",
+            "name": "DPA_STD_END",
+            "style": 0
+        },
+        "0483": {
+            "enum": "PARRY_HIT_H",
+            "id": 483,
+            "motion": "esf007_DPA_H",
+            "name": "DPA_H",
+            "style": 0
+        },
+        "0484": {
+            "enum": "PARRY_HIT_M",
+            "id": 484,
+            "motion": "esf007_DPA_M",
+            "name": "DPA_M",
+            "style": 0
+        },
+        "0485": {
+            "enum": "PARRY_HIT_L",
+            "id": 485,
+            "motion": "esf007_DPA_L",
+            "name": "DPA_L",
+            "style": 0
+        },
+        "0486": {
+            "enum": "PARRY_JUST_H",
+            "id": 486,
+            "motion": "esf007_DPA_H",
+            "name": "DPA_H",
+            "style": 0
+        },
+        "0487": {
+            "enum": "PARRY_JUST_M",
+            "id": 487,
+            "motion": "esf007_DPA_M",
+            "name": "DPA_M",
+            "style": 0
+        },
+        "0488": {
+            "enum": "PARRY_JUST_L",
+            "id": 488,
+            "motion": "esf007_DPA_L",
+            "name": "DPA_L",
+            "style": 0
+        },
+        "0489": {
+            "enum": "PARRY_CRO_BGN",
+            "id": 489,
+            "motion": "esf007_DPA_CRH_START",
+            "name": "DPA_CRH_START",
+            "style": 0
+        },
+        "0510": {
+            "enum": "T_FOOTWORK",
+            "id": 510,
+            "motion": "esf007_BAS_STD_TIRED_Loop",
+            "name": "BAS_STD_TIRED_Loop",
+            "style": 0
+        },
+        "0511": {
+            "enum": "T_CROUCH",
+            "id": 511,
+            "motion": "esf007_BAS_CRH_TIRED_Loop",
+            "name": "BAS_CRH_TIRED_Loop",
+            "style": 0
+        },
+        "0512": {
+            "enum": "T_SIT_DOWN",
+            "id": 512,
+            "motion": "esf007_BAS_STD_CRH_Tired",
+            "name": "BAS_STD_CRH_Tired",
+            "style": 0
+        },
+        "0513": {
+            "enum": "T_STAND_UP",
+            "id": 513,
+            "motion": "esf007_BAS_CRH_STD_Tired",
+            "name": "BAS_CRH_STD_Tired",
+            "style": 0
+        },
+        "0514": {
+            "enum": "T_TURN_STAND",
+            "id": 514,
+            "motion": "esf007_BAS_TRN_STD_Tired",
+            "name": "BAS_TRN_STD_Tired",
+            "style": 0
+        },
+        "0515": {
+            "enum": "T_TURN_CROUCH",
+            "id": 515,
+            "motion": "esf007_BAS_TRN_CRH_Tired",
+            "name": "BAS_TRN_CRH_Tired",
+            "style": 0
+        },
+        "0516": {
+            "enum": "T_WALK_F_BGN",
+            "id": 516,
+            "motion": "esf007_BAS_FORWARD_TIRED_START",
+            "name": "BAS_FORWARD_TIRED_START",
+            "style": 0
+        },
+        "0517": {
+            "enum": "T_WALK_FORWARD",
+            "id": 517,
+            "motion": "esf007_BAS_FORWARD_TIRED_Loop",
+            "name": "BAS_FORWARD_TIRED_Loop",
+            "style": 0
+        },
+        "0518": {
+            "enum": "T_WALK_F_END",
+            "id": 518,
+            "motion": "esf007_BAS_FORWARD_TIRED_END",
+            "name": "BAS_FORWARD_TIRED_END",
+            "style": 0
+        },
+        "0519": {
+            "enum": "T_WALK_B_BGN",
+            "id": 519,
+            "motion": "esf007_BAS_BACKWARD_TIRED_START",
+            "name": "BAS_BACKWARD_TIRED_START",
+            "style": 0
+        },
+        "0520": {
+            "enum": "T_WALK_BACK",
+            "id": 520,
+            "motion": "esf007_BAS_BACKWARD_TIRED_Loop",
+            "name": "BAS_BACKWARD_TIRED_Loop",
+            "style": 0
+        },
+        "0521": {
+            "enum": "T_WALK_B_END",
+            "id": 521,
+            "motion": "esf007_BAS_BACKWARD_TIRED_END",
+            "name": "BAS_BACKWARD_TIRED_END",
+            "style": 0
+        },
+        "0523": {
+            "enum": "_523",
+            "id": 523,
+            "motion": "esf007_BAS_STD_RECOVERY",
+            "name": "BAS_STD_RECOVERY",
+            "style": 0
+        },
+        "0524": {
+            "enum": "_524",
+            "id": 524,
+            "motion": "esf007_BAS_CRH_RECOVERY",
+            "name": "BAS_CRH_RECOVERY",
+            "style": 0
+        },
+        "0600": {
+            "id": 600,
+            "motion": "esf007_ATK_5LP",
+            "name": "ATK_5LP",
+            "style": 0
+        },
+        "0601": {
+            "id": 601,
+            "motion": "esf007_ATK_5LP_B",
+            "name": "ATK_5LP_B",
+            "style": 0
+        },
+        "0602": {
+            "id": 602,
+            "motion": "esf007_ATK_5LP",
+            "name": "ATK_5LP",
+            "style": 0
+        },
+        "0603": {
+            "id": 603,
+            "motion": "esf007_ATK_5MP",
+            "name": "ATK_5MP",
+            "style": 0
+        },
+        "0604": {
+            "id": 604,
+            "motion": "esf007_ATK_5HP",
+            "name": "ATK_5HP",
+            "style": 0
+        },
+        "0605": {
+            "id": 605,
+            "motion": "esf007_ATK_5LK",
+            "name": "ATK_5LK",
+            "style": 0
+        },
+        "0606": {
+            "id": 606,
+            "motion": "esf007_ATK_5MK",
+            "name": "ATK_5MK",
+            "style": 0
+        },
+        "0607": {
+            "id": 607,
+            "motion": "esf007_ATK_5HK",
+            "name": "ATK_5HK",
+            "style": 0
+        },
+        "0613": {
+            "id": 613,
+            "motion": "esf007_ATK_2LP",
+            "name": "ATK_2LP",
+            "style": 0
+        },
+        "0614": {
+            "id": 614,
+            "motion": "esf007_ATK_2LP_B",
+            "name": "ATK_2LP_B",
+            "style": 0
+        },
+        "0615": {
+            "id": 615,
+            "motion": "esf007_ATK_2LP",
+            "name": "ATK_2LP",
+            "style": 0
+        },
+        "0616": {
+            "id": 616,
+            "motion": "esf007_ATK_2MP",
+            "name": "ATK_2MP",
+            "style": 0
+        },
+        "0617": {
+            "id": 617,
+            "motion": "esf007_ATK_2HP",
+            "name": "ATK_2HP",
+            "style": 0
+        },
+        "0618": {
+            "id": 618,
+            "motion": "esf007_ATK_2LK",
+            "name": "ATK_2LK",
+            "style": 0
+        },
+        "0619": {
+            "id": 619,
+            "motion": "esf007_ATK_2LK_B",
+            "name": "ATK_2LK_B",
+            "style": 0
+        },
+        "0620": {
+            "id": 620,
+            "motion": "esf007_ATK_2LK",
+            "name": "ATK_2LK",
+            "style": 0
+        },
+        "0621": {
+            "id": 621,
+            "motion": "esf007_ATK_2MK",
+            "name": "ATK_2MK",
+            "style": 0
+        },
+        "0622": {
+            "id": 622,
+            "motion": "esf007_ATK_2HK",
+            "name": "ATK_2HK",
+            "style": 0
+        },
+        "0627": {
+            "id": 627,
+            "motion": "esf007_ATK_8LP",
+            "name": "ATK_8LP",
+            "style": 0
+        },
+        "0628": {
+            "id": 628,
+            "motion": "esf007_ATK_8MP",
+            "name": "ATK_8MP",
+            "style": 0
+        },
+        "0629": {
+            "id": 629,
+            "motion": "esf007_ATK_8HP",
+            "name": "ATK_8HP",
+            "style": 0
+        },
+        "0630": {
+            "id": 630,
+            "motion": "esf007_ATK_8LK",
+            "name": "ATK_8LK",
+            "style": 0
+        },
+        "0631": {
+            "id": 631,
+            "motion": "esf007_ATK_8MK",
+            "name": "ATK_8MK",
+            "style": 0
+        },
+        "0632": {
+            "id": 632,
+            "motion": "esf007_ATK_8HK",
+            "name": "ATK_8HK",
+            "style": 0
+        },
+        "0633": {
+            "id": 633,
+            "motion": "esf007_BAS_JUMP_N_LAND",
+            "name": "BAS_JUMP_N_LAND",
+            "style": 0
+        },
+        "0637": {
+            "id": 637,
+            "motion": "esf007_ATK_6MP_1HIT_END",
+            "name": "ATK_6MP_1HIT_END",
+            "style": 0
+        },
+        "0638": {
+            "id": 638,
+            "motion": "esf007_ATK_6MP",
+            "name": "ATK_6MP",
+            "style": 0
+        },
+        "0639": {
+            "id": 639,
+            "motion": "esf007_ATK_3MK",
+            "name": "ATK_3MK",
+            "style": 0
+        },
+        "0640": {
+            "id": 640,
+            "motion": "esf007_ATK_3HP",
+            "name": "ATK_3HP",
+            "style": 0
+        },
+        "0641": {
+            "id": 641,
+            "motion": "esf007_ATK_4HK",
+            "name": "ATK_4HK",
+            "style": 0
+        },
+        "0642": {
+            "id": 642,
+            "motion": "esf007_ATK_5HK_HP",
+            "name": "ATK_5HK_HP",
+            "style": 0
+        },
+        "0643": {
+            "id": 643,
+            "motion": "esf007_ATK_5HK_HP_5HP",
+            "name": "ATK_5HK_HP_5HP",
+            "style": 0
+        },
+        "0644": {
+            "id": 644,
+            "motion": "esf007_ATK_5HK_HP_2HP",
+            "name": "ATK_5HK_HP_2HP",
+            "style": 0
+        },
+        "0645": {
+            "id": 645,
+            "motion": "esf007_ATK_4HK",
+            "name": "ATK_4HK",
+            "style": 0
+        },
+        "0646": {
+            "id": 646,
+            "motion": "esf007_ATK_4HK",
+            "name": "ATK_4HK",
+            "style": 0
+        },
+        "0715": {
+            "id": 715,
+            "motion": "esf007_NGS",
+            "name": "NGS",
+            "style": 0
+        },
+        "0716": {
+            "id": 716,
+            "motion": "esf007_NGS",
+            "name": "NGS",
+            "style": 0
+        },
+        "0717": {
+            "id": 717,
+            "motion": "esf007_NGS_8",
+            "name": "NGS_8",
+            "style": 0
+        },
+        "0720": {
+            "id": 720,
+            "motion": "esf007_NGA_6",
+            "name": "NGA_6",
+            "style": 0
+        },
+        "0721": {
+            "id": 721,
+            "motion": "esf007_NGD_6",
+            "name": "NGD_6",
+            "style": 0
+        },
+        "0722": {
+            "id": 722,
+            "motion": "esf007_NGA_6",
+            "name": "NGA_6",
+            "style": 0
+        },
+        "0724": {
+            "id": 724,
+            "motion": "esf007_NGA_4",
+            "name": "NGA_4",
+            "style": 0
+        },
+        "0725": {
+            "id": 725,
+            "motion": "esf007_NGD_4",
+            "name": "NGD_4",
+            "style": 0
+        },
+        "0726": {
+            "id": 726,
+            "motion": "esf007_NGA_4",
+            "name": "NGA_4",
+            "style": 0
+        },
+        "0728": {
+            "id": 728,
+            "motion": "esf007_NGA_8",
+            "name": "NGA_8",
+            "style": 0
+        },
+        "0729": {
+            "id": 729,
+            "motion": "esf007_NGD_8",
+            "name": "NGD_8",
+            "style": 0
+        },
+        "0730": {
+            "id": 730,
+            "motion": "esf007_NGA_8",
+            "name": "NGA_8",
+            "style": 0
+        },
+        "0731": {
+            "id": 731,
+            "motion": "esf007_BAS_JUMP_N_LAND",
+            "name": "BAS_JUMP_N_LAND",
+            "style": 0
+        },
+        "0739": {
+            "id": 739,
+            "motion": "esf007_ATK_CTA_DASH",
+            "name": "ATK_CTA_DASH",
+            "style": 0
+        },
+        "0740": {
+            "id": 740,
+            "motion": "esf007_ATK_CTA_DASH",
+            "name": "ATK_CTA_DASH",
+            "style": 0
+        },
+        "0741": {
+            "id": 741,
+            "motion": "esf007_BAS_STD_Loop",
+            "name": "BAS_STD_Loop",
+            "style": 0
+        },
+        "0850": {
+            "id": 850,
+            "motion": "esf007_ATK_CTA_4",
+            "name": "ATK_CTA_4",
+            "style": 0
+        },
+        "0851": {
+            "id": 851,
+            "motion": "esf007_ATK_CTA_4",
+            "name": "ATK_CTA_4",
+            "style": 0
+        },
+        "0852": {
+            "id": 852,
+            "motion": "esf007_ATK_CTA_4",
+            "name": "ATK_CTA_4",
+            "style": 0
+        },
+        "0853": {
+            "id": 853,
+            "motion": "esf007_ATK_CTA_4",
+            "name": "ATK_CTA_4",
+            "style": 0
+        },
+        "0854": {
+            "id": 854,
+            "motion": "esf007_ATK_CTA_4",
+            "name": "ATK_CTA_4",
+            "style": 0
+        },
+        "0855": {
+            "id": 855,
+            "motion": "esf007_ATK_CTA",
+            "name": "ATK_CTA",
+            "style": 0
+        },
+        "0856": {
+            "id": 856,
+            "motion": "esf007_ATK_CTA",
+            "name": "ATK_CTA",
+            "style": 0
+        },
+        "0857": {
+            "id": 857,
+            "motion": "esf007_ATK_CTA",
+            "name": "ATK_CTA",
+            "style": 0
+        },
+        "0859": {
+            "id": 859,
+            "motion": "esf007_ATK_CTA",
+            "name": "ATK_CTA",
+            "style": 0
+        },
+        "0900": {
+            "id": 900,
+            "motion": "esf007_SPA_SP3",
+            "name": "SPA_SP3",
+            "style": 0
+        },
+        "0901": {
+            "id": 901,
+            "motion": "esf007_SPA_SP3",
+            "name": "SPA_SP3",
+            "style": 0
+        },
+        "0902": {
+            "id": 902,
+            "motion": "esf007_SPA_SP3",
+            "name": "SPA_SP3",
+            "style": 0
+        },
+        "0903": {
+            "id": 903,
+            "motion": "esf007_SPA_SP3",
+            "name": "SPA_SP3",
+            "style": 0
+        },
+        "0904": {
+            "id": 904,
+            "motion": "esf007_SPA_SP3",
+            "name": "SPA_SP3",
+            "style": 0
+        },
+        "0905": {
+            "id": 905,
+            "motion": "esf007_SPA_SP3",
+            "name": "SPA_SP3",
+            "style": 0
+        },
+        "0906": {
+            "id": 906,
+            "name": "_0906",
+            "style": 0
+        },
+        "0907": {
+            "id": 907,
+            "name": "_0907",
+            "style": 0
+        },
+        "0908": {
+            "id": 908,
+            "name": "_0908",
+            "style": 0
+        },
+        "0909": {
+            "id": 909,
+            "name": "_0909",
+            "style": 0
+        },
+        "0912": {
+            "id": 912,
+            "motion": "esf007_SPA_SP2_IN",
+            "name": "SPA_SP2_IN",
+            "style": 0
+        },
+        "0913": {
+            "id": 913,
+            "motion": "esf007_SPA_SP2_IN",
+            "name": "SPA_SP2_IN",
+            "style": 0
+        },
+        "0914": {
+            "id": 914,
+            "motion": "esf007_SPA_SP2_BOM",
+            "name": "SPA_SP2_BOM",
+            "style": 0
+        },
+        "0915": {
+            "id": 915,
+            "motion": "esf007_SPA_SP2_START",
+            "name": "SPA_SP2_START",
+            "style": 0
+        },
+        "0916": {
+            "id": 916,
+            "motion": "esf007_SPA_SP2_START",
+            "name": "SPA_SP2_START",
+            "style": 0
+        },
+        "0917": {
+            "id": 917,
+            "motion": "esf007_SPA_SP2_START",
+            "name": "SPA_SP2_START",
+            "style": 0
+        },
+        "0918": {
+            "id": 918,
+            "motion": "esf007_SPA_SP2_START",
+            "name": "SPA_SP2_START",
+            "style": 0
+        },
+        "0919": {
+            "id": 919,
+            "motion": "esf007_SPA_SP2_START",
+            "name": "SPA_SP2_START",
+            "style": 0
+        },
+        "0920": {
+            "id": 920,
+            "motion": "esf007_SPA_SP2_START",
+            "name": "SPA_SP2_START",
+            "style": 0
+        },
+        "0921": {
+            "id": 921,
+            "name": "_0921",
+            "style": 0
+        },
+        "0922": {
+            "id": 922,
+            "name": "_0922",
+            "style": 0
+        },
+        "0923": {
+            "id": 923,
+            "name": "_0923",
+            "style": 0
+        },
+        "0924": {
+            "id": 924,
+            "name": "_0924",
+            "style": 0
+        },
+        "0925": {
+            "id": 925,
+            "name": "_0925",
+            "style": 0
+        },
+        "0926": {
+            "id": 926,
+            "name": "_0926",
+            "style": 0
+        },
+        "0927": {
+            "id": 927,
+            "name": "_0927",
+            "style": 0
+        },
+        "0928": {
+            "id": 928,
+            "name": "_0928",
+            "style": 0
+        },
+        "0929": {
+            "id": 929,
+            "name": "_0929",
+            "style": 0
+        },
+        "0930": {
+            "id": 930,
+            "name": "_0930",
+            "style": 0
+        },
+        "0931": {
+            "id": 931,
+            "name": "_0931",
+            "style": 0
+        },
+        "0932": {
+            "id": 932,
+            "name": "_0932",
+            "style": 0
+        },
+        "0933": {
+            "id": 933,
+            "name": "_0933",
+            "style": 0
+        },
+        "0934": {
+            "id": 934,
+            "name": "_0934",
+            "style": 0
+        },
+        "0935": {
+            "id": 935,
+            "name": "_0935",
+            "style": 0
+        },
+        "0936": {
+            "id": 936,
+            "motion": "esf007_SPA_SP2_IN",
+            "name": "SPA_SP2_IN",
+            "style": 0
+        },
+        "0937": {
+            "id": 937,
+            "motion": "esf007_SPA_SP2_IN",
+            "name": "SPA_SP2_IN",
+            "style": 0
+        },
+        "0938": {
+            "id": 938,
+            "motion": "esf007_SPA_SP2_IN",
+            "name": "SPA_SP2_IN",
+            "style": 0
+        },
+        "0939": {
+            "id": 939,
+            "motion": "esf007_SPA_SP2_IN",
+            "name": "SPA_SP2_IN",
+            "style": 0
+        },
+        "0940": {
+            "id": 940,
+            "motion": "esf007_SPA_SP2_IN",
+            "name": "SPA_SP2_IN",
+            "style": 0
+        },
+        "0941": {
+            "id": 941,
+            "motion": "esf007_SPA_SP2_IN",
+            "name": "SPA_SP2_IN",
+            "style": 0
+        },
+        "0942": {
+            "id": 942,
+            "motion": "esf007_SPA_SP2_OUT",
+            "name": "SPA_SP2_OUT",
+            "style": 0
+        },
+        "0943": {
+            "id": 943,
+            "motion": "esf007_SPA_SP2_OUT",
+            "name": "SPA_SP2_OUT",
+            "style": 0
+        },
+        "0944": {
+            "id": 944,
+            "name": "_0944",
+            "style": 0
+        },
+        "0945": {
+            "id": 945,
+            "name": "_0945",
+            "style": 0
+        },
+        "0946": {
+            "id": 946,
+            "motion": "esf007_SPA_SP2_LAND",
+            "name": "SPA_SP2_LAND",
+            "style": 0
+        },
+        "0947": {
+            "id": 947,
+            "motion": "esf007_SPA_SP2_BOM",
+            "name": "SPA_SP2_BOM",
+            "style": 0
+        },
+        "0948": {
+            "id": 948,
+            "motion": "esf007_SPA_SP2_BOM",
+            "name": "SPA_SP2_BOM",
+            "style": 0
+        },
+        "0949": {
+            "id": 949,
+            "motion": "esf007_SPA_SP2_BOM",
+            "name": "SPA_SP2_BOM",
+            "style": 0
+        },
+        "0950": {
+            "id": 950,
+            "name": "_0950",
+            "style": 0
+        },
+        "0951": {
+            "id": 951,
+            "name": "_0951",
+            "style": 0
+        },
+        "0952": {
+            "id": 952,
+            "name": "_0952",
+            "style": 0
+        },
+        "0956": {
+            "id": 956,
+            "motion": "esf007_SPA_SP1",
+            "name": "SPA_SP1",
+            "style": 0
+        },
+        "0957": {
+            "id": 957,
+            "motion": "esf007_SPA_SP1",
+            "name": "SPA_SP1",
+            "style": 0
+        },
+        "0958": {
+            "id": 958,
+            "motion": "esf007_SPA_SP1",
+            "name": "SPA_SP1",
+            "style": 0
+        },
+        "0959": {
+            "id": 959,
+            "motion": "esf007_SPA_SP1",
+            "name": "SPA_SP1",
+            "style": 0
+        },
+        "0960": {
+            "id": 960,
+            "motion": "esf007_SPA_SP1",
+            "name": "SPA_SP1",
+            "style": 0
+        },
+        "0961": {
+            "id": 961,
+            "motion": "esf007_SPA_SP1",
+            "name": "SPA_SP1",
+            "style": 0
+        },
+        "0962": {
+            "id": 962,
+            "name": "_0962",
+            "style": 0
+        },
+        "0963": {
+            "id": 963,
+            "name": "_0963",
+            "style": 0
+        },
+        "0964": {
+            "id": 964,
+            "name": "_0964",
+            "style": 0
+        },
+        "0971": {
+            "id": 971,
+            "motion": "esf007_SPA_SP5_START",
+            "name": "SPA_SP5_START",
+            "style": 0
+        },
+        "0972": {
+            "id": 972,
+            "motion": "esf007_SPA_SP5_START",
+            "name": "SPA_SP5_START",
+            "style": 0
+        },
+        "0973": {
+            "id": 973,
+            "motion": "esf007_SPA_SP5_START",
+            "name": "SPA_SP5_START",
+            "style": 0
+        },
+        "0974": {
+            "id": 974,
+            "motion": "esf007_SPA_SP5_START",
+            "name": "SPA_SP5_START",
+            "style": 0
+        },
+        "0975": {
+            "id": 975,
+            "motion": "esf007_SPA_SP5_START",
+            "name": "SPA_SP5_START",
+            "style": 0
+        },
+        "0976": {
+            "id": 976,
+            "motion": "esf007_SPA_SP5_START",
+            "name": "SPA_SP5_START",
+            "style": 0
+        },
+        "0977": {
+            "id": 977,
+            "motion": "esf007_SPA_SP5_START",
+            "name": "SPA_SP5_START",
+            "style": 0
+        },
+        "0978": {
+            "id": 978,
+            "name": "_0978",
+            "style": 0
+        },
+        "0979": {
+            "id": 979,
+            "name": "_0979",
+            "style": 0
+        },
+        "0980": {
+            "id": 980,
+            "name": "_0980",
+            "style": 0
+        },
+        "0981": {
+            "id": 981,
+            "name": "_0981",
+            "style": 0
+        },
+        "0982": {
+            "id": 982,
+            "name": "_0982",
+            "style": 0
+        },
+        "0983": {
+            "id": 983,
+            "name": "_0983",
+            "style": 0
+        },
+        "0984": {
+            "id": 984,
+            "name": "_0984",
+            "style": 0
+        },
+        "0985": {
+            "id": 985,
+            "name": "_0985",
+            "style": 0
+        },
+        "0986": {
+            "id": 986,
+            "name": "_0986",
+            "style": 0
+        },
+        "0987": {
+            "id": 987,
+            "name": "_0987",
+            "style": 0
+        },
+        "0988": {
+            "id": 988,
+            "name": "_0988",
+            "style": 0
+        },
+        "0989": {
+            "id": 989,
+            "name": "_0989",
+            "style": 0
+        },
+        "0990": {
+            "id": 990,
+            "name": "_0990",
+            "style": 0
+        },
+        "0995": {
+            "id": 995,
+            "motion": "esf007_SPA_SP4_ATE",
+            "name": "SPA_SP4_ATE",
+            "style": 0
+        },
+        "0996": {
+            "id": 996,
+            "motion": "esf007_SPA_SP4_OUT",
+            "name": "SPA_SP4_OUT",
+            "style": 0
+        },
+        "0997": {
+            "id": 997,
+            "name": "_0997",
+            "style": 0
+        },
+        "0998": {
+            "id": 998,
+            "name": "_0998",
+            "style": 0
+        },
+        "0999": {
+            "id": 999,
+            "name": "_0999",
+            "style": 0
+        },
+        "1000": {
+            "id": 1000,
+            "motion": "esf007_SPA_SP4_ATE",
+            "name": "SPA_SP4_ATE",
+            "style": 0
+        },
+        "1001": {
+            "id": 1001,
+            "motion": "esf007_SPA_SP4_OUT",
+            "name": "SPA_SP4_OUT",
+            "style": 0
+        },
+        "1002": {
+            "id": 1002,
+            "motion": "esf007_SPA_SP4_OUT",
+            "name": "SPA_SP4_OUT",
+            "style": 0
+        },
+        "1003": {
+            "id": 1003,
+            "name": "_1003",
+            "style": 0
+        },
+        "1004": {
+            "id": 1004,
+            "name": "_1004",
+            "style": 0
+        },
+        "1005": {
+            "id": 1005,
+            "name": "_1005",
+            "style": 0
+        },
+        "1007": {
+            "id": 1007,
+            "name": "_1007",
+            "style": 0
+        },
+        "1010": {
+            "id": 1010,
+            "motion": "esf007_SPA_SP6_START",
+            "name": "SPA_SP6_START",
+            "style": 0
+        },
+        "1011": {
+            "id": 1011,
+            "motion": "esf007_SPA_SP6_NGA",
+            "name": "SPA_SP6_NGA",
+            "style": 0
+        },
+        "1012": {
+            "id": 1012,
+            "name": "_1012",
+            "style": 0
+        },
+        "1013": {
+            "id": 1013,
+            "name": "_1013",
+            "style": 0
+        },
+        "1014": {
+            "id": 1014,
+            "name": "_1014",
+            "style": 0
+        },
+        "1015": {
+            "id": 1015,
+            "motion": "esf007_SPD_SP6_NGA",
+            "name": "SPD_SP6_NGA",
+            "style": 0
+        },
+        "1016": {
+            "id": 1016,
+            "motion": "esf007_SPA_SP6_START",
+            "name": "SPA_SP6_START",
+            "style": 0
+        },
+        "1017": {
+            "id": 1017,
+            "motion": "esf007_SPA_SP6_NGA",
+            "name": "SPA_SP6_NGA",
+            "style": 0
+        },
+        "1018": {
+            "id": 1018,
+            "name": "_1018",
+            "style": 0
+        },
+        "1019": {
+            "id": 1019,
+            "name": "_1019",
+            "style": 0
+        },
+        "1020": {
+            "id": 1020,
+            "name": "_1020",
+            "style": 0
+        },
+        "1021": {
+            "id": 1021,
+            "motion": "esf007_SPD_SP6_NGA",
+            "name": "SPD_SP6_NGA",
+            "style": 0
+        },
+        "1023": {
+            "id": 1023,
+            "name": "_1023",
+            "style": 0
+        },
+        "1024": {
+            "id": 1024,
+            "name": "_1024",
+            "style": 0
+        },
+        "1025": {
+            "id": 1025,
+            "motion": "esf007_SPD_SP6_NGA",
+            "name": "SPD_SP6_NGA",
+            "style": 0
+        },
+        "1026": {
+            "id": 1026,
+            "name": "_1026",
+            "style": 0
+        },
+        "1027": {
+            "id": 1027,
+            "name": "_1027",
+            "style": 0
+        },
+        "1028": {
+            "id": 1028,
+            "motion": "esf007_SPD_SP6_NGA",
+            "name": "SPD_SP6_NGA",
+            "style": 0
+        },
+        "1150": {
+            "id": 1150,
+            "name": "_1150",
+            "style": 0
+        },
+        "1157": {
+            "id": 1157,
+            "name": "_1157",
+            "style": 0
+        },
+        "1163": {
+            "id": 1163,
+            "name": "_1163",
+            "style": 0
+        },
+        "1165": {
+            "id": 1165,
+            "motion": "esf007_SPA_SP4_ATE",
+            "name": "SPA_SP4_ATE",
+            "style": 0
+        },
+        "1167": {
+            "id": 1167,
+            "motion": "esf007_BAS_JUMP_F_START",
+            "name": "BAS_JUMP_F_START",
+            "style": 0
+        },
+        "1168": {
+            "id": 1168,
+            "motion": "esf007_BAS_JUMP_F_AIR",
+            "name": "BAS_JUMP_F_AIR",
+            "style": 0
+        },
+        "1169": {
+            "id": 1169,
+            "motion": "esf007_ATK_8HK",
+            "name": "ATK_8HK",
+            "style": 0
+        },
+        "1170": {
+            "id": 1170,
+            "motion": "esf007_BAS_JUMP_N_LAND",
+            "name": "BAS_JUMP_N_LAND",
+            "style": 0
+        },
+        "1200": {
+            "id": 1200,
+            "motion": "esf007_SAA_LV1",
+            "name": "SAA_LV1",
+            "style": 0
+        },
+        "1201": {
+            "id": 1201,
+            "motion": "esf007_SAA_LV1",
+            "name": "SAA_LV1",
+            "style": 0
+        },
+        "1202": {
+            "id": 1202,
+            "name": "_1202",
+            "style": 0
+        },
+        "1203": {
+            "id": 1203,
+            "name": "_1203",
+            "style": 0
+        },
+        "1211": {
+            "id": 1211,
+            "motion": "esf007_SAA_LV2",
+            "name": "SAA_LV2",
+            "style": 0
+        },
+        "1214": {
+            "id": 1214,
+            "name": "_1214",
+            "style": 0
+        },
+        "1216": {
+            "id": 1216,
+            "name": "_1216",
+            "style": 0
+        },
+        "1217": {
+            "id": 1217,
+            "name": "_1217",
+            "style": 0
+        },
+        "1218": {
+            "id": 1218,
+            "name": "_1218",
+            "style": 0
+        },
+        "1219": {
+            "id": 1219,
+            "name": "_1219",
+            "style": 0
+        },
+        "1220": {
+            "id": 1220,
+            "name": "_1220",
+            "style": 0
+        },
+        "1221": {
+            "id": 1221,
+            "name": "_1221",
+            "style": 0
+        },
+        "1222": {
+            "id": 1222,
+            "name": "_1222",
+            "style": 0
+        },
+        "1223": {
+            "id": 1223,
+            "name": "_1223",
+            "style": 0
+        },
+        "1224": {
+            "id": 1224,
+            "name": "_1224",
+            "style": 0
+        },
+        "1225": {
+            "id": 1225,
+            "name": "_1225",
+            "style": 0
+        },
+        "1226": {
+            "id": 1226,
+            "name": "_1226",
+            "style": 0
+        },
+        "1227": {
+            "id": 1227,
+            "name": "_1227",
+            "style": 0
+        },
+        "1234": {
+            "id": 1234,
+            "motion": "esf007_SAA_LV3_START",
+            "name": "SAA_LV3_START",
+            "style": 0
+        },
+        "1235": {
+            "id": 1235,
+            "motion": "esf007_SAA_LV3_START",
+            "name": "SAA_LV3_START",
+            "style": 0
+        },
+        "1236": {
+            "id": 1236,
+            "motion": "esf007_SAA_LV3",
+            "name": "SAA_LV3",
+            "style": 0
+        },
+        "1237": {
+            "id": 1237,
+            "motion": "esf007_SAD_LV3",
+            "name": "SAD_LV3",
+            "style": 0
+        },
+        "1238": {
+            "id": 1238,
+            "motion": "esf007_SAA_LV3_START",
+            "name": "SAA_LV3_START",
+            "style": 0
+        },
+        "1239": {
+            "id": 1239,
+            "motion": "esf007_SAA_LV3_START",
+            "name": "SAA_LV3_START",
+            "style": 0
+        },
+        "1240": {
+            "id": 1240,
+            "motion": "esf007_CAA",
+            "name": "CAA",
+            "style": 0
+        },
+        "1241": {
+            "id": 1241,
+            "motion": "esf007_CAD",
+            "name": "CAD",
+            "style": 0
+        },
+        "1497": {
+            "id": 1497,
+            "motion": "esf007_DEM_APPEAL_01",
+            "name": "DEM_APPEAL_01",
+            "style": 0
+        },
+        "1498": {
+            "id": 1498,
+            "motion": "esf007_DEM_APPEAL_02",
+            "name": "DEM_APPEAL_02",
+            "style": 0
+        },
+        "1499": {
+            "id": 1499,
+            "motion": "esf007_DEM_APPEAL_03",
+            "name": "DEM_APPEAL_03",
+            "style": 0
+        }
+    }
+}

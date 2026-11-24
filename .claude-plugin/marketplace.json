@@ -1,0 +1,7 @@
+{
+  "name": "shotokan-sf6",
+  "owner": { "name": "shotokan-sf6" },
+  "plugins": [
+    { "name": "shotokan", "source": "./", "description": "SF6 replay reviews from your own capture files." }
+  ]
+}
