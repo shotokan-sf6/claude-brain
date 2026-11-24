@@ -2,6 +2,9 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 2026-11-24 (0.1.4)
+- Bundled mods from shotokan-sf6/mods c757834: character names come only from `char_names.json`, which now lists every character. When updating, copy it into `reframework\data\sf6_moves\` with the scripts.
+
 ## 2026-11-24 (0.1.3)
 - Bundled tools from shotokan-sf6/tools daf2319: M. Bison and Cammy move names, `relabel_moves.py` (replaces `ken_relabel.py`).
 

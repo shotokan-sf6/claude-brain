@@ -10,18 +10,16 @@
 -- Battle stats (perfect parries, throw techs, Drive Reversals, Drive Impacts, ...): saved only
 --   when a value changes, so the file shows when each one happened.
 
-local CHARACTERS = {
-    [1] = "Ryu", [2] = "Luke", [3] = "Kimberly", [4] = "Chun-Li", [5] = "Manon", [6] = "Zangief",
-    [7] = "JP", [8] = "Dhalsim", [9] = "Cammy", [10] = "Ken", [11] = "Dee Jay", [12] = "Lily",
-    [13] = "AKI", [14] = "Rashid", [15] = "Blanka", [16] = "Juri", [17] = "Marisa", [18] = "Guile",
-    [19] = "Ed", [20] = "E Honda", [21] = "Jamie", [22] = "Akuma", [26] = "M Bison", [27] = "Terry",
-    [28] = "Mai",
-}
--- names typed into Move Export v4.1 (sf6_moves/char_names.json) cover characters missing from the list above
+-- Character names come from one place: reframework/data/sf6_moves/char_names.json ({"9": "Cammy", ...}), shared with
+-- export_moves.lua and the analyzer. A character missing from it is saved as "char_<id>"; name it in the Move Export window.
+local CHARACTERS = {}
+local char_names_count = 0
 local function load_char_names()
     local ok, saved = pcall(json.load_file, "sf6_moves/char_names.json")
     if ok and type(saved) == "table" then
-        for k, v in pairs(saved) do CHARACTERS[tonumber(k)] = v end
+        local n = 0
+        for k, v in pairs(saved) do CHARACTERS[tonumber(k)] = v; n = n + 1 end
+        char_names_count = n
     end
 end
 load_char_names()
@@ -414,6 +412,7 @@ re.on_draw_ui(function()
     imgui.same_line()
     if imgui.button("Clear Buffer") then clear() end
     imgui.text("Frames: " .. frames_captured .. "   Hits: " .. hits_captured .. "   Stat changes: " .. #replay.stats)
+    if char_names_count == 0 then imgui.text("No character names: copy data/sf6_moves/char_names.json into reframework/data/sf6_moves/") end
     if last_saved then imgui.text("Last saved: " .. last_saved) end
     if last_error then imgui.text("Last error: " .. last_error) end
     if imgui.tree_node("Manual save") then

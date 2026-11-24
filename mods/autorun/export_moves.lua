@@ -10,18 +10,12 @@
 -- Written for Sean's replay reviews; uses the same game structures as rkaganda/sf6_replays_data
 -- and alphazolam's MMDK, which documented where the move tables live.
 
-local CHARACTERS = {
-    [1] = "Ryu", [2] = "Luke", [3] = "Kimberly", [4] = "Chun-Li", [5] = "Manon", [6] = "Zangief",
-    [7] = "JP", [8] = "Dhalsim", [9] = "Cammy", [10] = "Ken", [11] = "Dee Jay", [12] = "Lily",
-    [13] = "AKI", [14] = "Rashid", [15] = "Blanka", [16] = "Juri", [17] = "Marisa", [18] = "Guile",
-    [19] = "Ed", [20] = "E Honda", [21] = "Jamie", [22] = "Akuma", [26] = "M Bison", [27] = "Terry",
-    [28] = "Mai",
-}
--- Characters not in this list are saved as "char_<id>" until you name them in the window:
--- the window shows both characters' IDs live, and "Save names" writes them to
--- reframework/data/sf6_moves/char_names.json, which this script and the analyzer both read.
+-- Character names come from one place: reframework/data/sf6_moves/char_names.json ({"9": "Cammy", ...}), shared with
+-- capture_replay.lua and the analyzer. A character missing from it is saved as "char_<id>" until you name it in the
+-- window: it shows both characters' IDs live, and "Save names" adds them to char_names.json.
 local NAMES_FILE = "sf6_moves/char_names.json"
 local saved = json.load_file(NAMES_FILE) or {}
+local CHARACTERS = {}
 for k, v in pairs(saved) do CHARACTERS[tonumber(k)] = v end
 local typed = { [0] = "", [1] = "" }
 
