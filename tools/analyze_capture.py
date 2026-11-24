@@ -81,6 +81,16 @@ CHAR_SPECIALS.update({
             ('JINRAI_1', 'Jinrai Kick'), ('JINRAI_L_EX', 'Kasai Thrust Kick'), ('jinrai_M_EX', 'Kasai Thrust Kick'), ('JINRAI_M_EX', 'Kasai Thrust Kick'),
             ('JINRAI_H_EX', 'Kasai Thrust Kick'), ('JINRAI_L', 'Kazekama Shin Kick'), ('JINRAI_M', 'Gorai Axe Kick'), ('JINRAI_H', 'Senka Snap Kick'),
             ('JINRAI', 'Jinrai Kick'), ('RYUBI', 'Dragonlash Kick'), ('TATSUMAKI_AIR', 'Air Tatsumaki'), ('TATSUMAKI', 'Tatsumaki')],
+    # Cammy (2026-11-24, from her move export): FC_* is Hooligan Combination; its follow-ups are Razor's Edge Slicer (no input),
+    # Fatal Leg Twister (the throw), Reverse Edge (down + K) and Silent Step (P); Hooligan Cannon Strike already reads as Cannon Strike.
+    'Cammy': [('FC_THROW', "Hooligan > Fatal Leg Twister"), ('RAZEREDGE', "Hooligan > Razor's Edge Slicer"), ('REVEDGE', 'Hooligan > Reverse Edge'),
+              ('S_STEP', 'Hooligan > Silent Step'), ('FC', 'Hooligan Combination')],
+    # M. Bison (2026-11-24): Double Knee Press is the Scissor Kicks; HEADPRESS_* without a button is the Shadow Rise jump, whose
+    # follow-ups are Head Press (K, then Somersault Skull Diver with P) and Devil Reverse (P); Backfist Combo plants the Psycho Mine.
+    'M Bison': [('DOUBLE_KNEEPRESS_MH', 'Scissor Kicks (M/H)'), ('DOUBLE_KNEEPRESS', 'Scissor Kicks'), ('SOMERSAULT_SKULL_DRIVER', 'Somersault Skull Diver'),
+                ('HEADPRESS_P', 'Devil Reverse'), ('HEADPRESS_ODA_K', 'Head Press (OD)'), ('HEADPRESS_ODD_K', 'Head Press (OD)'), ('HEADPRESS_K', 'Head Press'),
+                ('HEADPRESS', 'Shadow Rise'), ('BACKFIST_COMBO', 'Backfist Combo'), ('PSYCHO_CRUSHER', 'Psycho Crusher Attack'),
+                ('VEGA_WARP', 'Bison Warp'), ('PSYCHO_FIELD', 'Psycho Field')],
     'Dee Jay': [('1_Airslasher', 'Air Slasher'), ('1_AirSlasher', 'Air Slasher'), ('2_JackKnife', 'Jackknife Maximum'),
                 ('3_H_DowbleRollingSobat', 'Double Rolling Sobat'), ('3_M_RollingSobat', 'Double Rolling Sobat'),
                 ('3_L_FakeRollingstep', 'Double Rolling Sobat (feint)'), ('3_EX_DowbleRollingSobat', 'Double Rolling Sobat'),
@@ -108,12 +118,18 @@ CHAR_SUPERS = {
     'Terry': [('SAA_BusterWolf', 'SA1 Buster Wolf'), ('SAA_2', 'SA2'), ('SA3', 'SA3'), ('CA', 'Critical Art')],
     'Juri': [('SAA_SAKKAIFUHAJIN', 'SA1 Sakkai Fuhazan'), ('SAA_FUSUI_ENGINE', 'SA2 Feng Shui Engine'), ('SAA_03', 'SA3'), ('SAD_03', 'SA3'), ('CAA_03', 'Critical Art'), ('CAD_03', 'Critical Art')],
     'Arjun': [('SAA_SA1', 'SA1 Howling Destruction'), ('SAA_SA2', 'SA2 Instant Oblivion'), ('SAD_SA2', 'SA2 Instant Oblivion'), ('SA3', "SA3 Yaksha's Order"), ('CAA', "Critical Art (Yaksha's Order)")],
+    'M Bison': [('SAA_KNEEPRESS_NIGHTMARE', 'SA1 Knee Press Nightmare'), ('SAD_KNEEPRESS_NIGHTMARE', 'SA1 Knee Press Nightmare'),
+                ('SAA2', 'SA2 Psycho Punisher'), ('SAD2', 'SA2 Psycho Punisher'), ('SAA_FINAL_PSYCHO_CRUSHER', 'SA3 Unlimited Psycho Crusher'),
+                ('SAA_START', 'SA3 Unlimited Psycho Crusher'), ('SAA_HIT', 'SA3 Unlimited Psycho Crusher'), ('SAD_HIT', 'SA3 Unlimited Psycho Crusher'),
+                ('CAA_HIT', 'Critical Art (Unlimited Psycho Crusher)'), ('CAD_HIT', 'Critical Art (Unlimited Psycho Crusher)')],
     'Ken': [('SAA_RYUBI', 'SA1 Dragonlash Flame'), ('SAA_2_SippuJinrai', 'SA2 Shippu Jinrai-kyaku'), ('SAA_SHINRYUREPPA', 'SA3 Shinryu Reppa'),
             ('SAD_SHINRYUREPPA', 'SA3 Shinryu Reppa'), ('CAA_SHINRYUREPPA', 'Critical Art (Shinryu Reppa)'), ('CAD_SHINRYUREPPA', 'Critical Art (Shinryu Reppa)')],
     'Blanka': [('SAA_1_SHOUT', 'SA1'), ('SAA_2_ROLLING_CANON', 'SA2'), ('SAA_3_CANON_BALL', 'SA3'), ('SAD_3_CANON_BALL', 'SA3'), ('CAA_CANON_BALL', 'Critical Art'), ('CAD_CANON_BALL', 'Critical Art')],
 }
 
 CHAR_NORMALS = {
+    'Cammy': [('ATK_4MP_HK', 'Lift Combination (4MP~HK)'), ('ATK_TC_5HP_5HK', 'Target combo (5HP~HK)'), ('SPD_FC_THROW', 'Hooligan > Fatal Leg Twister')],
+    'M Bison': [('ATK_5MPTC_P', '5MP > P target combo'), ('ATK_5MPTC_K', '5MP > K target combo'), ('IMM_VEGA_BOMB', 'Psycho Mine explosion')],
     'Ken': [('ATK_5MP_HP', 'Chin Buster (5MP~HP)'), ('ATK_5MK_MK_HK', 'Triple Flash Kick (5MK~MK~HK)'), ('ATK_5MK_MK', 'Triple Flash Kick (5MK~MK)'),
             ('ATK_HK_SHIDEN', 'Quick Dash > Thunder Kick'), ('ATK_MK_FUMIKOMI', 'Quick Dash > Forward Step Kick'),
             ('KK_LK_FUNJIN_STOP', 'Quick Dash > Emergency Stop'), ('KK_LK_FUNJIN', 'Quick Dash')],

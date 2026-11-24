@@ -2,6 +2,9 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 2026-11-24 (0.1.3)
+- Bundled tools from shotokan-sf6/tools daf2319: M. Bison and Cammy move names, `relabel_moves.py` (replaces `ken_relabel.py`).
+
 ## 2026-11-24 (0.1.2)
 - Bundled tools from shotokan-sf6/tools 28c333a.
 - Bundled tools: Ken's move names (Jinrai follow-ups, Quick Dash moves, supers), and Full-review spectrum overrides now apply. The player-spectra reference names the internal keys an override needs.
