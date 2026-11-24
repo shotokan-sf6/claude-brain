@@ -1,6 +1,6 @@
 """Fill the spectra table (and the spectra in review_docs archetypes) for sets that have none.
 
-sf6db.py ingest runs this for the set it just ingested. Four axes (Composure, Initiative, Resource use,
+shared_core_db.py ingest runs this for the set it just ingested. Four axes (Composure, Initiative, Resource use,
 Temperament (offense)) read behaviour counts from beh_cache.json; replays missing from the cache are added first,
 from the captures (META captures_local, else the capture folders in paths.py: SHOTOKAN_REPLAYS / SHOTOKAN_CAPTURE_DIRS).
 
@@ -9,7 +9,7 @@ from the captures (META captures_local, else the capture folders in paths.py: SH
 """
 import json, sqlite3, sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import quick_dashboard_from_db as W, spectra as SP, paths
+import quick_review_reads as W, spectra as SP, paths
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 

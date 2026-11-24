@@ -2,6 +2,11 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 2026-11-24 (0.2.0)
+- Reviews run in tiers: `sf6-replay-analysis` loads `shared-core-review`, then `quick-review-report`, then (Full and Tournament) `full-review-report`, each with its own `references/` (files renamed `shared-core-*` and `full-review-*`).
+- quick-review-report loads `sf6-character-notes` for character baselines; the guideline skills (and `sf6-coach-shog`) load in full-review-report.
+- Bundled tools from shotokan-sf6/tools with the review-step scripts renamed: `shared_core_analyze.py`, `shared_core_blind_manifest.py`, `shared_core_db.py`, `quick_review_reads.py`, `full_review_decision_presses.py` (the old names are gone; update any scripts or notes that call them).
+
 ## 2026-11-24 (0.1.5)
 - Bundled tools from shotokan-sf6/tools (evening): Luke's move names (Flash Knuckle L/M/H/OD, Avenger follow-ups, SA1 Vulcan Blast, SA2 Eraser, SA3 Pale Rider), the `relabel_moves.py` fix for labels that partly stay the same, new `relabel_resolve.py`, and `quick_dashboard_from_db.py --set` so Quick reviews get their reads and habits.
 - sf6-replay-analysis: review games in the order played unless told otherwise; the Quick-review step uses `--write-reads --set SET_KEY`.

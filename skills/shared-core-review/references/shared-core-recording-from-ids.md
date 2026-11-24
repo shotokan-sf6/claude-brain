@@ -1,6 +1,6 @@
 # Recording replays from replay IDs
 
-Part of the sf6-replay-analysis skill (section 1b). Read when the skill points here.
+Part of the shared-core-review skill (recording from replay IDs). Read when the skill points here.
 
 ## 1b. Recording replays from replay IDs (when the player gives IDs instead of videos)
 Use computer use on his PC (load the computer-use skill first). Apps: SF6 (`d:\program files (x86)\steam\steamapps\common\street fighter 6\streetfighter6.exe`; resolve it by that path, the name doesn't resolve) and OBS Studio, plus File Explorer (click tier) and the system-key-combos grant so Win+Tab (Task View) works. OBS saves to `C:\Users\seanh\Videos` (request that folder for device access).

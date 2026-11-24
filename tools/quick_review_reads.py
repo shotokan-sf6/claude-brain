@@ -1,6 +1,6 @@
 """quick-dashboard data, built from the history database (sf6.db).
 
-  python quick_dashboard_from_db.py DB OUTDIR [--write-reads] [--set SET_KEY ...]   (--set: just those sets, on a dashboard or not)
+  python quick_review_reads.py DB OUTDIR [--write-reads] [--set SET_KEY ...]   (--set: just those sets, on a dashboard or not)
 
 For every set numbered on the 'quick-dashboard' dashboard (table dashboard_sets) it writes the Set review datasets
 (sets, games, hits, events, archetypes, habits, story, story_games, punish, findings, fixes, training).

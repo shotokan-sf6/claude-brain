@@ -15,7 +15,7 @@ Counts per player per replay (summed over a set before scoring):
 """
 import json, sys, os, collections as C
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'scripts'))
-from analyze_capture import load_capture, ATTACK_STATES, JUMP_STATES
+from shared_core_analyze import load_capture, ATTACK_STATES, JUMP_STATES
 
 ACT = ATTACK_STATES | JUMP_STATES | {'DASH', 'KDASH', 'PARRY'}
 MOVE = {'WALK', 'FOOTWORK', 'DASH', 'KDASH'}

@@ -76,4 +76,4 @@ Writing the story:
 - Write it after the other datasets are done.
 - Every claim must point to evidence (game, round, timer).
 - When a pattern shows up across games, put it in the set overview and tag where it changed in the game cards. Don't repeat the same text in every game.
-- Follow sf6-replay-analysis's "Chess or poker?" rule. A stock answer (a punish, a kill combo) gets one `try_this`. A read gets the options in `try_this` with what each one beats, e.g. "poke (beats walk-up) / walk-up throw (beats block) / whiff punish (beats poke)", plus which one fits this opponent's shown tendency.
+- Follow full-review-report's "Chess or poker?" rule. A stock answer (a punish, a kill combo) gets one `try_this`. A read gets the options in `try_this` with what each one beats, e.g. "poke (beats walk-up) / walk-up throw (beats block) / whiff punish (beats poke)", plus which one fits this opponent's shown tendency.

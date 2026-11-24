@@ -1,6 +1,6 @@
 """Fill game_stats (per-game metrics, with the character played) for sets ingested before it existed.
 
-Works from what sf6db.py already stored (hits, events, timings, games), so no captures or analyzer output are needed.
+Works from what shared_core_db.py already stored (hits, events, timings, games), so no captures or analyzer output are needed.
 Press counts (presses / decision presses) aren't stored per game for old sets, so those metrics are left out here;
 a re-ingest adds them. Back up the database first.
 
@@ -8,11 +8,11 @@ usage: python game_stats_backfill.py DB [--all]     (--all also rebuilds sets th
 """
 import sqlite3, sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import sf6db
+import shared_core_db
 
 
 def main(db, redo=False):
-    con = sf6db.connect(db); con.row_factory = sqlite3.Row
+    con = shared_core_db.connect(db); con.row_factory = sqlite3.Row
     done = {r[0] for r in con.execute('SELECT DISTINCT set_key FROM game_stats')}
     games = con.execute('SELECT replay_id, set_key, p1_player_id, p2_player_id, p1_char, p2_char FROM games').fetchall()
     n_sets, n_rows = set(), 0
@@ -28,7 +28,7 @@ def main(db, redo=False):
                    for r in con.execute('SELECT * FROM timings WHERE replay_id=?', (gid,))]
         con.execute('DELETE FROM game_stats WHERE replay_id=?', (gid,))
         for pid, ch in ((g['p1_player_id'], g['p1_char']), (g['p2_player_id'], g['p2_char'])):
-            m = sf6db.set_stats(hits, events, timings, [g], {pid: pid})[pid]
+            m = shared_core_db.set_stats(hits, events, timings, [g], {pid: pid})[pid]
             con.executemany('INSERT OR REPLACE INTO game_stats VALUES (?,?,?,?,?,?)', [(k, gid, pid, ch, a, b) for a, b in m.items()])
             n_rows += len(m)
         n_sets.add(k)

@@ -2,7 +2,7 @@
 
   python relabel_moves.py DB OLD_ANALYZER.py MOVES_DIR [--chars "Cammy,M Bison"] [--dry]
 
-OLD_ANALYZER.py is the previous analyze_capture.py (e.g. `git show <commit>:tools/analyze_capture.py > old.py`); the
+OLD_ANALYZER.py is the previous shared_core_analyze.py (e.g. `git show <commit>:tools/shared_core_analyze.py > old.py`; before 2026-11-24 the file was tools/analyze_capture.py); the
 current one is this folder's. MOVES_DIR is the move export folder (reframework/data/sf6_moves, or SF6_MOVES). For each
 character, every internal move name in its export is labelled by both versions; where the label changed, the old label
 is replaced by the new one. An old label that maps to more than one new label (counting raw names whose label didn't change) is ambiguous and left
@@ -16,7 +16,7 @@ text (reads, habits, review_docs) is left as written.
 import glob, importlib.util, json, os, re, sqlite3, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import analyze_capture as NEW
+import shared_core_analyze as NEW
 
 
 def load_old(path):

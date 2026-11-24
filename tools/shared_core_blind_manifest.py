@@ -1,6 +1,6 @@
 """Pre-set facts for a blind prediction, with nothing that leaks the result.
 
-  python blind_manifest.py CAPTURE [CAPTURE ...] [--out manifest.json]
+  python shared_core_blind_manifest.py CAPTURE [CAPTURE ...] [--out manifest.json]
 
 Prints, from the FIRST game's capture only: both players' names, CFN IDs, characters, control types, MR and LP
 before the set, and the battle type. It withholds what gives results away: round results, every later game's
@@ -10,7 +10,7 @@ Captures can be given in any order; the earliest is found by its timestamp, then
 """
 import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import analyze_capture as A
+import shared_core_analyze as A
 
 KEEP = ('name', 'cfn_id', 'char', 'char_id', 'control', 'mr', 'lp')
 

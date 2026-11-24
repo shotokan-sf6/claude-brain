@@ -1,6 +1,6 @@
 # Tracking across replays
 
-Part of the sf6-replay-analysis skill (section 7). Read when the skill points here.
+Part of the shared-core-review skill (long-term views after the ingest). Read when the skill points here.
 
 ## 7. Tracking across replays: the SF6 Replay Tracker
 The player keeps a Claude Sheet, **SF6 Replay Tracker** (link in shotokan.json, if the player has one). After every analysis, append the replay to it through the Claude Docs connector (read topic.sheets first, then readSheets and read each tab's last rows before writing; append below the last record, never overwrite).

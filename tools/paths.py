@@ -5,7 +5,7 @@
   SHOTOKAN_REPLAYS       capture files and videos. Default: $SHOTOKAN_HOME/replays
   SHOTOKAN_DB            the history database. Default: $SHOTOKAN_HOME/history/sf6.db
   SHOTOKAN_CAPTURE_DIRS  extra folders to search for captures, separated by os.pathsep (';' on Windows, ':' elsewhere).
-  SF6_MOVES              move-name files (data/sf6_moves from the mods repo); read by analyze_capture.py.
+  SF6_MOVES              move-name files (data/sf6_moves from the mods repo); read by shared_core_analyze.py.
   SHOTOKAN_PLAYER        the player in focus (your in-game name). Default: player_name in $SHOTOKAN_HOME/shotokan.json.
   SHOTOKAN_CFN_ID        their CFN ID. Default: cfn_id in shotokan.json.
 

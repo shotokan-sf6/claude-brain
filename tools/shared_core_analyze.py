@@ -1,6 +1,6 @@
 """Turn capture_replay.lua files into review datasets (sf6-review-dashboard schema) plus a report.
 
-usage: analyze_capture.py OUTDIR FOCUS_NAME SET_FORMAT capture1.json [capture2.json ...]
+usage: shared_core_analyze.py OUTDIR FOCUS_NAME SET_FORMAT capture1.json [capture2.json ...]
   OUTDIR      : where sets/games/hits/events/timings json + report.md go
   FOCUS_NAME  : the player in focus (P1 on the dashboard): their in-game name, as in shotokan.json
   SET_FORMAT  : FT2 / FT3 / FT5 (all captures are treated as one set, in the order given)
@@ -786,7 +786,7 @@ def analyze(path, game_no, focus):
                 if fr[k][o].get('act_st_name') not in BUSY_ST: pc[key_]['decision_presses'] += 1
     presses = [dict(game_id=rid, round=r_, player=p_, presses=c_['presses'], decision_presses=c_['decision_presses']) for (p_, r_), c_ in sorted(pc.items(), key=lambda x: (x[0][1], x[0][0]))]
 
-    # ---- decision presses in detail (tools/decision_presses.py): for each decision press, the situation (from the
+    # ---- decision presses in detail (tools/full_review_decision_presses.py): for each decision press, the situation (from the
     # 20 frames before: air button, vs a jump, wake-up, after blocking, own pressure, oki, after a hit, or neutral by
     # distance), what the opponent was doing, and the first thing that happened within ~70 frames.
     decisions = []

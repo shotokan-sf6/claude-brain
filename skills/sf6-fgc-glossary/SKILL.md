@@ -218,7 +218,7 @@ The site's separate "Commonly Used" category (92 terms: footsies, frame trap, me
 - **Bait**: inviting a response you're ready to punish.
 - **Download**: learning the opponent's habits mid-set.
 - **Mind game / yomi / psychic**: reading the opponent, and reads so good they look like mind-reading.
-- **RPS**: rock-paper-scissors option sets, e.g. strike beats throw, throw beats block, block beats strike. Pairs with the chess-or-poker rule in sf6-replay-analysis.
+- **RPS**: rock-paper-scissors option sets, e.g. strike beats throw, throw beats block, block beats strike. Pairs with the chess-or-poker rule in full-review-report.
 - **Risk / reward**: what can go wrong versus what you gain; judge choices by both.
 - **Flowchart / autopilot**: fixed if-then behaviour, often without thinking, which the opponent can bait.
 - **Random / mash / degenerate / gimmick**:

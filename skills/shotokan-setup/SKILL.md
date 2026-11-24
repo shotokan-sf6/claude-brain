@@ -26,7 +26,7 @@ Every other SHOTOKAN skill reads this file for "the player".
 - Copy `${CLAUDE_PLUGIN_ROOT}/tools/` into `<coaching folder>\tools\` (keep `batch\` as a subfolder). Do not overwrite an existing `tools\.env` or `tools\batch\.env`.
 - Write `<coaching folder>\tools\.env` with `SHOTOKAN_HOME=<coaching folder>` (see `tools\.env.example`).
 - Check Python 3.10+ is available on the player's computer (`python --version` in the device shell, or ask them to run it). If missing, point them to python.org and stop this step until it's installed.
-- Initialise the database: `python tools\sf6db.py init history\sf6.db`.
+- Initialise the database: `python tools\shared_core_db.py init history\sf6.db`.
 
 ## 4. Capture scripts (REFramework)
 - The player needs REFramework for SF6 (from its GitHub releases page; they download and install it themselves).
@@ -38,5 +38,5 @@ Every other SHOTOKAN skill reads this file for "the player".
 - Video (OBS) is optional; reviews work from captures alone.
 
 ## 6. Check
-- Run `python tools\analyze_capture.py` with no arguments to confirm it starts, and confirm `shotokan.json` and the database exist.
+- Run `python tools\shared_core_analyze.py` with no arguments to confirm it starts, and confirm `shotokan.json` and the database exist.
 - Tell the player what to do next: watch a replay to capture it, then ask "review my last set".

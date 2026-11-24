@@ -1,6 +1,6 @@
 # Report checks
 
-Part of the sf6-replay-analysis skill (section 5). Read when the skill points here.
+Part of the full-review-report skill (report checks). Read when the skill points here.
 
 ### Standard opponent checks (from the player): run these on every replay
 1. **Opponent at −4 or worse**: list every exchange where the meter shows the opponent at −4 or worse (the player at +4 or better) **after the player blocked**, with round + timer, the move, the advantage, and whether the player punished. Separate on-block cases from on-hit cases (a −6 during the player's own combo isn't a punish window).

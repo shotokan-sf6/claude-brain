@@ -4,7 +4,7 @@ SF6 replay reviews from your own capture files. Watch a replay in SF6 with the b
 
 ## What it does
 - **Setup** (`shotokan-setup`): coaching folder, your name / CFN ID / main character, the Python tools, the history database and the capture scripts.
-- **Reviews** (`sf6-replay-analysis`): runs the analyzer on capture files, writes a Full or Quick review (damage sources, Drive economy, decision presses, player reads and spectra, habits, fixes) and adds the set to your history database.
+- **Reviews** (`sf6-replay-analysis`, the entry point, loading three tiers: `shared-core-review` for every review, `quick-review-report` for the stats layer, `full-review-report` for the hand-written layer): runs the analyzer on capture files, writes a Full or Quick review (damage sources, Drive economy, decision presses, player reads and spectra, habits, fixes) and adds the set to your history database.
 - **Blind predictions** (`replay-review-prediction`): predicts each set before it's analysed, from pre-set facts only, and grades the prediction afterwards.
 - **Dashboards** (`sf6-review-dashboard`): an optional review dashboard per set.
 - **Reference** (`sf6-fgc-glossary`, `sf6-character-notes`, `sf6-drive-efficiency`): terms, character baselines and Drive valuation.

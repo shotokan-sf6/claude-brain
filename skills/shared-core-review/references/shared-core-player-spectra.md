@@ -1,6 +1,6 @@
 # Player spectra
 
-Part of the sf6-replay-analysis skill (section 5). Read when the skill points here.
+Part of the shared-core-review skill (spectra are computed at every ingest; the reviewer override is a Full-review step). Read when a skill points here.
 
 ### Player spectra (from the player)
 Describe player traits as **spectra between two opposite ends**, scored 1-5 (3 = in between), alongside the archetype in every player read. `tools\spectra.py` computes them from the captures (with `tools\behavior.py` / `beh_cache.json`); cut points are the 20/40/60/80th percentiles of all player-sets in sf6.db, so recalibrate as the pool grows. Each score comes with its evidence line.

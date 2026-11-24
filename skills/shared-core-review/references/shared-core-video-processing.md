@@ -1,9 +1,9 @@
 # Processing video (games with no capture)
 
-Part of the sf6-replay-analysis skill (sections 3-4). Read when the skill points here.
+Part of the shared-core-review skill (games with no capture; the detail pass is also used by full-review-report for story moments). Read when the skill points here.
 
 ## 3. Process the video
-When a capture file covers the game (section 0), only do the detail pass, for story moments. Put each upload in its own folder and work on a copy. Check that ffmpeg is installed (`which ffmpeg`) and install it if it's missing. If the player sent screenshots, read those first: paused screenshots are the most legible source.
+When a capture file covers the game, only do the detail pass, for story moments. Put each upload in its own folder and work on a copy. Check that ffmpeg is installed (`which ffmpeg`) and install it if it's missing. If the player sent screenshots, read those first: paused screenshots are the most legible source.
 
 1. Run `ffprobe` to get the duration, fps and resolution.
 2. **Overview pass**: extract frames at about 2–4 fps and tile them into contact sheets with timestamps burned in, for example:

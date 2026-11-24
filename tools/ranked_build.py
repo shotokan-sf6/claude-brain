@@ -85,8 +85,8 @@ def build_set(sid, order, key, rows):
     tim = json.load(open(f'{A}/timings.json'))
     games = json.load(open(f'{A}/games.json'))
     st = json.load(open(f'{A}/sets.json'))[0]
-    import sf6db
-    info = [sf6db.load_info(paths.find_capture(r['id'])) for r in rows]
+    import shared_core_db
+    info = [shared_core_db.load_info(paths.find_capture(r['id'])) for r in rows]
     side = ['p1' if i['p1_name'] == ME else 'p2' for i in info]
     oppc = char(info[0]['p2_char' if side[0] == 'p1' else 'p1_char'])
     use = usage(f'{A}/report.md')

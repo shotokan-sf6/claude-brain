@@ -1,6 +1,6 @@
 """Re-score hit damage in sf6.db with the current analyzer (white / recoverable health, Nov 2026), without re-ingesting.
 
-For every game in the database it re-runs analyze_capture.analyze() on the game's capture, matches the analyzer's hits to the
+For every game in the database it re-runs shared_core_analyze.analyze() on the game's capture, matches the analyzer's hits to the
 stored hits (same round, round timer and attacker, in order), and updates damage, recoverable and white_cashed. Then it
 recomputes the damage-based stats (damage_dealt, damage_taken, taken_share / taken_dmg / taken_situation_share) in set_stats
 and game_stats. Everything else (reads, habits, review docs, press counts, labels) is left as it is.
@@ -10,8 +10,8 @@ usage: python rescore_damage.py DB CAPTURE_DIR [--set SET_KEY ...] [--dry-run]
 """
 import collections as C, os, sqlite3, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import analyze_capture as A
-import sf6db
+import shared_core_analyze as A
+import shared_core_db
 
 DMG_PREFIX = ('taken_share: ', 'taken_dmg: ', 'taken_situation_share: ')
 
@@ -24,7 +24,7 @@ def capture_path(cdir, rid):
 
 
 def damage_metrics(hits, pids):
-    """Just the damage-based metrics of sf6db.set_stats, keyed by player id."""
+    """Just the damage-based metrics of shared_core_db.set_stats, keyed by player id."""
     out = {}
     for pid in pids:
         mine = [h for h in hits if h['attacker'] == pid]; took = [h for h in hits if h['victim'] == pid]
@@ -53,7 +53,7 @@ def main():
     if '--set' in args:
         i = args.index('--set'); only = set(args[i + 1:]); args = args[:i]
     db, cdir = args
-    con = sf6db.connect(db); con.row_factory = sqlite3.Row
+    con = shared_core_db.connect(db); con.row_factory = sqlite3.Row
     pname = {r['player_id']: r['name'] for r in con.execute('SELECT player_id, name FROM players')}
     games = con.execute('SELECT * FROM games ORDER BY set_key, game_no').fetchall()
     stats = C.Counter(); missing = []; touched = set()

@@ -8,7 +8,7 @@ description: "Model the value of SF6 Drive and super spending in replay reviews:
 > **Installed skills only.** This plugin ships the analysis, prediction, dashboard, glossary, character notes, Drive efficiency, Juzzy and Maj skills, and .shog's coaching rules as an example. Other coaching skills named in this text (E.X. Dojo, Coosco, DoctaAfrikan) aren't included: load them only if the player has installed them, otherwise skip those checks.
 
 
-Use this in every replay review (sf6-replay-analysis loads it) and whenever the player asks whether a Drive or super spend was worth it. The question is always: **what did the spend buy, compared with the best route that didn't spend?** And on defense: **what did the choice cost in Drive, compared with blocking?**
+Use this in every Full replay review (sf6-replay-analysis's full-review-report tier loads it) and whenever the player asks whether a Drive or super spend was worth it. The question is always: **what did the spend buy, compared with the best route that didn't spend?** And on defense: **what did the choice cost in Drive, compared with blocking?**
 
 Drive moves in both directions all the time, not only when a player spends it:
 - **Hitting gives Drive back**: the attacker gains Drive when an attack connects, on hit **and on block**.
@@ -44,7 +44,7 @@ Drive lost while blocking or getting hit is **not** spending (the resource log e
 There's no fixed exchange rate; value a resource by what else it could have bought and what losing it risks.
 - **Damage equivalent:** for each character, the median extra damage a bar bought in the player's history (route comparison in section 3, from the database). Use that as the base value of 1 Drive bar and 1 super bar, per character. With fewer than ~5 comparable routes, say the value is uncalibrated rather than inventing one.
 - **Scarcity:** the bars that take a player below 2 are worth more, because they sit next to burnout (no Drive Rush, no parry, no Drive Reversal, chip damage, a blocked Drive Impact can stun in the corner). Flag every spend that left the spender at 2 bars or fewer, and every burnout, with what drained them (spending vs blocking vs getting punish-countered).
-- **Lethal:** a spend that kills or wins the round is worth it (chess, sf6-replay-analysis 5b). A spend that adds damage to an opponent who dies anyway is waste.
+- **Lethal:** a spend that kills or wins the round is worth it (chess, full-review-report "Chess or poker?"). A spend that adds damage to an opponent who dies anyway is waste.
 - **Opportunity:** super bars kept for a Level 3 / CA threat or a reversal have value unspent; note when a spend gave up a later kill threat.
 - **Time:** at +40/frame, one bar regenerates in about 4 s of neutral. Early-round spends recover; late-round or low-Drive spends often don't.
 
@@ -83,7 +83,7 @@ At each defensive spend (wake-up reversal, Drive Reversal, Drive Parry, OD rever
 - **Drive Parry:** cost 0.5 bar + 0.3 bar/s held; refunds about **+0.5 bar per parried hit** (sometimes +1), which can make it cheaper than blocking the same string, and a perfect parry gives a punish. Main risk: being **thrown out of parry** (punish-counter throw damage plus Drive lost). Per player the analyzer logs every parry (`parries.json`, `parries` table): frames held, cost, hits parried, Drive regained, net, perfect, and what happened next (nothing, raw drive rush, punished them, hit, thrown). A parry habit with positive or small negative net Drive and few throws is efficient; one that keeps getting thrown or hit is expensive defense.
 - **Getting thrown or punish-countered** after a defensive choice is part of that choice's cost (damage and Drive).
 
-Verdict per spend: better than blocking, about even, or worse, with the numbers. Defensive calls are usually poker (sf6-replay-analysis 5b): judge them against the attacker's shown frequencies, not the single outcome.
+Verdict per spend: better than blocking, about even, or worse, with the numbers. Defensive calls are usually poker (full-review-report "Chess or poker?"): judge them against the attacker's shown frequencies, not the single outcome.
 
 ## 5. Oki thresholds (to be added)
 The player plans to add **knockdown-advantage thresholds** that say which okizeme options a given plus frame allows (e.g. meaty a 5f button, safe jump, strike/throw without a dash, dash-up meaty, needs Drive Rush), per character. When the table exists, turn each `kd_adv` into named oki options and include them in the offense gain. Until then, report `kd_adv` and the recovery type, and describe the oki in words.

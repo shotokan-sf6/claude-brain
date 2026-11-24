@@ -14,7 +14,7 @@ for k in keys:
     caps = [os.path.join(reps, g[0] + '.json.gz') for g in games]
     out = tempfile.mkdtemp()
     focus = name_of.get(games[0][1]) or '.shog'
-    r = subprocess.run([sys.executable, os.path.join(tools, 'analyze_capture.py'), out, focus, 'FT5'] + caps, capture_output=True, text=True)
+    r = subprocess.run([sys.executable, os.path.join(tools, 'shared_core_analyze.py'), out, focus, 'FT5'] + caps, capture_output=True, text=True)
     if r.returncode: print(k, 'analyzer failed', r.stderr[-400:]); continue
     nh = json.load(open(os.path.join(out, 'hits.json'))); nt = json.load(open(os.path.join(out, 'timings.json')))
     hk = {}

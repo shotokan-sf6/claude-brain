@@ -3,15 +3,15 @@
 One file (D:\\SF6-Claude-Coaching\\history\\sf6.db) holding every reviewed set: players (CFN ID + names),
 sets, games, the analyzer's hits / events / timings, per-set stats, player reads, habits and matchup notes.
 
-  python sf6db.py init  DB
-  python sf6db.py ingest DB ANALYZER_OUTDIR META.json      # one set; META describes it (see ingest_set); also
+  python shared_core_db.py init  DB
+  python shared_core_db.py ingest DB ANALYZER_OUTDIR META.json      # one set; META describes it (see ingest_set); also
                                                           # computes its spectra (spectra_backfill.py), --no-spectra to skip
-  python sf6db.py sql   DB "SELECT ..."                   # ad-hoc query, prints rows
-  python sf6db.py predict DB PREDICTION.json [--replace]  # store a blind prediction BEFORE the analyzer runs
-  python sf6db.py history DB --opp NAME|CFN [--opp-char C] [--player NAME|CFN (default: shotokan.json)] [--my-char C] [--before ISO] [--exclude ID,ID]
+  python shared_core_db.py sql   DB "SELECT ..."                   # ad-hoc query, prints rows
+  python shared_core_db.py predict DB PREDICTION.json [--replace]  # store a blind prediction BEFORE the analyzer runs
+  python shared_core_db.py history DB --opp NAME|CFN [--opp-char C] [--player NAME|CFN (default: shotokan.json)] [--my-char C] [--before ISO] [--exclude ID,ID]
                                                           # pre-set history for a prediction, only from earlier sets
 
-Blind predictions: build the pre-set facts with blind_manifest.py (no results, no later MR), gather history with
+Blind predictions: build the pre-set facts with shared_core_blind_manifest.py (no results, no later MR), gather history with
 `history` (only sets before the one predicted), write PREDICTION.json and store it with `predict` before running the
 analyzer. `predict` refuses a set whose games are already in the database, and a stored prediction can't be replaced
 once its set is ingested. Ingest links the prediction to its set and records the grade from review_docs.prediction.
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS dashboard_sets (   -- stable "Set N" numbering per da
   dashboard TEXT, set_key TEXT, set_no INTEGER, PRIMARY KEY (dashboard, set_key));
 CREATE INDEX IF NOT EXISTS ix_hits_set ON hits(set_key); CREATE INDEX IF NOT EXISTS ix_hits_victim ON hits(victim_id, lens);
 CREATE INDEX IF NOT EXISTS ix_sets_opp ON sets(opp_player_id); CREATE INDEX IF NOT EXISTS ix_sets_chars ON sets(focus_char, opp_char);
-CREATE TABLE IF NOT EXISTS predictions (          -- blind pre-set predictions, stored before the analyzer runs (sf6db.py predict)
+CREATE TABLE IF NOT EXISTS predictions (          -- blind pre-set predictions, stored before the analyzer runs (shared_core_db.py predict)
   prediction_id INTEGER PRIMARY KEY, replay_ids TEXT NOT NULL UNIQUE, set_key TEXT, written_at TEXT NOT NULL, stored_at TEXT NOT NULL,
   manifest TEXT, body TEXT NOT NULL, grade TEXT, graded_at TEXT);
 CREATE TABLE IF NOT EXISTS game_stats (           -- same metrics as set_stats, per game, with the character played in that game
@@ -230,7 +230,7 @@ def ingest_set(con, outdir, meta):
                 (k, seen, meta.get('ranked'), meta.get('format', 'FT2'), meta.get('review'), names[focus], names[opp],
                  meta.get('focus_char') or i0[fs + '_char'], meta.get('opp_char') or i0[os_ + '_char'], fg, og, winner,
                  (meta.get('focus_mr') or [None])[0] or None, meta.get('games_missing', 0), meta.get('note'), meta.get('dashboard'),
-                 meta.get('analyzer', 'analyze_capture.py'), datetime.datetime.now().isoformat(timespec='seconds')))
+                 meta.get('analyzer', 'shared_core_analyze.py'), datetime.datetime.now().isoformat(timespec='seconds')))
     for n, g in enumerate(games):
         i = infos[g['game_id']]
         fm = (meta.get('focus_mr') or [None] * len(games))[n] if n < len(meta.get('focus_mr') or []) else None
@@ -310,7 +310,7 @@ def _ids_key(ids):
 
 def store_prediction(con, pred, replace=False):
     """Store a blind prediction before any of its games are ingested. pred needs 'replays' (list of replay IDs) and
-    'written_at'; 'manifest' (blind_manifest.py output) is kept if present. Returns the prediction_id."""
+    'written_at'; 'manifest' (shared_core_blind_manifest.py output) is kept if present. Returns the prediction_id."""
     ids = pred.get('replays') or []
     if isinstance(ids, str): ids = ids.replace(',', ' ').split()
     if not ids: raise SystemExit("prediction needs 'replays': the set's replay IDs")
@@ -335,7 +335,7 @@ def link_prediction(con, set_key, meta):
     ids = [r[0] for r in con.execute('SELECT replay_id FROM games WHERE set_key=?', (set_key,))]
     row = con.execute('SELECT prediction_id FROM predictions WHERE replay_ids=?', (_ids_key(ids),)).fetchone()
     if not row:
-        print('note: no stored blind prediction for this set (sf6db.py predict stores one before the analyzer runs)')
+        print('note: no stored blind prediction for this set (shared_core_db.py predict stores one before the analyzer runs)')
         return None
     grade = (meta.get('review_docs') or {}).get('prediction')
     con.execute('UPDATE predictions SET set_key=?, grade=COALESCE(?, grade), graded_at=CASE WHEN ? IS NULL THEN graded_at ELSE ? END WHERE prediction_id=?',

@@ -1,11 +1,11 @@
 """Decision presses in detail: where players press, with which buttons, and what it leads to.
 
 A decision press is a new button, special, super or throw while the opponent isn't being hit, knocked down or
-getting up (the same count as the `decision_presses` stat). For each one, analyze_capture.py records the situation
+getting up (the same count as the `decision_presses` stat). For each one, shared_core_analyze.py records the situation
 (from the 20 frames before), the move, what the opponent was doing, and the first outcome within about 70 frames
 (hit / counter hit / blocked / parried / whiffed / got hit / whiff punished).
 
-  python decision_presses.py DB --player Coosco   (your own names from shotokan.json are added first unless --no-me) [--char Cammy] [--replays DIR] [--out decisions.json]
+  python full_review_decision_presses.py DB --player Coosco   (your own names from shotokan.json are added first unless --no-me) [--char Cammy] [--replays DIR] [--out decisions.json]
 
 --player takes a name, or several names of one player separated by commas (the first is the label).
 Prints, per player, presses per round by situation, outcome rates per situation and the top moves per situation.
@@ -15,7 +15,7 @@ folders from paths.py (SHOTOKAN_REPLAYS, SHOTOKAN_CAPTURE_DIRS). DB defaults to 
 """
 import argparse, collections as C, json, os, sqlite3, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import analyze_capture as A, paths
+import shared_core_analyze as A, paths
 
 GOOD = ('clean hit', 'counter hit', 'punish counter', 'throw', 'reversal')
 CTX = ['neutral close', 'neutral mid', 'neutral far', 'after blocking', 'wake-up', 'own pressure', 'oki', 'after a hit', 'vs a jump', 'air button']

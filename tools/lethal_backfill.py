@@ -3,7 +3,7 @@ Re-reads each game that has burnout events with the analyzer and relabels the ma
 usage: lethal_backfill.py WORK_DB LOG.json [FOCUS_PLAYER]"""
 import json, os, sqlite3, sys, collections as C
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import analyze_capture as A, paths
+import shared_core_analyze as A, paths
 db, logp = sys.argv[1], sys.argv[2]
 FOCUS = sys.argv[3] if len(sys.argv) > 3 else ''
 con = sqlite3.connect(db); con.row_factory = sqlite3.Row
