@@ -61,9 +61,12 @@ CHAR_SPECIALS = {
                ('AERIAL', 'Rainbow Rolling (63214K)'), ('WILDHUNT', 'Wild Hunt (command grab)'), ('BOMB', 'Blanka-chan Bomb'), ('SURPRISE', 'Surprise Forward/Back')],
     'Ryu': [('HADOSHO', 'Hashogeki'), ('HADO', 'Hadoken'), ('SYORYU', 'Shoryuken'), ('TATSUMAKI_AIR', 'Air Tatsumaki'),
             ('TATSUMAKI', 'Tatsumaki'), ('SOKUTOU', 'High Blade Kick'), ('KIAITAME', 'Denjin Charge')],
-    'Luke': [('HADOSHO', 'Rising Uppercut'), ('SYORYU', 'Rising Uppercut'), ('RisingUpper', 'Rising Uppercut'), ('HADO', 'Sand Blast'),
-             ('SandBlast', 'Sand Blast'), ('FlashKnuckle_Air', 'Air Flash Knuckle'), ('FLASHKNUCKLE', 'Flash Knuckle'),
-             ('Avenger', 'Avenger'), ('SOKUTOU', 'Avenger kick')],
+    # Luke (2026-11-24, from his move export): the Flash Knuckle family sits together between Sand Blast and Air Flash Knuckle:
+    # HADOSHO = L, MOROTE_M / MOROTE_H = M / H, FLASHKNUCKLE_EX = OD (read from the export's order, not a confirmed name).
+    # SOKUTOU_L starts Avenger; AvengerImpalar / AvengerNoChaser are its K / P follow-ups.
+    'Luke': [('HADOSHO', 'Flash Knuckle (L)'), ('MOROTE', 'Flash Knuckle'), ('SYORYU', 'Rising Uppercut'), ('RisingUpper', 'Rising Uppercut'),
+             ('HADO', 'Sand Blast'), ('SandBlast', 'Sand Blast'), ('FlashKnuckle_Air', 'Air Flash Knuckle'), ('FLASHKNUCKLE', 'Flash Knuckle'),
+             ('AvengerImpalar', 'Avenger > Impaler'), ('AvengerNoChaser', 'Avenger > No Chaser'), ('Avenger', 'Avenger'), ('SOKUTOU', 'Avenger')],
 }
 SUBMOVES = {'funkeyslycer': 'Funky Slicer', 'wanningmoon': 'Waning Moon', 'juglinstep': 'Juggling Step', 'juglinsway': 'Juggling Sway'}
 CHAR_SPECIALS.update({
@@ -124,6 +127,8 @@ CHAR_SUPERS = {
                 ('CAA_HIT', 'Critical Art (Unlimited Psycho Crusher)'), ('CAD_HIT', 'Critical Art (Unlimited Psycho Crusher)')],
     'Ken': [('SAA_RYUBI', 'SA1 Dragonlash Flame'), ('SAA_2_SippuJinrai', 'SA2 Shippu Jinrai-kyaku'), ('SAA_SHINRYUREPPA', 'SA3 Shinryu Reppa'),
             ('SAD_SHINRYUREPPA', 'SA3 Shinryu Reppa'), ('CAA_SHINRYUREPPA', 'Critical Art (Shinryu Reppa)'), ('CAD_SHINRYUREPPA', 'Critical Art (Shinryu Reppa)')],
+    'Luke': [('SAA_HADOUKEN', 'SA1 Vulcan Blast'), ('SAA_Ereser', 'SA2 Eraser'), ('SAA_PALERIDER', 'SA3 Pale Rider'), ('SAD_PALERIDER', 'SA3 Pale Rider'),
+             ('CAA_PALERIDER', 'Critical Art (Pale Rider)'), ('CAD_PALERIDER', 'Critical Art (Pale Rider)')],
     'Blanka': [('SAA_1_SHOUT', 'SA1'), ('SAA_2_ROLLING_CANON', 'SA2'), ('SAA_3_CANON_BALL', 'SA3'), ('SAD_3_CANON_BALL', 'SA3'), ('CAA_CANON_BALL', 'Critical Art'), ('CAD_CANON_BALL', 'Critical Art')],
 }
 

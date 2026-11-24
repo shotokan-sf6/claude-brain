@@ -2,6 +2,10 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 2026-11-24 (0.1.5)
+- Bundled tools from shotokan-sf6/tools (evening): Luke's move names (Flash Knuckle L/M/H/OD, Avenger follow-ups, SA1 Vulcan Blast, SA2 Eraser, SA3 Pale Rider), the `relabel_moves.py` fix for labels that partly stay the same, new `relabel_resolve.py`, and `quick_dashboard_from_db.py --set` so Quick reviews get their reads and habits.
+- sf6-replay-analysis: review games in the order played unless told otherwise; the Quick-review step uses `--write-reads --set SET_KEY`.
+
 ## 2026-11-24 (0.1.4)
 - Bundled mods from shotokan-sf6/mods c757834: character names come only from `char_names.json`, which now lists every character. When updating, copy it into `reframework\data\sf6_moves\` with the scripts.
 

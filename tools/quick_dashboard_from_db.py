@@ -1,6 +1,6 @@
 """quick-dashboard data, built from the history database (sf6.db).
 
-  python quick_dashboard_from_db.py DB OUTDIR [--write-reads]
+  python quick_dashboard_from_db.py DB OUTDIR [--write-reads] [--set SET_KEY ...]   (--set: just those sets, on a dashboard or not)
 
 For every set numbered on the 'quick-dashboard' dashboard (table dashboard_sets) it writes the Set review datasets
 (sets, games, hits, events, archetypes, habits, story, story_games, punish, findings, fixes, training).
@@ -462,12 +462,26 @@ def build_set(sid, order, key, D):
 
 
 
-def main(db, out, write_reads=False):
-    paths.require_player(ME)
+def main(db, out, write_reads=False, only=None):
+    """Build the Set review datasets for every set on the (retired) quick-dashboard, or, with `only` (--set SET_KEY,
+    repeatable), for just those sets whether or not they were ever on a dashboard. --write-reads writes a Quick review's
+    generated player reads and habits to the database."""
+    global ME
     os.makedirs(out, exist_ok=True)
     con = sqlite3.connect(db); con.row_factory = sqlite3.Row
     allD = C.defaultdict(list); allS = []
-    for r in con.execute("SELECT set_key, set_no FROM dashboard_sets WHERE dashboard='quick-dashboard' ORDER BY set_no").fetchall():
+    if only:
+        rows = []
+        for i, key in enumerate(only, 1):
+            n = con.execute("SELECT set_no FROM dashboard_sets WHERE dashboard='quick-dashboard' AND set_key=?", (key,)).fetchone()
+            if not con.execute('SELECT 1 FROM sets WHERE set_key=?', (key,)).fetchone(): raise SystemExit(f'no set {key} in {db}')
+            rows.append({'set_key': key, 'set_no': n[0] if n else i})
+        focus = con.execute('SELECT p.name FROM sets s JOIN players p ON p.player_id = s.focus_player_id WHERE s.set_key=?', (only[0],)).fetchone()
+        if focus and focus[0]: ME = focus[0]   # the set's own focus player
+    else:
+        rows = con.execute("SELECT set_key, set_no FROM dashboard_sets WHERE dashboard='quick-dashboard' ORDER BY set_no").fetchall()
+    paths.require_player(ME)
+    for r in rows:
         key, no = r['set_key'], r['set_no']
         sid = f'Set {no}'
         D = load_set(con, key)
@@ -510,4 +524,5 @@ def main(db, out, write_reads=False):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2], '--write-reads' in sys.argv)
+    only = [sys.argv[i + 1] for i, x in enumerate(sys.argv) if x == '--set' and i + 1 < len(sys.argv)]
+    main(sys.argv[1], sys.argv[2], '--write-reads' in sys.argv, only or None)

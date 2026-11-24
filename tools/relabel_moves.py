@@ -5,7 +5,8 @@
 OLD_ANALYZER.py is the previous analyze_capture.py (e.g. `git show <commit>:tools/analyze_capture.py > old.py`); the
 current one is this folder's. MOVES_DIR is the move export folder (reframework/data/sf6_moves, or SF6_MOVES). For each
 character, every internal move name in its export is labelled by both versions; where the label changed, the old label
-is replaced by the new one. An old label that maps to more than one new label is ambiguous and left alone (reported).
+is replaced by the new one. An old label that maps to more than one new label (counting raw names whose label didn't change) is ambiguous and left
+alone (reported): re-ingest the affected sets to fix those.
 A trailing " (OD)" added by the Drive-drain check is kept.
 
 Touched, for that character's side only: hits.starter (attacking) and hits.victim_move (being hit), timings.action,
@@ -35,10 +36,11 @@ def mapping(old, moves_dir, char):
         if d.get('char_name', '').replace('.', '').replace('_', ' ') != char.replace('.', ''):
             continue
         raw |= {v if isinstance(v, str) else v.get('name', '') for v in d['moves'].values()}
+    pairs = {(old.pretty(n, char), NEW.pretty(n, char)) for n in raw}
+    changed = {a for a, b in pairs if a != b}
     cand = {}
-    for n in raw:
-        a, b = old.pretty(n, char), NEW.pretty(n, char)
-        if a != b: cand.setdefault(a, set()).add(b)
+    for a, b in pairs:   # every new label an old one stands for, unchanged ones included: an old label that partly stays is ambiguous
+        if a in changed: cand.setdefault(a, set()).add(b)
     good = {a: next(iter(b)) for a, b in cand.items() if len(b) == 1}
     bad = {a: sorted(b) for a, b in cand.items() if len(b) > 1}
     return good, bad, len(raw)
