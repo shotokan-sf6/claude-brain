@@ -1,0 +1,14 @@
+# Recording replays from replay IDs
+
+Part of the sf6-replay-analysis skill (section 1b). Read when the skill points here.
+
+## 1b. Recording replays from replay IDs (when the player gives IDs instead of videos)
+Use computer use on his PC (load the computer-use skill first). Apps: SF6 (`d:\program files (x86)\steam\steamapps\common\street fighter 6\streetfighter6.exe`; resolve it by that path, the name doesn't resolve) and OBS Studio, plus File Explorer (click tier) and the system-key-combos grant so Win+Tab (Task View) works. OBS saves to `C:\Users\seanh\Videos` (request that folder for device access).
+- **SF6 input**: menus move with **WASD** (not the arrow keys), F = confirm, Esc = back. Tapped keys are often missed: use `hold_key` for about 0.15 s. Click an empty area of SF6 first so it has focus.
+- **Get to Replays** from the Fighting Ground: Tab (Multi Menu) > D, F (CFN) > D, D, F (Replays, opens on the Search tab).
+- **Load a replay**: from the search results, hold Esc to go back to the form (the cursor lands on "Search by player name"), hold S twice to reach Search by Replay ID, hold F to open the dialog. Wait ~1 s, press Return to enter edit mode, wait ~1 s, Backspace x12, type the ID, wait ~1 s, Return to commit, wait ~1.5 s, hold S to move to Search. Zoom on the dialog before searching: if the field still shows a text cursor or the yellow outline instead of Search being highlighted, a key was missed: press Return once more, wait, and hold S again. Then hold F to search and hold F on the result to open its details screen (note the opponent, character and Won/Lost there).
+- **Record**: Win+Tab, click the OBS thumbnail (with SF6 first in Task View, about (650,115) in the 1456x819 frame), click Start Recording (about (1192,568)), zoom to confirm it now reads Stop Recording, click SF6 (about (1300,790)) to refocus it, hold F on Watch Replay. Matches run about 2.5 min (2 rounds) to 4.5 min (3 rounds); poll with screenshots every ~50 s. The Ctrl+F9/F10 OBS hotkeys did **not** trigger from simulated keys, and the OBS WebSocket can't be reached from the device shell, so use the button. Don't use `open_application` on OBS when it's already running (it offers to start a second copy: Cancel).
+- **Check** the first in-match frame for the frame meter, input history and damage panel.
+- **Finish**: at the Play Again / End Replay screen, Win+Tab to OBS and click Stop Recording (zoom to confirm it reads Start Recording again), click SF6, then hold S + F on End Replay. Rename the newest OBS file in Videos to `<ReplayID>.mp4` with device_bash (`ls -t <date>*.mp4 | head -1`), and move it and the capture `<ReplayID>.json` into `<coaching folder>\replays\`. Then stage and analyse it, unless the player only asked for recordings.
+- If Claude's own window covers SF6, click an empty part of the SF6 screen before sending keys.
+- Release the computer-use lock at the end of the turn.

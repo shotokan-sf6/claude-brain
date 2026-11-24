@@ -1,0 +1,17 @@
+# Player spectra
+
+Part of the sf6-replay-analysis skill (section 5). Read when the skill points here.
+
+### Player spectra (from the player)
+Describe player traits as **spectra between two opposite ends**, scored 1-5 (3 = in between), alongside the archetype in every player read. `tools\spectra.py` computes them from the captures (with `tools\behavior.py` / `beh_cache.json`); cut points are the 20/40/60/80th percentiles of all player-sets in sf6.db, so recalibrate as the pool grows. Each score comes with its evidence line.
+- **Temperament (defense):** Impulsive ↔ Mindful. Share of after-block / wake-up choices made on reversal timing (an attack, special, super, throw, jump or parry within 2 frames).
+- **Temperament (offense):** Impulsive ↔ Mindful. After their attack is blocked, how often they press again (attack, jump, Drive Rush) within 3 frames of being free.
+- **Adaptability:** Inelastic ↔ Elastic. Elastic = adjusts; inelastic = keeps doing the same thing even when it isn't working or hurts them. Measured by how often moves that got them counter-hit, punished or Drive-Rush-checked in earlier games were still used in later games (lights excluded; strengths merged). Needs 2+ games. **Only a losing plan counts as inelastic** (the player, 2026-11-21): a reuse counts when the player lost that game or was behind in the set going into it, or the move kept getting punished (2+ times or 2,000+ damage, weighted 1.5x). In a game they won while not behind, a reused move only counts if it cost 3,500+ damage there. Not changing a winning plan is neutral: "Kept a winning plan" (3/5), not inelastic.
+- **Risk tolerance:** Low ↔ High. Risky options per round (wake-up reversals, Drive Impacts, Drive Reversals, raw Drive Rushes at half weight, supers, forward jumps).
+- **Raw Drive Rush in risk/reward (from the player):** treat it as fairly low risk: it costs 1 Drive bar, plus a clean or counter hit if it's checked, and it's a generally safe, easy way to start pressure. It only becomes a problem when the opponent keeps checking it and the player doesn't adjust; flag that as a leak, not the Drive Rush itself. Don't weigh character-specific Drive Rush strength for now.
+- **Initiative:** Reactive ↔ Proactive. Forward share of neutral movement, averaged with the share of neutral exchanges they start.
+- **Composure:** Steady ↔ Tilts. Action rate after taking a 2,000+ combo or losing a round, against the rest of the time.
+- **Variety:** Scripted ↔ Mixed. Spread of their after-block and wake-up choices.
+- **Resource use:** Conservative ↔ Spendthrift. Drive bars + half a point per super bar + 1 per burnout, per round. Pair it with Drive efficiency: spendthrift and efficient is cashing in, spendthrift and wasteful is a leak.
+- **Reviewer's call:** in a Full review, when my read of the video disagrees with a computed score, my call wins: set `spectra_override` `{key: [score, reason]}` in that player's archetypes row, keyed by the spectrum's internal key, not its name: `temperament`, `temperament_off`, `elasticity` (Adaptability), `risk`, `initiative`, `composure`, `variety`, `resources` (an axis name like "Adaptability" is silently ignored), and the card shows "Reviewer's call (computed X/5)". Quick reviews use the computed scores.
+- When a new behaviour-based spectrum looks useful, suggest it to the player rather than adding it silently.

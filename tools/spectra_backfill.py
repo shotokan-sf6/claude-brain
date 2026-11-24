@@ -43,6 +43,10 @@ def backfill(db, keys=None, me=None, local=None):
         s = con.execute('select focus_player_id from sets where set_key=?', (key,)).fetchone()
         W.ME = con.execute('select name from players where player_id=?', (s['focus_player_id'],)).fetchone()['name'] or me or paths.PLAYER   # the set's own focus player
         D = W.load_set(con, key); d, _ = W.build_set(key, 0, key, D)
+        hw = con.execute("select rows from review_docs where set_key=? and dataset='archetypes'", (key,)).fetchone()
+        ovs = {r.get('player'): r.get('spectra_override') for r in (json.loads(hw['rows']) if hw else []) if r.get('spectra_override')}
+        for a in d['archetypes']:   # a Full review's reviewer's-call overrides (review_docs archetypes) apply to the computed spectra
+            if ovs.get(a.get('player')): a['spectra_override'] = ovs[a['player']]
         SP.attach(d['archetypes'], key, D['games'], D['hits'], D['tim'], D['ev'], D['use'])
         pid = {W.ME: D['s']['focus_player_id'], D['opp']: D['s']['opp_player_id']}
         by_player = {}
@@ -54,7 +58,7 @@ def backfill(db, keys=None, me=None, local=None):
         if r:   # hand-written reads: keep them, attach the computed spectra
             rows = json.loads(r['rows'])
             for a in rows:
-                if a.get('player') in by_player and not a.get('spectra'): a['spectra'] = by_player[a['player']]
+                if a.get('player') in by_player and (not a.get('spectra') or a.get('spectra_override')): a['spectra'] = by_player[a['player']]
             con.execute("update review_docs set rows=? where set_key=? and dataset='archetypes'", (json.dumps(rows), key))
         con.commit()
         print('spectra', key, {p: [x['score'] for x in v] for p, v in by_player.items()})

@@ -73,8 +73,14 @@ CHAR_SPECIALS.update({
     # A.K.I.: internal Japanese names; Jatoben = Serpent Lash and ShienHou = Nightshade Pulse are solid, the Akidako / Jakeiko labels less so
     'AKI': [('Jatoben', 'Serpent Lash'), ('ShienHou', 'Nightshade Pulse'), ('ShienSen', 'Nightshade Pulse follow-up'),
             ('Akidako_Jarenko', 'Snake Step follow-up (Akidako)'), ('Akidako', 'Snake Step (Akidako)'), ('Jakeiko', 'Cruel Fate (Jakeiko)')],
-    'Ken': [('SYORYU', 'Shoryuken'), ('HADO', 'Hadoken'), ('JINRAI', 'Jinrai Kick'), ('RYUBI', 'Dragonlash Kick'),
-            ('TATSUMAKI_AIR', 'Air Tatsumaki'), ('TATSUMAKI', 'Tatsumaki'), ('SHIDEN', 'Thunder Kick'), ('FUMIKOMI', 'Quick Dash')],
+    # Ken (2026-11-24, from his move export and capture sequences): SPA_JINRAI_1 is the first kick; SPA_JINRAI_L/M/H are the
+    # follow-ups (M hit crouch-blockers, so it's the overhead Gorai Axe Kick; L hit standing blockers, the low Kazekama Shin Kick);
+    # the _EX follow-ups (after OD Jinrai) are Kasai Thrust Kick. SYORYU_START_FUNJIN is both the OD Shoryuken and the one from Quick Dash
+    # (two action ids, one name), so it stays 'Shoryuken' and the Drive-drain check adds (OD).
+    'Ken': [('SYORYU', 'Shoryuken'), ('HADO', 'Hadoken'),
+            ('JINRAI_1', 'Jinrai Kick'), ('JINRAI_L_EX', 'Kasai Thrust Kick'), ('jinrai_M_EX', 'Kasai Thrust Kick'), ('JINRAI_M_EX', 'Kasai Thrust Kick'),
+            ('JINRAI_H_EX', 'Kasai Thrust Kick'), ('JINRAI_L', 'Kazekama Shin Kick'), ('JINRAI_M', 'Gorai Axe Kick'), ('JINRAI_H', 'Senka Snap Kick'),
+            ('JINRAI', 'Jinrai Kick'), ('RYUBI', 'Dragonlash Kick'), ('TATSUMAKI_AIR', 'Air Tatsumaki'), ('TATSUMAKI', 'Tatsumaki')],
     'Dee Jay': [('1_Airslasher', 'Air Slasher'), ('1_AirSlasher', 'Air Slasher'), ('2_JackKnife', 'Jackknife Maximum'),
                 ('3_H_DowbleRollingSobat', 'Double Rolling Sobat'), ('3_M_RollingSobat', 'Double Rolling Sobat'),
                 ('3_L_FakeRollingstep', 'Double Rolling Sobat (feint)'), ('3_EX_DowbleRollingSobat', 'Double Rolling Sobat'),
@@ -102,12 +108,22 @@ CHAR_SUPERS = {
     'Terry': [('SAA_BusterWolf', 'SA1 Buster Wolf'), ('SAA_2', 'SA2'), ('SA3', 'SA3'), ('CA', 'Critical Art')],
     'Juri': [('SAA_SAKKAIFUHAJIN', 'SA1 Sakkai Fuhazan'), ('SAA_FUSUI_ENGINE', 'SA2 Feng Shui Engine'), ('SAA_03', 'SA3'), ('SAD_03', 'SA3'), ('CAA_03', 'Critical Art'), ('CAD_03', 'Critical Art')],
     'Arjun': [('SAA_SA1', 'SA1 Howling Destruction'), ('SAA_SA2', 'SA2 Instant Oblivion'), ('SAD_SA2', 'SA2 Instant Oblivion'), ('SA3', "SA3 Yaksha's Order"), ('CAA', "Critical Art (Yaksha's Order)")],
+    'Ken': [('SAA_RYUBI', 'SA1 Dragonlash Flame'), ('SAA_2_SippuJinrai', 'SA2 Shippu Jinrai-kyaku'), ('SAA_SHINRYUREPPA', 'SA3 Shinryu Reppa'),
+            ('SAD_SHINRYUREPPA', 'SA3 Shinryu Reppa'), ('CAA_SHINRYUREPPA', 'Critical Art (Shinryu Reppa)'), ('CAD_SHINRYUREPPA', 'Critical Art (Shinryu Reppa)')],
     'Blanka': [('SAA_1_SHOUT', 'SA1'), ('SAA_2_ROLLING_CANON', 'SA2'), ('SAA_3_CANON_BALL', 'SA3'), ('SAD_3_CANON_BALL', 'SA3'), ('CAA_CANON_BALL', 'Critical Art'), ('CAD_CANON_BALL', 'Critical Art')],
+}
+
+CHAR_NORMALS = {
+    'Ken': [('ATK_5MP_HP', 'Chin Buster (5MP~HP)'), ('ATK_5MK_MK_HK', 'Triple Flash Kick (5MK~MK~HK)'), ('ATK_5MK_MK', 'Triple Flash Kick (5MK~MK)'),
+            ('ATK_HK_SHIDEN', 'Quick Dash > Thunder Kick'), ('ATK_MK_FUMIKOMI', 'Quick Dash > Forward Step Kick'),
+            ('KK_LK_FUNJIN_STOP', 'Quick Dash > Emergency Stop'), ('KK_LK_FUNJIN', 'Quick Dash')],
 }
 
 
 def pretty(n, char=None):
     """game move name -> readable label"""
+    for k, lab in CHAR_NORMALS.get(char, []):   # unique attacks and target combos, which read as plain normals otherwise
+        if n == k or n.startswith(k + '_'): return lab
     for k, lab in CHAR_SUPERS.get(char, []):
         if n.startswith(k): return lab
     if n.startswith('SPA_'):
