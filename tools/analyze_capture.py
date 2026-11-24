@@ -2,7 +2,7 @@
 
 usage: analyze_capture.py OUTDIR FOCUS_NAME SET_FORMAT capture1.json [capture2.json ...]
   OUTDIR      : where sets/games/hits/events/timings json + report.md go
-  FOCUS_NAME  : the player in focus (P1 on the dashboard), e.g. .shog
+  FOCUS_NAME  : the player in focus (P1 on the dashboard): their in-game name, as in shotokan.json
   SET_FORMAT  : FT2 / FT3 / FT5 (all captures are treated as one set, in the order given)
 """
 import json, os, re, sys, collections as C

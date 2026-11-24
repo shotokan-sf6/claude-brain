@@ -34,14 +34,14 @@ def ensure_behavior(con, key, local=None):
     return added
 
 
-def backfill(db, keys=None, me='.shog', local=None):
+def backfill(db, keys=None, me=None, local=None):
     con = sqlite3.connect(db); con.row_factory = sqlite3.Row
     if not keys:
         keys = [r[0] for r in con.execute('select set_key from sets s where not exists (select 1 from spectra p where p.set_key = s.set_key)')]
     for key in keys:
         ensure_behavior(con, key, local)
         s = con.execute('select focus_player_id from sets where set_key=?', (key,)).fetchone()
-        W.ME = con.execute('select name from players where player_id=?', (s['focus_player_id'],)).fetchone()['name'] or me
+        W.ME = con.execute('select name from players where player_id=?', (s['focus_player_id'],)).fetchone()['name'] or me or paths.PLAYER   # the set's own focus player
         D = W.load_set(con, key); d, _ = W.build_set(key, 0, key, D)
         SP.attach(d['archetypes'], key, D['games'], D['hits'], D['tim'], D['ev'], D['use'])
         pid = {W.ME: D['s']['focus_player_id'], D['opp']: D['s']['opp_player_id']}

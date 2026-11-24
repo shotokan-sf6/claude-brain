@@ -1,4 +1,4 @@
-"""Ranked FT2 sets (.shog, Cammy) -> quick-dashboard data.
+"""Ranked FT2 sets (the player in focus, from shotokan.json) -> quick-dashboard data.
 
 Reads analyzer output in ranked/a/<key>/ for every set in SETS (built from log.tsv),
 writes ranked/data/*.json: per-set rows tagged with set_id (continuing after the quick-dashboard's
@@ -11,7 +11,7 @@ import paths
 ROOT = os.environ.get('SHOTOKAN_RANKED_DIR') or os.path.join(paths.HOME, 'ranked')   # the working folder (ranked/a/<key>/, log.tsv)
 OUT = f'{ROOT}/data'
 os.makedirs(OUT, exist_ok=True)
-ME = '.shog'
+ME = paths.require_player()   # the player in focus (shotokan.json / SHOTOKAN_PLAYER)
 CHAR_ALIAS = {'char_33': 'Yasmine', 'E_Honda': 'E. Honda', 'M_Bison': 'M. Bison', 'Dee_Jay': 'Dee Jay'}
 MISSING = {'5L78C3YHG_WYYXLXDUV': dict(progression='1-0, 1-1, 1-2',
     game_id='WYYXLXDUV', note='Game 2 (replay ID WBF54DB9G) was not found in CFN, so it is not analysed; the 1-2 result is inferred from your MR (1678 before game 1 and again before game 3)')}
@@ -113,7 +113,7 @@ def build_set(sid, order, key, rows):
     mr0, mr1 = rows[0]['mr'], rows[-1]['mr']
     st.update(set_id=sid, order=order, p1=ME, p1_char='Cammy', p2=opp, p2_char=oppc, p1_games=mg, p2_games=og, winner=ME if mg > og else opp,
               ranked=True, opp_char=oppc,
-              sub=f"Ranked · Replays {', '.join(r['id'] for r in rows)} · {rows[0]['date']} {rows[0]['time']}-{rows[-1]['time']} · .shog {mr0} MR at the start")
+              sub=f"Ranked · Replays {', '.join(r['id'] for r in rows)} · {rows[0]['date']} {rows[0]['time']}-{rows[-1]['time']} · {ME} {mr0} MR at the start")
     if missing:
         st.update(winner=opp, progression=missing['progression'], note=missing['note'],
                   sub=st['sub'] + ' · ' + missing['note'])
@@ -144,7 +144,7 @@ def build_set(sid, order, key, rows):
         return dict(n=len(ts), f0=f0, press=press, nothing=acts.get('nothing (30f)', 0), jump=acts.get('jump', 0), parry=acts.get('parry', 0))
     T = {p: {e: timing(p, e) for e in ('after block', 'wake-up')} for p in (ME, opp)}
 
-    # ---- lens leaks (what .shog was doing when hit)
+    # ---- lens leaks (what the player in focus was doing when hit)
     lens = C.defaultdict(list)
     for h in theirs:
         lens[h['lens'] or 'Unclear / super'].append(h)
@@ -287,7 +287,7 @@ def build_set(sid, order, key, rows):
 
     # ---- findings, fixes, training
     fnd = [dict(finding_id=f'{sid}-F1', set_id=sid, skill='game data', category='Summary', applies_to='both', confidence='High',
-                finding=f"Damage: .shog dealt {fmt(dealt)}, took {fmt(taken)}. Counter hits {len(ch[ME])}/{len(ch[opp])}, anti-airs {len(aa[ME])}/{len(aa[opp])}, throws {len(thr[ME])}/{len(thr[opp])}, burnouts {len(burn[ME])}/{len(burn[opp])} (.shog / {opp}).",
+                finding=f"Damage: {ME} dealt {fmt(dealt)}, took {fmt(taken)}. Counter hits {len(ch[ME])}/{len(ch[opp])}, anti-airs {len(aa[ME])}/{len(aa[opp])}, throws {len(thr[ME])}/{len(thr[opp])}, burnouts {len(burn[ME])}/{len(burn[opp])} ({ME} / {opp}).",
                 evidence='hits, events')]
     fx, tr = [], []
     for i, (k, v) in enumerate(leaks[:3], 1):

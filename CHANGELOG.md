@@ -2,6 +2,9 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 2026-11-24 (0.1.1)
+- Bundled tools no longer default to `.shog`: they read the player from `shotokan.json` (or `SHOTOKAN_PLAYER` / `SHOTOKAN_CFN_ID`) and stop with a clear message when it's missing. `buckler_replays.py` takes the CFN ID from it too. Removed from Known gaps. (tools e96a044)
+
 ## 2026-11-24 (0.1.0)
 - First version. Skills: shotokan-setup (new), sf6-replay-analysis, replay-review-prediction, sf6-review-dashboard, sf6-fgc-glossary, sf6-character-notes, sf6-drive-efficiency, sf6-coach-juzzy-sessions, sf6-coach-juzzy-tips, sf6-footsies-handbook-maj, and sf6-coach-shog as an example of personal rules.
 - Skill copies made general: the player comes from shotokan.json (name, CFN ID, main character); personal paths and dashboard links removed; E.X. Dojo, Coosco and DoctaAfrikan checks skipped unless those skills are installed.

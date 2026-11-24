@@ -5,7 +5,7 @@ getting up (the same count as the `decision_presses` stat). For each one, analyz
 (from the 20 frames before), the move, what the opponent was doing, and the first outcome within about 70 frames
 (hit / counter hit / blocked / parried / whiffed / got hit / whiff punished).
 
-  python decision_presses.py DB --player .shog,shog --player Coosco [--char Cammy] [--replays DIR] [--out decisions.json]
+  python decision_presses.py DB --player Coosco   (your own names from shotokan.json are added first unless --no-me) [--char Cammy] [--replays DIR] [--out decisions.json]
 
 --player takes a name, or several names of one player separated by commas (the first is the label).
 Prints, per player, presses per round by situation, outcome rates per situation and the top moves per situation.
@@ -79,9 +79,13 @@ def summary(D, players):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('db', nargs='?', default=paths.DB); ap.add_argument('--player', action='append', required=True)
+    ap.add_argument('db', nargs='?', default=paths.DB); ap.add_argument('--player', action='append', default=[])
+    ap.add_argument('--no-me', action='store_true', help="don't add the player from shotokan.json")
     ap.add_argument('--char'); ap.add_argument('--replays'); ap.add_argument('--out')
     a = ap.parse_args()
+    if not a.no_me and paths.PLAYER_NAMES and not any(paths.PLAYER in p.split(',') for p in a.player):
+        a.player.insert(0, ','.join(paths.PLAYER_NAMES))
+    if not a.player: ap.error('no players: pass --player NAME or set player_name in shotokan.json')
     D = collect(a.db, a.player, a.char, a.replays)
     if a.out: json.dump(D, open(a.out, 'w'))
     summary(D, [p.split(',')[0] for p in a.player])

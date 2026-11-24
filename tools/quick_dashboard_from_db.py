@@ -11,8 +11,10 @@ Then run overview_from_db.py for the Overview tab.
 """
 import json
 import spectra as SP, os, re, sys, sqlite3, collections as C
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import paths
 
-ME = '.shog'
+ME = paths.PLAYER   # the player in focus (shotokan.json / SHOTOKAN_PLAYER); callers may set it
 CHAR_ALIAS = {'char_33': 'Yasmine', 'E_Honda': 'E. Honda', 'M_Bison': 'M. Bison', 'Dee_Jay': 'Dee Jay'}
 TEXT_DS = ('story', 'story_games', 'habits', 'archetypes', 'fixes', 'training', 'findings', 'punish', 'set_gameplan', 'prediction', 'tournament')
 fmt = lambda n: f'{int(round(n)):,}'
@@ -279,7 +281,7 @@ def build_set(sid, order, key, D):
         return dict(n=len(ts), f0=f0, press=press, nothing=acts.get('nothing (30f)', 0), jump=acts.get('jump', 0), parry=acts.get('parry', 0))
     T = {p: {e: timing(p, e) for e in ('after block', 'wake-up')} for p in (ME, opp)}
 
-    # ---- lens leaks (what .shog was doing when hit)
+    # ---- lens leaks (what the player in focus was doing when hit)
     lens = C.defaultdict(list)
     for h in theirs:
         lens[h['lens'] or 'Unclear / super'].append(h)
@@ -461,6 +463,7 @@ def build_set(sid, order, key, D):
 
 
 def main(db, out, write_reads=False):
+    paths.require_player(ME)
     os.makedirs(out, exist_ok=True)
     con = sqlite3.connect(db); con.row_factory = sqlite3.Row
     allD = C.defaultdict(list); allS = []

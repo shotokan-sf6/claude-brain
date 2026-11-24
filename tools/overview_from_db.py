@@ -5,13 +5,15 @@
 Writes ov_sets, overview (patterns across sets), gameplan and ov_training. Every number in the text is
 computed from sf6.db, so the Overview updates when a set is added or re-analysed.
 """
-import json, sqlite3, sys, collections as C
+import json, os, sqlite3, sys, collections as C
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import paths
 from sf6db_export import mv as _mv
 JUMPS = {'BAS_JUMP_F_START': 'forward jump (takeoff)', 'BAS_JUMP_F_AIR': 'forward jump', 'BAS_JUMP_N_START': 'neutral jump (takeoff)', 'BAS_JUMP_N_AIR': 'neutral jump',
          'BAS_JUMP_B_START': 'back jump (takeoff)', 'BAS_JUMP_B_AIR': 'back jump', 'BAS_JUMP_F_LAND': 'forward jump landing', 'BAS_JUMP_N_LAND': 'jump landing'}
 mv = lambda n: JUMPS.get(n) or _mv(n)
 
-ME = '.shog'
+ME = paths.PLAYER   # the player in focus (shotokan.json / SHOTOKAN_PLAYER)
 LEAK = {'Counter-hit at mid range': 'Counter-hit at mid range', 'Whiff punished': 'Whiff punished', 'Walked in': 'Walking in', 'Jumped': 'Jumps / dive kicks',
         'Challenging pressure': 'Challenging pressure', 'Challenging okizeme': 'Challenging okizeme', 'Unsafe move punished': 'Unsafe moves', 'Pressed after turn ended': 'Pressing after turn ended',
         'Blocking, opened up': 'Opened up', 'Jumped in on (no anti-air)': 'Jump-ins not anti-aired', 'Unclear / super': 'Supers',
@@ -23,6 +25,7 @@ about = lambda n: f'about {int(round(n, -2)):,}' if n >= 1000 else f(n)
 
 
 def main(db, out):
+    paths.require_player(ME)
     con = sqlite3.connect(db); con.row_factory = sqlite3.Row
     q = lambda sql, *a: [dict(r) for r in con.execute(sql, a).fetchall()]
     me = con.execute('SELECT player_id FROM players WHERE name=?', (ME,)).fetchone()[0]

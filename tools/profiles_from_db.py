@@ -1,6 +1,6 @@
 """Build player profiles from the history database, using only the data a Quick review stores.
 
-  python profiles_from_db.py DB OUT.json [--levels Quick] [--players name,name] [--me .shog]
+  python profiles_from_db.py DB OUT.json [--levels Quick] [--players name,name] [--me NAME]   (default: the player in shotokan.json)
 
 For each player in sets of the chosen review levels, it combines across those sets:
   - archetype reads (most common call; confidence grows with the number of sets that agree)
@@ -11,7 +11,9 @@ For each player in sets of the chosen review levels, it combines across those se
   - how to beat them: the review's counter notes plus rules keyed to their extreme spectra
 Every sentence is built from those numbers; nothing is hand-written per player.
 """
-import sqlite3, json, sys, collections, statistics, re
+import sqlite3, json, os, sys, collections, statistics, re
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import paths
 
 ENDS = {'Temperament (defense)': ('Impulsive', 'Mindful'), 'Temperament (offense)': ('Impulsive', 'Mindful'),
         'Adaptability': ('Inelastic', 'Elastic'), 'Risk tolerance': ('Low', 'High'), 'Initiative': ('Reactive', 'Proactive'),
@@ -60,7 +62,8 @@ def clean(h):
     for k, v in MOVE_NAMES.items(): h = h.replace(k, v)
     return h
 
-def main(db, out, levels=('Quick',), only=None, me='.shog'):
+def main(db, out, levels=('Quick',), only=None, me=None):
+    me = paths.require_player(me)
     c = sqlite3.connect(db); c.row_factory = sqlite3.Row
     name = {r['player_id']: r['name'] for r in c.execute('select player_id, name from players')}
     q = 'select * from sets where review in (%s)' % ','.join('?' * len(levels))
@@ -180,4 +183,4 @@ def main(db, out, levels=('Quick',), only=None, me='.shog'):
 
 if __name__ == '__main__':
     a = sys.argv; opt = lambda k, d=None: a[a.index(k) + 1] if k in a else d
-    main(a[1], a[2], tuple(opt('--levels', 'Quick').split(',')), opt('--players') and opt('--players').split(','), opt('--me', '.shog'))
+    main(a[1], a[2], tuple(opt('--levels', 'Quick').split(',')), opt('--players') and opt('--players').split(','), opt('--me', None))

@@ -9,10 +9,13 @@ any buckler request > Request Headers > cookie) into BUCKLER_COOKIE in tools\\ba
 --cookie-file. The script never prints or logs it. Cookies expire; a 403 means paste a fresh one.
 
 usage:
-  py buckler_replays.py 1307078698                      100 newest IDs -> ids_1307078698.txt (batch_record.py --file format)
-  py buckler_replays.py 1307078698 -n 30 --type ranked  30 newest ranked IDs
-  py buckler_replays.py 1307078698 --json out.json      also save players, characters, MR/LP and round results
-  then: py batch_record.py --file ids_1307078698.txt
+  py buckler_replays.py                                 your 100 newest IDs (CFN ID from shotokan.json) -> ids_<cfn>.txt
+  py buckler_replays.py 1234567890                      someone else's, by CFN ID
+  py buckler_replays.py -n 30 --type ranked             30 newest ranked IDs
+  py buckler_replays.py --json out.json                 also save players, characters, MR/LP and round results
+  then: py batch_record.py --file ids_<cfn>.txt
+The default CFN ID comes from SHOTOKAN_CFN_ID, else cfn_id in shotokan.json ($SHOTOKAN_HOME, else the first one
+found in a folder above this script).
 """
 import argparse, datetime, gzip, json, os, re, sys, time, urllib.error, urllib.request
 from pathlib import Path
@@ -21,6 +24,21 @@ BASE = os.getenv("BUCKLER_BASE_URL", "https://www.streetfighter.com")
 UA = os.getenv("BUCKLER_USER_AGENT", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36")
 TYPES = {1: "ranked", 2: "casual", 3: "battle_hub", 4: "custom_room"}   # replay_battle_type ids, as in sfbuff's BattleType
 MAX_PAGES = 10                                                           # Buckler keeps 10 pages of 10 (the last 100)
+
+
+def default_cfn():
+    """Your CFN ID: SHOTOKAN_CFN_ID, else cfn_id in shotokan.json ($SHOTOKAN_HOME or a folder above this script)."""
+    if os.getenv("SHOTOKAN_CFN_ID"):
+        return os.getenv("SHOTOKAN_CFN_ID")
+    here = Path(__file__).resolve().parent
+    dirs = ([Path(os.environ["SHOTOKAN_HOME"])] if os.getenv("SHOTOKAN_HOME") else []) + [here, *list(here.parents)[:3]]
+    for d in dirs:
+        f = d / "shotokan.json"
+        if f.exists():
+            cfn = json.loads(f.read_text(encoding="utf-8")).get("cfn_id")
+            if cfn:
+                return str(cfn)
+    return None
 
 
 class BucklerError(RuntimeError):
@@ -110,13 +128,16 @@ def side(r, n):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cfn_id", help="the player's CFN ID (Buckler short_id, e.g. 1307078698)")
+    ap.add_argument("cfn_id", nargs="?", help="the player's CFN ID (Buckler short_id); default: yours, from shotokan.json")
     ap.add_argument("-n", "--count", type=int, default=100, help="how many replay IDs (max 100, Buckler's limit)")
     ap.add_argument("--type", action="append", choices=list(TYPES.values()), help="only these battle types (repeatable)")
     ap.add_argument("--out", help="IDs file (default ids_<cfn_id>.txt next to this script)")
     ap.add_argument("--json", help="also write the replays with players, characters, MR/LP and round results")
     ap.add_argument("--cookie-file", help="file holding the Cookie header (else BUCKLER_COOKIE from .env)")
     a = ap.parse_args()
+    a.cfn_id = a.cfn_id or default_cfn()
+    if not a.cfn_id:
+        ap.error("no CFN ID: pass one, or set cfn_id in shotokan.json (or SHOTOKAN_CFN_ID)")
     cookie = load_cookie(a.cookie_file)
     types = {k for k, v in TYPES.items() if v in (a.type or [])} or None
     try:

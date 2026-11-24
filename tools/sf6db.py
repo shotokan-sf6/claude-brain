@@ -8,7 +8,7 @@ sets, games, the analyzer's hits / events / timings, per-set stats, player reads
                                                           # computes its spectra (spectra_backfill.py), --no-spectra to skip
   python sf6db.py sql   DB "SELECT ..."                   # ad-hoc query, prints rows
   python sf6db.py predict DB PREDICTION.json [--replace]  # store a blind prediction BEFORE the analyzer runs
-  python sf6db.py history DB --opp NAME|CFN [--opp-char C] [--player NAME|CFN] [--my-char C] [--before ISO] [--exclude ID,ID]
+  python sf6db.py history DB --opp NAME|CFN [--opp-char C] [--player NAME|CFN (default: shotokan.json)] [--my-char C] [--before ISO] [--exclude ID,ID]
                                                           # pre-set history for a prediction, only from earlier sets
 
 Blind predictions: build the pre-set facts with blind_manifest.py (no results, no later MR), gather history with
@@ -351,9 +351,11 @@ def _pid(con, who):
     return r[0] if r else None
 
 
-def history(con, opp=None, opp_char=None, player='.shog', my_char=None, before=None, exclude=()):
+def history(con, opp=None, opp_char=None, player=None, my_char=None, before=None, exclude=()):
     """Pre-set history for a prediction, only from sets before `before` (ISO date or datetime; default now).
     A set counts as earlier if played_date is before the date, or on the same date and ingested before the time."""
+    import paths
+    player = paths.require_player(player)
     before = before or datetime.datetime.now().isoformat(timespec='seconds')
     day, tm = before[:10], (before[11:] if len(before) > 10 else None)
     ex = set(i.upper() for i in exclude)
@@ -411,7 +413,7 @@ if __name__ == '__main__':
     elif cmd == 'history':
         a = sys.argv[3:]
         opt = lambda k: a[a.index(k) + 1] if k in a else None
-        h = history(con, opt('--opp'), opt('--opp-char'), opt('--player') or '.shog', opt('--my-char'), opt('--before'),
+        h = history(con, opt('--opp'), opt('--opp-char'), opt('--player'), opt('--my-char'), opt('--before'),
                     (opt('--exclude') or '').replace(',', ' ').split())
         print(json.dumps(h, indent=1, ensure_ascii=False))
     elif cmd == 'sql':

@@ -6,10 +6,15 @@
   SHOTOKAN_DB            the history database. Default: $SHOTOKAN_HOME/history/sf6.db
   SHOTOKAN_CAPTURE_DIRS  extra folders to search for captures, separated by os.pathsep (';' on Windows, ':' elsewhere).
   SF6_MOVES              move-name files (data/sf6_moves from the mods repo); read by analyze_capture.py.
+  SHOTOKAN_PLAYER        the player in focus (your in-game name). Default: player_name in $SHOTOKAN_HOME/shotokan.json.
+  SHOTOKAN_CFN_ID        their CFN ID. Default: cfn_id in shotokan.json.
+
+shotokan.json (written by the plugin's setup, or by hand):
+  {"player_name": ".shog", "other_names": ["shog"], "cfn_id": "1307078698", "main_character": "Cammy", "control": "Classic"}
 
 A tools/.env file (KEY=value per line, # comments) is read first; real environment variables win over it.
 """
-import os
+import json, os
 
 TOOLS = os.path.dirname(os.path.abspath(__file__))
 
@@ -29,6 +34,32 @@ _load_env()
 HOME = os.environ.get('SHOTOKAN_HOME') or os.path.dirname(TOOLS)
 REPLAYS = os.environ.get('SHOTOKAN_REPLAYS') or os.path.join(HOME, 'replays')
 DB = os.environ.get('SHOTOKAN_DB') or os.path.join(HOME, 'history', 'sf6.db')
+
+
+def _config():
+    p = os.path.join(HOME, 'shotokan.json')
+    if not os.path.exists(p):
+        return {}
+    try:
+        return json.load(open(p, encoding='utf-8'))
+    except ValueError:
+        raise SystemExit(f'{p} is not valid JSON')
+
+
+CONFIG = _config()
+PLAYER = os.environ.get('SHOTOKAN_PLAYER') or CONFIG.get('player_name') or None
+PLAYER_NAMES = [n for n in [PLAYER] + list(CONFIG.get('other_names') or []) if n]   # every name the player has used
+PLAYER_CFN = os.environ.get('SHOTOKAN_CFN_ID') or (str(CONFIG['cfn_id']) if CONFIG.get('cfn_id') else None)
+
+
+def require_player(given=None):
+    """The player in focus: `given` if passed, else SHOTOKAN_PLAYER / shotokan.json. Stops with a clear message if neither is set."""
+    who = given or PLAYER
+    if not who:
+        raise SystemExit('No player set: pass the player name, or set player_name in ' + os.path.join(HOME, 'shotokan.json') + ' (or SHOTOKAN_PLAYER).')
+    return who
+
+
 CAPTURE_DIRS = [REPLAYS, os.path.join(REPLAYS, '_to_delete')] + [d for d in os.environ.get('SHOTOKAN_CAPTURE_DIRS', '').split(os.pathsep) if d]
 
 
