@@ -1,6 +1,6 @@
 {
   "name": "shotokan",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "SF6 replay reviews from your own capture files: analysis, blind predictions, full reviews, player comparisons and a history database.",
   "author": {
     "name": "Sean (.shog)"

@@ -92,8 +92,9 @@ def build_id(cookie):
     return json.loads(m.group(1))["buildId"]
 
 
-def battlelog(short_id, cookie, want, types=None, delay=1.5):
-    """Yield replay dicts, newest first, until `want` have been yielded (after the type filter) or the log ends."""
+def battlelog(short_id, cookie, want, types=None, delay=1.5, raw=None):
+    """Yield replay dicts, newest first, until `want` have been yielded (after the type filter) or the log ends.
+    raw: a list that gets each page's pageProps (for --raw)."""
     bid, got, retried = build_id(cookie), 0, False
     url = lambda page: f"{BASE}/6/buckler/_next/data/{bid}/en/profile/{short_id}/battlelog.json?page={page}"
     for page in range(1, MAX_PAGES + 1):
@@ -106,6 +107,7 @@ def battlelog(short_id, cookie, want, types=None, delay=1.5):
                 raise BucklerError(f"profile {short_id} not found (check the CFN ID)")
             bid, retried = build_id(cookie), True          # redeployed mid-run: fetch the new buildId once
             props = get(url(page), cookie)["pageProps"]
+        if raw is not None: raw.append(props)
         for r in props.get("replay_list") or []:
             if types and r.get("replay_battle_type") not in types:
                 continue
@@ -133,6 +135,7 @@ def main():
     ap.add_argument("--type", action="append", choices=list(TYPES.values()), help="only these battle types (repeatable)")
     ap.add_argument("--out", help="IDs file (default ids_<cfn_id>.txt next to this script)")
     ap.add_argument("--json", help="also write the replays with players, characters, MR/LP and round results")
+    ap.add_argument("--raw", help="also save Buckler's raw pageProps (every page fetched) to this JSON file, to look for fields the script doesn't read yet")
     ap.add_argument("--cookie-file", help="file holding the Cookie header (else BUCKLER_COOKIE from .env)")
     a = ap.parse_args()
     a.cfn_id = a.cfn_id or default_cfn()
@@ -141,7 +144,9 @@ def main():
     cookie = load_cookie(a.cookie_file)
     types = {k for k, v in TYPES.items() if v in (a.type or [])} or None
     try:
-        reps = list(battlelog(a.cfn_id, cookie, min(a.count, 100), types))
+        raw = [] if a.raw else None
+        reps = list(battlelog(a.cfn_id, cookie, min(a.count, 100), types, raw=raw))
+        if a.raw: Path(a.raw).write_text(json.dumps(raw, ensure_ascii=False, indent=1), encoding="utf-8")
     except BucklerError as e:
         sys.exit(f"Buckler: {e}")
     out = Path(a.out) if a.out else Path(__file__).with_name(f"ids_{a.cfn_id}.txt")

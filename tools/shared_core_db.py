@@ -8,6 +8,9 @@ sets, games, the analyzer's hits / events / timings, per-set stats, player reads
                                                           # computes its spectra (spectra_backfill.py), --no-spectra to skip,
                                                           # and refreshes the personal baseline (player_baseline.py)
   python shared_core_db.py sql   DB "SELECT ..."                   # ad-hoc query, prints rows
+  python shared_core_db.py mr    DB [SETKEY ...]                  # MR change per game and MR after each ranked set (sfbuff's Elo, K=16);
+                                                          # ingest does this for its set. Warns when MR says the games are out of order
+  python shared_core_db.py odds  DB MY_MR OPP_MR                  # MR at stake (win / loss), game and FT2 / FT3 win chances from the MR gap
   python shared_core_db.py predict DB PREDICTION.json [--replace]  # store a blind prediction BEFORE the analyzer runs
   python shared_core_db.py history DB --opp NAME|CFN [--opp-char C] [--player NAME|CFN (default: shotokan.json)] [--my-char C] [--before ISO] [--exclude ID,ID]
                                                           # pre-set history for a prediction, only from earlier sets
@@ -42,6 +45,7 @@ CREATE TABLE IF NOT EXISTS games (
   p1_control INTEGER, p2_control INTEGER, p1_mr INTEGER, p2_mr INTEGER,
   winner_player_id INTEGER REFERENCES players, round_score TEXT, round_winners TEXT, capture_file TEXT,
   p1_lp INTEGER, p2_lp INTEGER, p1_rank TEXT, p2_rank TEXT);   -- rank: league below Master, '<MR> MR' or 'MR unknown' at Master (rank.py)
+-- games also get p1_mr_change, p2_mr_change, mr_change_source and sets opp_mr_start, focus_mr_end, opp_mr_end (added in connect(); see mr_changes())
 CREATE TABLE IF NOT EXISTS hits (
   hit_id INTEGER PRIMARY KEY, set_key TEXT REFERENCES sets ON DELETE CASCADE, replay_id TEXT, round INTEGER, round_timer INTEGER,
   attacker_id INTEGER, victim_id INTEGER, attacker_char TEXT, victim_char TEXT, damage INTEGER, starter TEXT, hits_in_combo INTEGER,
@@ -119,7 +123,9 @@ def connect(db):
     con.execute('PRAGMA foreign_keys = ON')
     con.executescript(SCHEMA)
     for t, cols in (('games', 'p1_lp INTEGER, p2_lp INTEGER, p1_rank TEXT, p2_rank TEXT'), ('hits', 'drive_spent REAL, super_spent REAL, drive_gained REAL, drive_damage REAL, knockdown TEXT, kd_adv INTEGER, corner_dist REAL, victim_drive_after REAL, recoverable INTEGER, white_cashed INTEGER'),
-                    ('resources', 'gain_hit REAL, gain_block REAL, parry_regain REAL, loss_block REAL, loss_hit REAL, loss_hit_drive_impact REAL, loss_hit_punish_counter REAL, drive_rush_cancel REAL')):
+                    ('resources', 'gain_hit REAL, gain_block REAL, parry_regain REAL, loss_block REAL, loss_hit REAL, loss_hit_drive_impact REAL, loss_hit_punish_counter REAL, drive_rush_cancel REAL'),
+                    ('games', 'p1_mr_change INTEGER, p2_mr_change INTEGER, mr_change_source TEXT'),
+                    ('sets', 'opp_mr_start INTEGER, focus_mr_end INTEGER, opp_mr_end INTEGER')):
         have = {r[1] for r in con.execute(f'PRAGMA table_info({t})')}
         for c_ in cols.split(', '):
             if c_.split()[0] not in have: con.execute(f'ALTER TABLE {t} ADD COLUMN {c_}')   # older databases
@@ -234,7 +240,8 @@ def ingest_set(con, outdir, meta):
     fg = sum(g['winner'] == focus for g in games) + meta.get('extra_focus_wins', 0)
     og = len(games) - sum(g['winner'] == focus for g in games) + meta.get('extra_opp_wins', 0)
     winner = names[focus] if fg > og else names[opp]
-    cur.execute('INSERT INTO sets VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+    cur.execute('INSERT INTO sets (set_key, played_date, ranked, format, review, focus_player_id, opp_player_id, focus_char, opp_char, '
+                'focus_games, opp_games, winner_player_id, focus_mr_start, games_missing, note, dashboard, analyzer, ingested_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                 (k, seen, meta.get('ranked'), meta.get('format', 'FT2'), meta.get('review'), names[focus], names[opp],
                  meta.get('focus_char') or i0[fs + '_char'], meta.get('opp_char') or i0[os_ + '_char'], fg, og, winner,
                  (meta.get('focus_mr') or [None])[0] or None, meta.get('games_missing', 0), meta.get('note'), meta.get('dashboard'),
@@ -244,7 +251,9 @@ def ingest_set(con, outdir, meta):
         fm = (meta.get('focus_mr') or [None] * len(games))[n] if n < len(meta.get('focus_mr') or []) else None
         p1mr = i.get('p1_mr') or (fm if fs == 'p1' else None); p2mr = i.get('p2_mr') or (fm if fs == 'p2' else None)
         lp1, lp2 = i.get('p1_lp'), i.get('p2_lp')
-        cur.execute('INSERT OR REPLACE INTO games VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        cur.execute('INSERT OR REPLACE INTO games (replay_id, set_key, game_no, played_time, p1_player_id, p2_player_id, p1_char, p2_char, '
+                    'p1_control, p2_control, p1_mr, p2_mr, winner_player_id, round_score, round_winners, capture_file, p1_lp, p2_lp, p1_rank, p2_rank) '
+                    'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                     (g['game_id'], k, g['game_no'], (meta.get('game_times') or [None] * 9)[n] if meta.get('game_times') else None,
                      names[i['p1_name']], names[i['p2_name']], i['p1_char'], i['p2_char'], i.get('p1_control'), i.get('p2_control'),
                      p1mr or None, p2mr or None, names[g['winner']], g['round_score'], g['round_winners'], meta['captures'][g['game_id']],
@@ -363,6 +372,65 @@ def _pid(con, who):
     return r[0] if r else None
 
 
+def mr_change(my_mr, opp_mr, result):
+    """MR change for one ranked game: Elo with K = 16, as in sfbuff (github.com/alanoliveira/sfbuff,
+    app/models/master_rating_calculator.rb, MIT). result 1 win, 0 loss, 0.5 draw. Checked on sf6.db 2026-11-25:
+    it matches the next game's MR in 314 of 316 game sides (the other 2 were one set stored in the wrong game order)."""
+    return round(16 * (result - 1 / (1 + 10 ** ((opp_mr - my_mr) / 400.0))))
+
+
+def mr_odds(my_mr, opp_mr):
+    """What the MR gap says before a set (2026-11-25): every ranked game has 16 MR at stake, split by the Elo
+    expectation, so the MR a player would lose is 16 x their chance to win the game (8 / 8 = 50%; +6 / -10 = 62.5%).
+    Returns the win / loss MR, the game win chance and the chance to win an FT2 and an FT3 if every game had that chance."""
+    p = 1 / (1 + 10 ** ((opp_mr - my_mr) / 400.0)); q = 1 - p
+    return dict(win=mr_change(my_mr, opp_mr, 1), loss=mr_change(my_mr, opp_mr, 0), game=round(p, 3),
+                ft2=round(p * p * (1 + 2 * q), 3), ft3=round(p ** 3 * (1 + 3 * q + 6 * q * q), 3))
+
+
+def mr_changes(con, set_key):
+    """Fill games.p1/p2_mr_change and sets.opp_mr_start / focus_mr_end / opp_mr_end for a ranked set where both players
+    have an MR. A game's change is observed (the same player's MR in the set's next game minus this one) when there is a
+    next game, else calculated with mr_change(); the last game of a set is always calculated. mr_change_source says which:
+    'observed', 'calculated', or 'observed; formula says X / Y' when they disagree, which usually means the games are
+    stored out of played order. Returns a list of those disagreements."""
+    ranked = con.execute('SELECT ranked, focus_player_id, opp_player_id FROM sets WHERE set_key=?', (set_key,)).fetchone()
+    if not ranked: return []
+    rk, fpid, opid = ranked
+    g = con.execute('SELECT replay_id, game_no, p1_player_id, p2_player_id, p1_mr, p2_mr, winner_player_id FROM games '
+                    'WHERE set_key=? ORDER BY game_no', (set_key,)).fetchall()
+    mr_of = lambda row, pid: row[4] if row[2] == pid else row[5] if row[3] == pid else None
+    warn = []
+    for i, row in enumerate(g):
+        rid, _, p1, p2, m1, m2, w = row
+        if not rk or not m1 or not m2 or m1 <= 0 or m2 <= 0:
+            con.execute('UPDATE games SET p1_mr_change=NULL, p2_mr_change=NULL, mr_change_source=NULL WHERE replay_id=?', (rid,)); continue
+        res = lambda pid: 0.5 if w is None else (1 if w == pid else 0)
+        calc = (mr_change(m1, m2, res(p1)), mr_change(m2, m1, res(p2)))
+        nxt = g[i + 1] if i + 1 < len(g) else None
+        obs = None
+        if nxt:
+            n1, n2 = mr_of(nxt, p1), mr_of(nxt, p2)
+            if n1 and n2 and n1 > 0 and n2 > 0: obs = (n1 - m1, n2 - m2)
+        if obs is None: ch, src = calc, 'calculated'
+        elif all(abs(a - b) <= 1 for a, b in zip(obs, calc)): ch, src = obs, 'observed'
+        else:
+            ch, src = obs, f'observed; formula says {calc[0]:+d} / {calc[1]:+d}'
+            warn.append(f'{set_key} game {row[1]} ({rid}): MR moved {obs[0]:+d} / {obs[1]:+d}, formula {calc[0]:+d} / {calc[1]:+d} (games out of order?)')
+        con.execute('UPDATE games SET p1_mr_change=?, p2_mr_change=?, mr_change_source=? WHERE replay_id=?', (ch[0], ch[1], src, rid))
+    first = g[0] if g else None; last = g[-1] if g else None
+    ends = {}
+    if first and last and rk:
+        lc = con.execute('SELECT p1_mr_change, p2_mr_change FROM games WHERE replay_id=?', (last[0],)).fetchone()
+        for pid in (fpid, opid):
+            m = mr_of(last, pid); d = lc[0] if last[2] == pid else lc[1]
+            ends[pid] = m + d if m and m > 0 and d is not None else None
+        o0 = mr_of(first, opid)
+        con.execute('UPDATE sets SET opp_mr_start=?, focus_mr_end=?, opp_mr_end=? WHERE set_key=?',
+                    (o0 if o0 and o0 > 0 else None, ends.get(fpid), ends.get(opid), set_key))
+    return warn
+
+
 def history(con, opp=None, opp_char=None, player=None, my_char=None, before=None, exclude=()):
     """Pre-set history for a prediction, only from sets before `before` (ISO date or datetime; default now).
     A set counts as earlier if played_date is before the date, or on the same date and its first game was played
@@ -423,6 +491,7 @@ if __name__ == '__main__':
         meta = json.load(open(sys.argv[4]))
         key = ingest_set(con, sys.argv[3], meta)
         print('ingested', key)
+        for w in mr_changes(con, key): print('MR check:', w)
         link_prediction(con, key, meta)
         con.commit(); con.close()
         if '--no-spectra' not in sys.argv:   # the eight player spectra (spectra table + review_docs archetypes)
@@ -439,6 +508,15 @@ if __name__ == '__main__':
         h = history(con, opt('--opp'), opt('--opp-char'), opt('--player'), opt('--my-char'), opt('--before'),
                     (opt('--exclude') or '').replace(',', ' ').split())
         print(json.dumps(h, indent=1, ensure_ascii=False))
+    elif cmd == 'mr':   # fill MR changes for every set (or the set keys given); prints sets whose MR says the game order is wrong
+        keys = sys.argv[3:] or [r[0] for r in con.execute('SELECT set_key FROM sets')]
+        warns = [w for k in keys for w in mr_changes(con, k)]
+        con.commit()
+        n = con.execute('SELECT COUNT(*), SUM(mr_change_source LIKE "observed%"), SUM(mr_change_source = "calculated") FROM games WHERE mr_change_source IS NOT NULL').fetchone()
+        print(f'MR changes: {n[0]} games ({n[1]} observed, {n[2]} calculated) in {len(keys)} sets checked')
+        for w in warns: print('MR check:', w)
+    elif cmd == 'odds':   # python shared_core_db.py odds DB MY_MR OPP_MR
+        print(json.dumps(mr_odds(float(sys.argv[3]), float(sys.argv[4]))))
     elif cmd == 'sql':
         cur = con.execute(sys.argv[3]); print(' | '.join(d[0] for d in cur.description))
         for r in cur.fetchall(): print(' | '.join('' if v is None else str(v) for v in r))

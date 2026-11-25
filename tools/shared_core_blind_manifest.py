@@ -32,6 +32,13 @@ def manifest(paths):
     out = {'battle_type': inf.get('battle_type'), 'players': []}
     for s in ('p1', 'p2'):
         out['players'].append({k: inf.get(f'{s}_{k}') for k in KEEP})
+    ps = out['players']
+    if len(ps) == 2 and all((x.get('mr') or 0) > 0 for x in ps):
+        # MR at stake and win chances from the MR gap (shared_core_db.mr_odds: sfbuff's Elo, K=16). In sf6.db (117 ranked
+        # sets, 2026-11-25) small gaps (FT2 odds under 0.6) played like coin flips and bigger gaps favoured the higher MR
+        # more than the formula says (0.65 expected -> 0.84 won, 0.81 -> 0.93).
+        from shared_core_db import mr_odds
+        out['mr_odds'] = {x['name']: mr_odds(x['mr'], y['mr']) for x, y in ((ps[0], ps[1]), (ps[1], ps[0]))}
     out['withheld'] = 'round results, later games\' MR/LP, number of games, frame data'
     return out
 
