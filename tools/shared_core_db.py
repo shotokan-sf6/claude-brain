@@ -365,19 +365,28 @@ def _pid(con, who):
 
 def history(con, opp=None, opp_char=None, player=None, my_char=None, before=None, exclude=()):
     """Pre-set history for a prediction, only from sets before `before` (ISO date or datetime; default now).
-    A set counts as earlier if played_date is before the date, or on the same date and ingested before the time."""
+    A set counts as earlier if played_date is before the date, or on the same date and its first game was played
+    before the time (games.played_time, from the meta's game_times; ingest time only when no game time is stored).
+    Times are compared as 'YYYY-MM-DD HH:MM[:SS]', so 'T' or ' ' separators both work."""
     import paths
     player = paths.require_player(player)
-    before = before or datetime.datetime.now().isoformat(timespec='seconds')
+    before = (before or datetime.datetime.now().isoformat(timespec='seconds')).replace('T', ' ')
     day, tm = before[:10], (before[11:] if len(before) > 10 else None)
     ex = set(i.upper() for i in exclude)
+    def started(sk, date, ing):
+        ts = [t for (t,) in con.execute('SELECT played_time FROM games WHERE set_key=? AND played_time IS NOT NULL AND played_time<>""', (sk,))]
+        ts = [t if len(t) > 8 else f'{date} {t}' for t in ts]   # some older rows store only 'HH:MM'
+        return min(ts) if ts else (ing or '').replace('T', ' ')
     def earlier(sk, date, ing):
         if ex and any(r[0] in ex for r in con.execute('SELECT replay_id FROM games WHERE set_key=?', (sk,))): return False
         if date < day: return True
-        return date == day and tm is not None and (ing or '') [:19] <= before[:19]
+        if date != day or tm is None: return False
+        st = started(sk, date, ing)
+        return bool(st) and st[:16] < before[:16]   # to the minute; a set starting at `before` is the set itself
     me, op = _pid(con, player), _pid(con, opp)
     sets = [r for r in con.execute('SELECT set_key, played_date, ingested_at, format, ranked, focus_player_id, opp_player_id, focus_char, opp_char, '
                                    'focus_games, opp_games, winner_player_id FROM sets ORDER BY played_date') if earlier(r[0], r[1], r[2])]
+    sets.sort(key=lambda r: (r[1], started(r[0], r[1], r[2])))   # same-day sets in played order
     out = {'before': before, 'vs_player': [], 'char_matchup': [], 'opp_reads': [], 'opp_habits': [], 'my_recent_habits': []}
     name = lambda p: (con.execute('SELECT name FROM players WHERE player_id=?', (p,)).fetchone() or ['?'])[0]
     for sk, d, _, fmt, rk, f, o, fc, oc, fg, og, w in sets:

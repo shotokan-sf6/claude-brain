@@ -66,7 +66,7 @@ def usage_from(rows, games):
 DIVE_KICK = {'Cammy': 'dive kick'}          # characters whose air special is used as a dive kick in these notes
 KIT = {
     'Cammy': dict(aa='2MP / 5HP or Cannon Spike', wp='5MK or 2MK~Drive Rush'),
-    'Ryu': dict(aa='Shoryuken'), 'Ken': dict(aa='Shoryuken'), 'Akuma': dict(aa='Goshoryuken'), 'Luke': dict(aa='Rising Uppercut'),
+    'Ryu': dict(aa='Shoryuken'), 'Ken': dict(aa='Shoryuken'), 'Akuma': dict(aa='Gou Shoryuken'), 'Luke': dict(aa='Rising Uppercut'),
     'Terry': dict(aa='Rising Tackle'), 'Guile': dict(aa='Flash Kick'), 'Dee Jay': dict(aa='Jackknife Maximum'),
     'Chun-Li': dict(aa='Tenshokyaku or 2HP'), 'Ed': dict(aa='Psycho Upper'), 'Mai': dict(aa='Ryuuenbu or Hissatsu Shinobibachi'),
 }

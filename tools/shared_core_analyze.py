@@ -146,6 +146,34 @@ CHAR_SPECIALS.update({
               ('03', 'Divine Pillar'), ('Throw_Grab_OD', 'Ghastly Interrogation (OD)'), ('Throw_Grab', 'Ghastly Interrogation'),
               ('Throw_START', 'Ghastly Interrogation')],
 })
+CHAR_SPECIALS.update({
+    # Akuma (2026-11-25, internal names checked against SuperCombo's move list): SYORYU = Gou Shoryuken (623P), GOHADO = Gou Hadoken
+    # (236P, Full / Half are likely its charge levels), ZANKU = Zanku Hadoken (j.236P), SHAKKA = Adamant Flame (214P, Ex = OD),
+    # HYAKKI = Demon Raid (236K) with GOSHO = Demon Guillotine (P), GOZIN = Demon Blade Kick (K), CANCEL = Demon Swoop (2, likely),
+    # GORASEN = OD Demon Gou Rasen; ASURA = Ashura Senku teleport, ASURA_NG* = Oboro Throw (its LPLK follow-up);
+    # MISOGI (214214K) is a level 2 Super Art though it carries the SPA_ prefix.
+    'Akuma': [('SYORYU', 'Gou Shoryuken'), ('GOHADO', 'Gou Hadoken'), ('ZANKU', 'Zanku Hadoken'),
+              ('SHAKKA_Ex', 'Adamant Flame (OD)'), ('SHAKKA', 'Adamant Flame'),
+              ('HYAKKI_GOSHO', 'Demon Raid > Demon Guillotine'), ('HYAKKI_GOZIN', 'Demon Raid > Demon Blade Kick'),
+              ('HYAKKI_GORASEN', 'Demon Raid > Demon Gou Rasen'), ('HYAKKI_CANCEL', 'Demon Raid > Demon Swoop'), ('HYAKKI', 'Demon Raid'),
+              ('TATSUMAKI_AIR', 'Aerial Tatsumaki Zanku-Kyaku'), ('TATSUMAKI', 'Tatsumaki Zanku-Kyaku'),
+              ('ASURA_NG', 'Ashura Senku > Oboro Throw'), ('ASURA_F', 'Ashura Senku (forward)'), ('ASURA_B', 'Ashura Senku (back)'),
+              ('MISOGI', 'Misogi (level 2 super)')],
+})
+CHAR_SPECIALS.update({
+    # Sagat (2026-11-25, checked against SuperCombo's move list): TigerShot_CRH = Low Tiger Shot (236LP), TigerShot_STD = High
+    # Tiger Shot (236MP / HP), TigerKnee = Tiger Knee Crush (236K), 03 = Tiger Nexus (214K); 3_x_HIT is likely its connected
+    # version (its 6K follow-ups are Mighty / Greedy / Nova Tiger)
+    'Sagat': [('TigerUppercut', 'Tiger Uppercut'), ('TigerShot_CRH', 'Low Tiger Shot'), ('TigerShot_STD', 'High Tiger Shot'),
+              ('TigerShot', 'Tiger Shot'), ('TigerKnee', 'Tiger Knee Crush'), ('03', 'Tiger Nexus'), ('3_', 'Tiger Nexus')],
+    # Ingrid (2026-11-25): 236P = Sun Shot, 236K = Sun Rise, 214P = Sun Flare (_Air = Solar Burst, Stock1/2 = meter stocks),
+    # 22P_DAGEKI / 22P_Tama are taken to be Sun Veil (the wiki's 22K counter) catching a strike / a projectile: the wiki has no 22P,
+    # and DAGEKI is "strike", Tama "ball" (inferred, not confirmed)
+    'Ingrid': [('236P', 'Sun Shot'), ('236K', 'Sun Rise'), ('214P_H_Stock1_Air', 'Solar Burst (H, 1 stock)'), ('214P_H_Stock2_Air', 'Solar Burst (H, 2 stock)'),
+               ('214P_H_Stock1', 'Sun Flare (H, 1 stock)'), ('214P_H_Stock2', 'Sun Flare (H, 2 stock)'), ('214P_OD_Air', 'Solar Burst (OD)'),
+               ('214P_M_Air', 'Solar Burst (M)'), ('214P_L_Air', 'Solar Burst (L)'), ('214P', 'Sun Flare'),
+               ('KKK', 'Vanishing Sun'), ('22P_DAGEKI', 'Sun Veil (counter, strike)'), ('22P_Tama', 'Sun Veil (counter, projectile)'), ('22P', 'Sun Veil')],
+})
 LINGER = {'Arjun': ('SPA_03', 'SPA_236K')}   # moves whose hitbox stays out after the character moves on
 CHAR_SUPERS = {
     'Ryu': [('SAA_HADOUKEN', 'SA1 Shinku Hadoken'), ('SAA_HADOSHO', 'SA2 Shin Hashogeki'), ('SAD_SHINSYORYU', 'Critical Art (Shin Shoryuken)'),
@@ -161,12 +189,31 @@ CHAR_SUPERS = {
             ('SAD_SHINRYUREPPA', 'SA3 Shinryu Reppa'), ('CAA_SHINRYUREPPA', 'Critical Art (Shinryu Reppa)'), ('CAD_SHINRYUREPPA', 'Critical Art (Shinryu Reppa)')],
     'Luke': [('SAA_HADOUKEN', 'SA1 Vulcan Blast'), ('SAA_Ereser', 'SA2 Eraser'), ('SAA_PALERIDER', 'SA3 Pale Rider'), ('SAD_PALERIDER', 'SA3 Pale Rider'),
              ('CAA_PALERIDER', 'Critical Art (Pale Rider)'), ('CAD_PALERIDER', 'Critical Art (Pale Rider)')],
+    'Sagat': [('SAA_SA1', 'SA1 Tiger Cannon'), ('SAA2_NGS', 'SA2 Savage Tiger (grab)'), ('SAA2', 'SA2 Savage Tiger'), ('SAD2', 'SA2 Savage Tiger'),
+              ('SA3', 'SA3 Tiger Vanquisher'), ('CA_', 'Critical Art (Tiger Vanquisher)')],
+    # Ingrid: SAA_01 = SA1 Shining Sun, SAA_02 = SA2 Order of the Sun (both with stock versions), SA3 = Cosmic Ray; SAA_Boss unknown
+    'Ingrid': [('SAA_01', 'SA1 Shining Sun'), ('SAD_01', 'SA1 Shining Sun'), ('SAA_02', 'SA2 Order of the Sun'), ('SAD_02', 'SA2 Order of the Sun'),
+               ('SA3', 'SA3 Cosmic Ray'), ('CA_', 'Critical Art (Cosmic Ray)')],
+    # Akuma: Shun Goku Satsu (Raging Demon) is his alternate Critical Art (CAA2 / CAD2); SHINRA = SA3 Sip of Calamity,
+    # HOUTENGOUKA = SA2 Empyrean's End (inferred from the name and the wiki list), KONGO_KOKURETSUZAN = level 2 Super Art
+    'Akuma': [('CAA2', 'Critical Art (Shun Goku Satsu)'), ('CAD2', 'Critical Art (Shun Goku Satsu)'),
+              ('SAA_GOHADO', 'SA1 Messatsu Gohado'), ('SAA_GOZANKU', 'SA1 Tenma Gozanku'),
+              ('SAA_HOUTENGOUKA', "SA2 Empyrean's End"), ('SAD_HOUTENGOUKA', "SA2 Empyrean's End"),
+              ('SAA_SHINRA', 'SA3 Sip of Calamity'), ('SAD_SHINRA', 'SA3 Sip of Calamity'),
+              ('CAA_SHINRA', 'Critical Art (Sip of Calamity)'), ('CAD_SHINRA', 'Critical Art (Sip of Calamity)'),
+              ('SAA_KONGO_KOKURETSUZAN', 'Kongou-Kokuretsuzan (level 2 super)')],
     'Blanka': [('SAA_1_SHOUT', 'SA1'), ('SAA_2_ROLLING_CANON', 'SA2'), ('SAA_3_CANON_BALL', 'SA3'), ('SAD_3_CANON_BALL', 'SA3'), ('CAA_CANON_BALL', 'Critical Art'), ('CAD_CANON_BALL', 'Critical Art')],
 }
 
 CHAR_NORMALS = {
     'Cammy': [('ATK_4MP_HK', 'Lift Combination (4MP~HK)'), ('ATK_TC_5HP_5HK', 'Target combo (5HP~HK)'), ('SPD_FC_THROW', 'Hooligan > Fatal Leg Twister')],
     'M Bison': [('ATK_5MPTC_P', '5MP > P target combo'), ('ATK_5MPTC_K', '5MP > K target combo'), ('IMM_VEGA_BOMB', 'Psycho Mine explosion')],
+    'Sagat': [('ATK_2MP_HP', 'Tiger Slash (2MP~HP)'), ('ATK_2MP_HK', 'Tiger Rise (2MP~HK)'), ('ATK_5HP_HK', 'Tiger Sting (5HP~HK)'),
+              ('ATK_5MK_MK', '5MK~MK target combo'), ('ATK_6HK_HIT', '6HK')],
+    'Ingrid': [('ATK_5MP_TC', 'Pretty Heel Kick (5MP~MK)'), ('ATK_4MK_TC', 'Glowing Touch 2 (4MK~HP)'), ('ATK_4HP_TC', 'Luminous Uppercut 2 (4HP~HP)')],
+    'Akuma': [('ATK_5MP_MP', 'Viscera Piercer (5MP~MP)'), ('ATK_5MK_HK', 'Bone Crusher Axe Kick (5MK~HK)'),
+              ('ATK_6HP_TC_TC', 'Kikoku Combination (6HP~6HP~HK)'), ('ATK_6HP_TC', 'Kikoku Combination (6HP~6HP)'),
+              ('ATK_92MK', 'Tenmaku Blade Kick (j.2MK)')],
     'Ken': [('ATK_5MP_HP', 'Chin Buster (5MP~HP)'), ('ATK_5MK_MK_HK', 'Triple Flash Kick (5MK~MK~HK)'), ('ATK_5MK_MK', 'Triple Flash Kick (5MK~MK)'),
             ('ATK_HK_SHIDEN', 'Quick Dash > Thunder Kick'), ('ATK_MK_FUMIKOMI', 'Quick Dash > Forward Step Kick'),
             ('KK_LK_FUNJIN_STOP', 'Quick Dash > Emergency Stop'), ('KK_LK_FUNJIN', 'Quick Dash')],

@@ -68,5 +68,9 @@
   "236236[K]": -99,
   "236236P": -45
  },
- "aliases": {}
+ "aliases": {
+  "Sun Rise": "236?K",
+  "Sun Shot": "236?P",
+  "Sun Flare": "214?P"
+ }
 }
