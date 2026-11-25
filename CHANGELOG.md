@@ -2,6 +2,9 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 2026-11-25 (0.2.3)
+- New skill `batch-record-replays`: records replays by ID with the bundled `tools/batch/batch_record.py` (SF6 + batch_replays.lua + OBS), checks each `<ID>.mp4` / `<ID>.json` landed, reports recorded / skipped / failed without results so the blind prediction stays blind, and lists fixes for common failures (OBS not running, search dialogs, wrong screen).
+
 ## 2026-11-24 (0.2.2)
 - Block punish windows: the bundled analyzer measures every blocked move the attacker is still recovering from by 5+ frames, with range and what the defender did, checked against wiki block advantage in the new `tools/frame_data/` (32 characters). Stored in sf6.db (`punish_windows`, set and game stats). quick-review-report reports block punishes; full-review-report checks missed punishes and keeps the `frame_data` aliases up to date.
 
