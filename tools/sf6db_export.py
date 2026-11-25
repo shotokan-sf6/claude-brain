@@ -1,4 +1,4 @@
-"""Views of sf6.db for the SF6 Replay Tracker sheet and dashboard.
+"""Tab-style views of sf6.db (set metrics, player reads, opponents, character matchups) as JSON. Formerly fed the retired Replay Tracker sheet; overview_from_db.py imports its move-name helper.
 
   python sf6db_export.py DB OUTDIR      -> OUTDIR/<tab>.json, each {"header": [...], "rows": [[...], ...]}
 

@@ -54,8 +54,8 @@ Work on a `$HOME` copy of sf6.db (SQLite on the device mount fails), then copy i
 - **Add every reviewed set**, including sets where the player isn't in it.
 - An incomplete set (e.g. a ranked FT2 left at 1-1) stays 1-1 with no winner and no prediction grade.
 - Grade the prediction (predicted vs actual, path, what happened, lessons) and store it in `review_docs.prediction`.
-- **After every ingest, refresh the long-term views:** run `tools\sf6db_export.py DB OUTDIR` and rewrite the Replay Tracker sheet's Set Metrics, Player Reads, Opponents and Character Matchups tabs from its output (if the player has a tracker; link in shotokan.json), then re-upload those tabs to the tracker dashboard (`shared-core-tracking.md`).
-- sf6.db also has the views `v_sets`, `v_player_matchups` (me vs an opponent) and `v_char_matchups` (my character vs theirs); the tracker sheet and the site are views of it.
+- The long-term views are the SHOTOKAN site, published from sf6.db (no tracker sheet; retired 2026-11-25).
+- sf6.db also has the views `v_sets`, `v_player_matchups` (me vs an opponent) and `v_char_matchups` (my character vs theirs); the site is a view of it.
 
 ## 7. Rules every review follows
 - **Timestamps:** round + `round_timer`, written "@" (G1 R2 @77).
@@ -66,6 +66,6 @@ Work on a `$HOME` copy of sf6.db (SQLite on the device mount fails), then copy i
 - **Burnouts:** a burnout spent on a combo that kills (lethal) isn't counted.
 - **OD specials:** the analyzer marks a special OD when its start drains at least 15,000 Drive within 12 frames. Trust the OD label over the strength label.
 - **Confidence:** never make up inputs or frame values; mark what the data can't prove "likely" or "unclear", and ask the player what they were going for when it matters.
-- **Reviewing another player** (e.g. "Sayo, playing Ryu"): analyze from that player's side, keep it out of the player's own tracker, confirm which in-game name is theirs, and deliver what was asked for.
+- **Reviewing another player** (e.g. "Sayo, playing Ryu"): analyze from that player's side, keep it out of the player's own stats, confirm which in-game name is theirs, and deliver what was asked for.
 
 Then continue with `quick-review-report`.

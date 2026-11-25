@@ -2,6 +2,9 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 2026-11-25 (0.2.4)
+- Replay Tracker sheet retired: shared-core-review no longer refreshes a tracker sheet or dashboard after ingest, `shared-core-tracking.md` is removed, and the skills and README no longer mention the tracker. The history database (and the SHOTOKAN site, for .shog) is the long-term view. Bundled `tools/sf6db_export.py` docstring updated to match shotokan-sf6/tools.
+
 ## 2026-11-25 (0.2.3)
 - New skill `batch-record-replays`: records replays by ID with the bundled `tools/batch/batch_record.py` (SF6 + batch_replays.lua + OBS), checks each `<ID>.mp4` / `<ID>.json` landed, reports recorded / skipped / failed without results so the blind prediction stays blind, and lists fixes for common failures (OBS not running, search dialogs, wrong screen).
 

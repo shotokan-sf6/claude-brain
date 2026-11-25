@@ -31,4 +31,4 @@ SF6 replay reviews from your own capture files. Watch a replay in SF6 with the b
 E.X. Dojo, Coosco and DoctaAfrikan coaching skills. Skills that mention them skip those checks unless you install them yourself.
 
 ## Known gaps (0.1.0)
-- The Replay Tracker sheet and named dashboards are .shog's; other players set their own links in `shotokan.json`.
+- Named dashboards are .shog's; other players set their own links in `shotokan.json`.

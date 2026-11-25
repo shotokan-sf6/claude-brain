@@ -82,4 +82,4 @@ For tournament sets, or when asked. On top of a Full review:
 - Store these as the `tournament` dataset (set_id, part, order, title, body, evidence, verdict) in review_docs (shown as a "Tournament review" section on the set's review page) and set the review to Tournament.
 
 ## 8. Dashboards for another player
-When asked for a dashboard copy from the other player's side (e.g. "obi1-dash"), run the analyzer with that player as the focus, write the hand-written datasets from their side (format: `sf6-review-dashboard`), and keep it out of the player's tracker and database views.
+When asked for a dashboard copy from the other player's side (e.g. "obi1-dash"), run the analyzer with that player as the focus, write the hand-written datasets from their side (format: `sf6-review-dashboard`), and keep it out of the player's database views.
