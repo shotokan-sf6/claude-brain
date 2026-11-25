@@ -38,6 +38,38 @@ def base_damage(char, label):
 JUMP_STATES = {'JUMP', 'JUMP_NORM', 'SJUMP', 'SJUMP_NORM', 'WJUMP', 'WSJUMP', 'TJUMP', 'FALL', 'JDEF'}
 MOVE_STATES = {'FOOTWORK', 'WALK', 'DASH', 'KDASH', 'DUCK_WALK', 'STAND', 'SIT', 'SITD', 'STAND_TURN', 'SIT_TURN'}
 ATTACK_STATES = {'ATCK', 'SPECIAL', 'SUPER', 'CATCH', 'ATCK_LAND'}
+# block punish range (distance in capture units between the players when the defender leaves blockstun): calibrated
+# on 2026-11-24 ranked sets, where point-blank DP / Tiger Uppercut / Flash Kick blocks were 0.9-1.6 apart and spaced
+# -5/-6 pokes 1.8-3.8 apart. Tune as character reach data comes in.
+PUNISH_CLOSE, PUNISH_MID = 1.6, 2.6
+_FD = {}
+
+
+def frame_data(char):
+    """tools/frame_data/<char>.json: wiki block advantage by input, plus analyzer-label aliases ({} when none)."""
+    c = _norm(char)
+    if c not in _FD:
+        p = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'frame_data', c + '.json')
+        try: _FD[c] = json.load(open(p, encoding='utf-8'))
+        except (OSError, ValueError): _FD[c] = {}
+    return _FD[c]
+
+
+def block_adv(char, label):
+    """Wiki block advantage for an analyzer move label, or None. Normals match the input directly (5MK, 2HP);
+    specials go through the character's aliases ("Shoryuken": "623?P", so "Shoryuken (OD)" -> 623PP)."""
+    fd = frame_data(char); adv = fd.get('block_adv', {})
+    if not label: return None
+    if label in adv: return adv[label]
+    al = fd.get('aliases', {})
+    m = re.match(r'(.*?) \((L|M|H|OD)\)$', label)
+    base, st = (m.group(1), m.group(2)) if m else (label, None)
+    t = al.get(label) or al.get(base)
+    if not t: return None
+    if '?' in t:
+        if not st: return None
+        t = re.sub(r'\?([PK])', lambda x: x.group(1) * 2, t) if st == 'OD' else t.replace('?', st)
+    return adv.get(t)
 
 
 def mname(names, side, aid):
@@ -771,6 +803,57 @@ def analyze(path, game_no, focus):
                                     regained=round(regain / 10000, 2), net=round((regain - cost) / 10000, 2), perfect=perfect, next=nxt))
             k += 1
 
+    # ---- block punish windows: each time a player leaves blockstun while the attacker is still recovering from the move
+    # they blocked, by 5 frames or more (frames measured from the capture: blockstun end -> attacker free / new action).
+    # A move restarted before the blockstun ended (5MK into 5MK, chained jabs) is a frame trap, not a window. Range is the
+    # distance between the players when the defender is free: 'close' is in reach of a 4-5f button, 'mid' needs a long
+    # button, 'far' (fireballs, spaced limbs) isn't a block punish at all. frame_data/<char>.json (move label -> wiki block
+    # advantage, filled during Full reviews) confirms the measured value when it has the move.
+    punish_windows = []
+    FREE_ST = MOVE_STATES | JUMP_STATES | {'PARRY', 'DEF'}
+    for side in ('p1', 'p2'):
+        o = other[side]; s0 = None
+        for k in range(1, len(fr)):
+            if fr[k].get('fight_st') != 4: s0 = None; continue
+            b0, b1 = fr[k - 1][side].get('blockstun') or 0, fr[k][side].get('blockstun') or 0
+            if b1 > 0 and b0 == 0: s0 = k
+            if not (b0 > 0 and b1 == 0) or s0 is None or fr[k][side].get('act_st_name') == 'DAMAGE': continue
+            x = fr[k][o]; aid = x.get('action_id'); ost = x.get('act_st_name')
+            if ost in FREE_ST or ost in ('DAMAGE', 'HOLD', 'GETUP', 'DOWN') or ost in JUMP_STATES: continue
+            if any(fr[j][o].get('action_id') != aid or (fr[j][o].get('action_frame') or 0) < (fr[j - 1][o].get('action_frame') or 0) for j in range(s0 + 1, k + 1)):
+                continue   # cancelled or restarted during the blockstun
+            e = None; hit = False
+            for j in range(k, min(len(fr), k + 150)):
+                y = fr[j][o]; st = y.get('act_st_name')
+                if st == 'DAMAGE' or (y.get('hitstun') or 0) > 0: e = j; hit = True; break
+                if (fr[j][side].get('blockstun') or 0) > 0: break   # blocked something again (a projectile, a second hit)
+                if st in FREE_ST or y.get('action_id') != aid or (j > k and (y.get('action_frame') or 0) < (fr[j - 1][o].get('action_frame') or 0)):
+                    e = j; break
+            if e is None: continue
+            adv = None if hit else -(e - k)
+            if adv is not None and adv > -5: continue
+            res, act = ('punished', None) if hit else (None, None)
+            if not hit:
+                for j in range(k, e + 1):
+                    st = fr[j][side].get('act_st_name')
+                    if st == 'DAMAGE': res = 'got hit'; break
+                    if st in ('ATCK', 'SPECIAL', 'SUPER', 'THROW'):
+                        res = 'pressed, no hit'; act = pretty(mname(names, side, fr[j][side].get('action_id')), side_char[side]); break
+                    if st == 'PARRY': res = 'drive parry'; break
+                    if st in JUMP_STATES: res = 'jumped'; break
+                    if st in ('DASH', 'KDASH'): res = 'dashed'; break
+                res = res or 'held / walked'
+            dist = abs((fr[k][side].get('posX') or 0) - (x.get('posX') or 0))
+            move = pretty(mname(names, o, aid), side_char[o]); wiki = block_adv(side_char[o], move)
+            if wiki is None: check = 'unverified'
+            elif adv is None: check = 'wiki %+d' % wiki
+            # multi-hit / late-blocked moves (DPs, OD specials) measure less minus than the wiki's first-hit value; the window is still real
+            else: check = ('ok' if abs(wiki - adv) <= 3 else 'later hit blocked' if wiki < adv else 'wiki disagrees') + ' (wiki %+d)' % wiki
+            if hit and wiki is not None and wiki > -5: continue
+            punish_windows.append(dict(game_id=rid, round=fr[k]['round'] + 1, round_timer=fr[k]['round_timer'], defender=side_name[side], attacker=side_name[o],
+                                       move=move, adv=adv, distance=round(dist, 2), range=('close' if dist <= PUNISH_CLOSE else 'mid' if dist <= PUNISH_MID else 'far'),
+                                       result=res, action=act, wiki_adv=wiki, check=check))
+
     # button economy (Theory #4): new attack / special / super / throw states per player per round. A press is a
     # "decision press" when the opponent isn't being hit, knocked down or getting up, so combo and oki presses
     # (which the winning player gets more of) don't inflate the count. Chained buttons in one combo count once.
@@ -834,13 +917,13 @@ def analyze(path, game_no, focus):
                 if done is not None and j - done > 25: break
             decisions.append(dict(game_id=rid, round=fr[k]['round'] + 1, round_timer=fr[k]['round_timer'], side=side, player=side_name[side],
                                   move=mv, ctx=ctx, dist=round(dist, 2), opp=opp_doing, outcome=out_, damage=dmg))
-    return dict(decisions=decisions, info=info, rows=rows, events=events, winners=winners, timings=timings, usage=usage, side_name=side_name, side_char=side_char, resources=resources, parries=parries, presses=presses)
+    return dict(decisions=decisions, info=info, rows=rows, events=events, winners=winners, timings=timings, usage=usage, side_name=side_name, side_char=side_char, resources=resources, parries=parries, presses=presses, punish_windows=punish_windows)
 
 
 def main():
     out, focus, fmt, paths = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4:]
     os.makedirs(out, exist_ok=True)
-    games, hits, events, timings, report, resources, parries, presses = [], [], [], [], [], [], [], []
+    games, hits, events, timings, report, resources, parries, presses, pwin = [], [], [], [], [], [], [], [], []
     score = C.Counter(); opp = None
     for g, p in enumerate(paths, 1):
         A = analyze(p, g, focus)
@@ -850,7 +933,7 @@ def main():
         games.append(dict(game_id=A['info']['replay_id'], set_id='Set 1', game_no=g, winner=winner,
                           round_score=f"{rs[focus]}-{rs[opp]}", round_winners=', '.join(A['winners']),
                           set_score_after=f"{score[focus]}-{score[opp]}"))
-        hits += A['rows']; events += A['events']; timings += A['timings']; resources += [dict(r, set_id='Set 1') for r in A['resources']]; parries += [dict(x, set_id='Set 1') for x in A['parries']]; presses += [dict(x, set_id='Set 1') for x in A['presses']]
+        hits += A['rows']; events += A['events']; timings += A['timings']; resources += [dict(r, set_id='Set 1') for r in A['resources']]; parries += [dict(x, set_id='Set 1') for x in A['parries']]; presses += [dict(x, set_id='Set 1') for x in A['presses']]; pwin += [dict(x, set_id='Set 1') for x in A['punish_windows']]
         report.append((A, g))
     key = lambda n: re.sub(r'[^a-z0-9]', '', n.lower())
     winner = max(score, key=score.get)
@@ -858,7 +941,7 @@ def main():
                  **{key(focus) + '_games': score[focus], key(opp) + '_games': score[opp]}, winner=winner,
                  progression=', '.join(x['set_score_after'] for x in games), max_deficit_overcome=None, note=None)]
     for i, e in enumerate(events, 1): e['event_id'] = f'E{i:02d}'; e['set_id'] = 'Set 1'
-    for n, obj in (('sets', sets), ('games', games), ('hits', hits), ('events', events), ('timings', timings), ('resources', resources), ('parries', parries), ('presses', presses)):
+    for n, obj in (('sets', sets), ('games', games), ('hits', hits), ('events', events), ('timings', timings), ('resources', resources), ('parries', parries), ('presses', presses), ('punish_windows', pwin)):
         json.dump(obj, open(f'{out}/{n}.json', 'w'), indent=1, ensure_ascii=False)
     # ---- report for writing the story
     L = []
@@ -881,6 +964,17 @@ def main():
     L.append('# Drive Parries (cost, hits parried, Drive regained, net, what happened next)')
     for x in parries:
         L.append(f"  {x['game_id'][:3]} R{x['round']} @{x['round_timer']} {x['player']}: {x['frames']}f, cost {x['cost']}, parried {x['hits_parried']} (+{x['regained']}), net {x['net']}{' PERFECT' if x['perfect'] else ''} -> {x['next']}")
+    L.append('# Block punish windows (attacker -5 or worse when the defender left blockstun; range close <= %g, mid <= %g)' % (PUNISH_CLOSE, PUNISH_MID))
+    for p in sorted(set(x['defender'] for x in pwin)):
+        xs = [x for x in pwin if x['defender'] == p]
+        for rg in ('close', 'mid', 'far'):
+            ys = [x for x in xs if x['range'] == rg]
+            ys = [x for x in ys if not x['check'].startswith('wiki disagrees')]
+            if ys: L.append(f"  {p} {rg}: {len(ys)} windows, punished {sum(x['result'] == 'punished' for x in ys)}, missed {sum(x['result'] != 'punished' for x in ys)} ({dict(C.Counter(x['result'] for x in ys if x['result'] != 'punished'))})")
+    for x in pwin:
+        if x['range'] != 'far':
+            L.append(f"  {x['game_id'][:3]} R{x['round']} @{x['round_timer']} {x['defender']} blocked {x['attacker']}'s {x['move']}: "
+                     f"{'hit before recovering' if x['adv'] is None else '%d' % x['adv']} at {x['distance']} ({x['range']}) -> {x['result']}{' ' + x['action'] if x['action'] else ''} [{x['check']}]")
     L.append('# Timings (frames until first action after blockstun ends / on wake-up)')
     for p in set(t['player'] for t in timings):
         for ev in ('after block', 'wake-up'):

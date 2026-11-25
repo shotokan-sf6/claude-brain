@@ -1,8 +1,16 @@
 {
   "name": "shotokan",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "SF6 replay reviews from your own capture files: analysis, blind predictions, full reviews, player comparisons and a history database.",
-  "author": { "name": "Sean (.shog)" },
+  "author": {
+    "name": "Sean (.shog)"
+  },
   "homepage": "https://github.com/shotokan-sf6",
-  "keywords": ["street fighter 6", "sf6", "replay review", "coaching", "fighting games"]
+  "keywords": [
+    "street fighter 6",
+    "sf6",
+    "replay review",
+    "coaching",
+    "fighting games"
+  ]
 }

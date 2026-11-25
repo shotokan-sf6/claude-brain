@@ -2,6 +2,9 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 2026-11-24 (0.2.2)
+- Block punish windows: the bundled analyzer measures every blocked move the attacker is still recovering from by 5+ frames, with range and what the defender did, checked against wiki block advantage in the new `tools/frame_data/` (32 characters). Stored in sf6.db (`punish_windows`, set and game stats). quick-review-report reports block punishes; full-review-report checks missed punishes and keeps the `frame_data` aliases up to date.
+
 ## 2026-11-24 (0.2.1)
 - Bundled tools: spectra scored against everyone except the configured player (`spectra_calibrate.py`), the 7-day personal baseline (`player_baseline.py`, run by ingest) and `character_baselines.py`. shared-core-player-spectra reference updated. sf6-character-notes: Marisa notes and baselines without the player.
 

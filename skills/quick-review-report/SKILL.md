@@ -26,6 +26,7 @@ From the ingested set (sf6.db) and report.md, for the player in focus and the op
 - **Where they dealt damage:** top starters (damage and count), frame-trap counter hits in pressure, throws and shimmies (throws landed, techs caught), punish counters, combo drive rush cancels.
 - **Button economy:** decision presses per round and damage per decision press, against the opponent's (`set_stats`).
 - **Defense:** after-block and wake-up choices (held block, pressed on the first free frame, jumped, parried), and damage taken in oki.
+- **Block punishes:** report.md's "Block punish windows" section (sf6.db `punish_windows`): windows of -5 or worse by range (close / mid; far isn't a block punish), how many were punished, and what was done instead (Drive Parry, pressed but didn't connect, jumped, held). Name each close miss with its round @ timer. Trust rows marked `ok` or `later hit blocked`; check `unverified` ones on video before calling them misses, and ignore `wiki disagrees`.
 - **Resources:** burnouts (lethal ones not counted), the three Drive Rush classes, Drive Reversals, super spent and left at round ends.
 
 ## 4. Lessons held

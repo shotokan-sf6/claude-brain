@@ -27,6 +27,7 @@ WebFetch is blocked by the wiki's bot check. Use the built-in browser (load the 
 [...document.querySelectorAll('table')].filter(t=>/Startup|Notes|Punish Adv/.test(t.rows[0]?.innerText||'')).map(t=>[...t.rows].slice(1).map(r=>[...r.cells].map(c=>c.innerText.replace(/\s+/g,' ').slice(0,140)).join(' | ')).join('\n')).join('\n=====\n')
 ```
 - Pull each page once per session, for both characters (punish questions need the opponent's block advantage; the Invuln column matters on wake-up). Matchups pages are sometimes empty placeholders: say so and build matchup notes from frame data and the replay.
+- Block advantage is cached in `tools/frame_data/<char>.json` (wiki Block Adv by input, pulled 2026-11-24). When a review's punish windows show `unverified` specials, add the analyzer label to that file's `aliases` (e.g. `"Shoryuken": "623?P"`: `?` takes L/M/H from the label, OD doubles the button) and re-run the analyzer. Re-pull a character's table after a balance patch.
 - Use numpad notation. Cite the wiki values you pulled, not remembered ones, and say whether each value came from the meter or the wiki.
 
 ## 3. Go through the set

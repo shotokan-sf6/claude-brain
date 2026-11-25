@@ -63,6 +63,9 @@ CREATE TABLE IF NOT EXISTS resources (            -- Drive / super spent per pla
 CREATE TABLE IF NOT EXISTS parries (              -- each Drive Parry: cost, hits parried, Drive regained, perfect, what happened next
   set_key TEXT REFERENCES sets ON DELETE CASCADE, replay_id TEXT, round INTEGER, round_timer INTEGER, player_id INTEGER,
   frames INTEGER, drive_before REAL, cost REAL, hits_parried INTEGER, regained REAL, net REAL, perfect INTEGER, next TEXT);
+CREATE TABLE IF NOT EXISTS punish_windows (       -- defender left blockstun with the attacker still recovering by 5+ frames
+  set_key TEXT REFERENCES sets ON DELETE CASCADE, replay_id TEXT, round INTEGER, round_timer INTEGER, defender_id INTEGER, attacker_id INTEGER,
+  move TEXT, adv INTEGER, distance REAL, range TEXT, result TEXT, action TEXT, wiki_adv INTEGER, check_note TEXT);
 CREATE TABLE IF NOT EXISTS set_stats (            -- long format: one row per set, player and metric, for trends
   set_key TEXT REFERENCES sets ON DELETE CASCADE, player_id INTEGER, metric TEXT, value REAL, PRIMARY KEY (set_key, player_id, metric));
 CREATE TABLE IF NOT EXISTS reads (
@@ -149,7 +152,7 @@ def player(con, name, cfn_id=None, seen=None):
     return pid
 
 
-def set_stats(hits, events, timings, games, pids, presses=None):
+def set_stats(hits, events, timings, games, pids, presses=None, pwin=None):
     """Per-player metrics for trend tracking (ints and shares)."""
     out = {}
     for name, pid in pids.items():
@@ -165,6 +168,10 @@ def set_stats(hits, events, timings, games, pids, presses=None):
         if presses:   # button economy (Theory #4): all presses and decision presses (opponent not being hit / knocked down)
             pr = [x for x in presses if x['player'] == name]
             m['presses'] = sum(x['presses'] for x in pr); m['decision_presses'] = sum(x['decision_presses'] for x in pr); m['press_rounds'] = len(pr)
+        if pwin is not None:   # block punishes: windows of -5 or worse in reach (close / mid), and how many were punished
+            for rg in ('close', 'mid'):
+                ws = [x for x in pwin if x['defender'] == name and x['range'] == rg and not (x['check'] or '').startswith('wiki disagrees')]
+                m[f'punish_windows_{rg}'] = len(ws); m[f'punishes_landed_{rg}'] = sum(x['result'] == 'punished' for x in ws)
         for t in DR_TYPES:
             m[t.replace(' ', '_')] = sum(e['player'] == name and e['type'] == t for e in events)
         for ev in ('after block', 'wake-up'):
@@ -262,13 +269,17 @@ def ingest_set(con, outdir, meta):
     if os.path.exists(f'{outdir}/parries.json'):
         cur.executemany('INSERT INTO parries VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)', [(k, x['game_id'], x['round'], x['round_timer'], names[x['player']], x['frames'], x['drive_before'], x['cost'],
                                                                                 x['hits_parried'], x['regained'], x['net'], int(bool(x['perfect'])), x['next']) for x in L('parries')])
-    for pid, m in set_stats(hits, events, timings, games, names, presses).items():
+    cur.execute('DELETE FROM punish_windows WHERE set_key=?', (k,))
+    pwin = L('punish_windows') if os.path.exists(f'{outdir}/punish_windows.json') else []
+    cur.executemany('INSERT INTO punish_windows VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [(k, x['game_id'], x['round'], x['round_timer'], names[x['defender']], names[x['attacker']], x['move'], x['adv'],
+                                                                                    x['distance'], x['range'], x['result'], x['action'], x['wiki_adv'], x['check']) for x in pwin])
+    for pid, m in set_stats(hits, events, timings, games, names, presses, pwin).items():
         cur.executemany('INSERT INTO set_stats VALUES (?,?,?,?)', [(k, pid, a, b) for a, b in m.items()])
     cur.execute('DELETE FROM game_stats WHERE set_key=?', (k,))
     for g in games:   # per game too, so a player's stats can be split by character (and a mid-set character switch is split correctly)
         gid = g['game_id']; only = lambda rows: [x for x in rows if x.get('game_id') == gid]
         for name, pid in names.items():
-            m = set_stats(only(hits), only(events), only(timings), [g], {name: pid}, only(presses) if presses else None)[pid]
+            m = set_stats(only(hits), only(events), only(timings), [g], {name: pid}, only(presses) if presses else None, only(pwin))[pid]
             cur.executemany('INSERT OR REPLACE INTO game_stats VALUES (?,?,?,?,?,?)', [(k, gid, pid, charof.get((gid, name)), a, b) for a, b in m.items()])
     rep = os.path.join(outdir, 'report.md')
     if os.path.exists(rep):
