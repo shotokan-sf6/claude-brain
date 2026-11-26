@@ -125,10 +125,14 @@ def connect(db):
     for t, cols in (('games', 'p1_lp INTEGER, p2_lp INTEGER, p1_rank TEXT, p2_rank TEXT'), ('hits', 'drive_spent REAL, super_spent REAL, drive_gained REAL, drive_damage REAL, knockdown TEXT, kd_adv INTEGER, corner_dist REAL, victim_drive_after REAL, recoverable INTEGER, white_cashed INTEGER'),
                     ('resources', 'gain_hit REAL, gain_block REAL, parry_regain REAL, loss_block REAL, loss_hit REAL, loss_hit_drive_impact REAL, loss_hit_punish_counter REAL, drive_rush_cancel REAL'),
                     ('games', 'p1_mr_change INTEGER, p2_mr_change INTEGER, mr_change_source TEXT'),
-                    ('sets', 'opp_mr_start INTEGER, focus_mr_end INTEGER, opp_mr_end INTEGER')):
+                    ('sets', 'opp_mr_start INTEGER, focus_mr_end INTEGER, opp_mr_end INTEGER, reviewed_at TEXT')):
         have = {r[1] for r in con.execute(f'PRAGMA table_info({t})')}
         for c_ in cols.split(', '):
             if c_.split()[0] not in have: con.execute(f'ALTER TABLE {t} ADD COLUMN {c_}')   # older databases
+    # reviewed_at: when a set was first reviewed (ISO time) (kept across re-ingests, unlike ingested_at). Sets from before the
+    # column existed take their ingest date, else 2026-11-26.
+    con.execute("UPDATE sets SET reviewed_at = COALESCE(ingested_at, '2026-11-26') WHERE reviewed_at IS NULL")
+    con.commit()
     return con
 
 
@@ -227,6 +231,7 @@ def ingest_set(con, outdir, meta):
         if meta.get('game_numbers'): g['game_no'] = meta['game_numbers'][n]          # e.g. a game missing from the set
     k = meta['set_key']
     cur = con.cursor()
+    prev_reviewed = (cur.execute('SELECT reviewed_at FROM sets WHERE set_key = ?', (k,)).fetchone() or [None])[0]
     cur.execute('DELETE FROM sets WHERE set_key = ?', (k,))
     seen = meta.get('played_date')
     names = {}
@@ -246,6 +251,8 @@ def ingest_set(con, outdir, meta):
                  meta.get('focus_char') or i0[fs + '_char'], meta.get('opp_char') or i0[os_ + '_char'], fg, og, winner,
                  (meta.get('focus_mr') or [None])[0] or None, meta.get('games_missing', 0), meta.get('note'), meta.get('dashboard'),
                  meta.get('analyzer', 'shared_core_analyze.py'), datetime.datetime.now().isoformat(timespec='seconds')))
+    cur.execute('UPDATE sets SET reviewed_at = ? WHERE set_key = ?',
+                (meta.get('reviewed_at') or prev_reviewed or datetime.datetime.now().isoformat(timespec='seconds'), k))   # first review time, kept on re-ingest
     for n, g in enumerate(games):
         i = infos[g['game_id']]
         fm = (meta.get('focus_mr') or [None] * len(games))[n] if n < len(meta.get('focus_mr') or []) else None

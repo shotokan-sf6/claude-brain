@@ -2,6 +2,9 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 0.2.8 (2026-11-26): reviewed date
+- `shared_core_db.py`: new `sets.reviewed_at`, the time a set was first reviewed. It's set on the first ingest and kept on re-ingest (unlike `ingested_at`), or taken from META `reviewed_at`. Existing databases are backfilled from `ingested_at` (else 2026-11-26) when they're opened. SHOTOKAN Web sorts its latest reviewed sets by it.
+
 ## 0.2.7 (2026-11-26): wiki move names, fireball Drive Rush, A.K.I. notes
 - Move names checked against the SuperCombo move lists and matched to each capture's inputs, in `shared_core_analyze.py`. A.K.I. had three wrong labels. 2PP is Sinister Slide (was "Snake Step (Akidako)"), with its follow-ups Venomous Fang, Heel Strike and Entrapment (grab). 236K is Snake Step (was "Cruel Fate (Jakeiko)"), and 214K is Cruel Fate. Also named: Orchid Spring, Toxic Wreath, Nightshade Chaser, j.2HP Gong Fu, and SA1-SA3. Jamie: Swagger Step, Arrow Kick, Luminous Dive Kick, Tenshin, Bakkai, The Devil Inside. Alex: Flash Axe / Chop, Power Bomb (attempt / hit), Prowler Stance and its follow-ups, held 5HK / 5HP, j.2HP. Elena: Scratch Wheel, Spinning Scythe, Rhino Horn, the Lynx Song family, Moon Glider, SA1-SA3. Earlier in the day: more supers / specials for A.K.I., C. Viper, Dhalsim, Yasmine, Alex, Ingrid, Chun-Li and Kimberly, and bare `DRIVE_RUSH` counted as Drive Rush (Chun-Li, C. Viper). Use `relabel_moves.py` / `relabel_resolve.py` to bring an existing database up to date.
 - `frame_data`: block-advantage aliases for Arrow Kick, Air Knee Smash and Scratch Wheel.
