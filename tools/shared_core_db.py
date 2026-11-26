@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS sets (
   focus_player_id INTEGER REFERENCES players, opp_player_id INTEGER REFERENCES players,
   focus_char TEXT, opp_char TEXT, focus_games INTEGER, opp_games INTEGER, winner_player_id INTEGER REFERENCES players,
   focus_mr_start INTEGER, games_missing INTEGER DEFAULT 0, note TEXT, dashboard TEXT, analyzer TEXT, ingested_at TEXT);
+CREATE TABLE IF NOT EXISTS player_flags (
+  player_id INTEGER REFERENCES players, flag TEXT, note TEXT, added TEXT, PRIMARY KEY (player_id, flag));
 CREATE TABLE IF NOT EXISTS games (
   replay_id TEXT PRIMARY KEY, set_key TEXT REFERENCES sets ON DELETE CASCADE, game_no INTEGER, played_time TEXT,
   p1_player_id INTEGER REFERENCES players, p2_player_id INTEGER REFERENCES players, p1_char TEXT, p2_char TEXT,
@@ -125,7 +127,7 @@ def connect(db):
     for t, cols in (('games', 'p1_lp INTEGER, p2_lp INTEGER, p1_rank TEXT, p2_rank TEXT'), ('hits', 'drive_spent REAL, super_spent REAL, drive_gained REAL, drive_damage REAL, knockdown TEXT, kd_adv INTEGER, corner_dist REAL, victim_drive_after REAL, recoverable INTEGER, white_cashed INTEGER'),
                     ('resources', 'gain_hit REAL, gain_block REAL, parry_regain REAL, loss_block REAL, loss_hit REAL, loss_hit_drive_impact REAL, loss_hit_punish_counter REAL, drive_rush_cancel REAL'),
                     ('games', 'p1_mr_change INTEGER, p2_mr_change INTEGER, mr_change_source TEXT'),
-                    ('sets', 'opp_mr_start INTEGER, focus_mr_end INTEGER, opp_mr_end INTEGER, reviewed_at TEXT')):
+                    ('sets', 'opp_mr_start INTEGER, focus_mr_end INTEGER, opp_mr_end INTEGER, reviewed_at TEXT, excluded TEXT')):
         have = {r[1] for r in con.execute(f'PRAGMA table_info({t})')}
         for c_ in cols.split(', '):
             if c_.split()[0] not in have: con.execute(f'ALTER TABLE {t} ADD COLUMN {c_}')   # older databases
@@ -231,7 +233,7 @@ def ingest_set(con, outdir, meta):
         if meta.get('game_numbers'): g['game_no'] = meta['game_numbers'][n]          # e.g. a game missing from the set
     k = meta['set_key']
     cur = con.cursor()
-    prev_reviewed = (cur.execute('SELECT reviewed_at FROM sets WHERE set_key = ?', (k,)).fetchone() or [None])[0]
+    prev_reviewed, prev_excluded = cur.execute('SELECT reviewed_at, excluded FROM sets WHERE set_key = ?', (k,)).fetchone() or (None, None)
     cur.execute('DELETE FROM sets WHERE set_key = ?', (k,))
     seen = meta.get('played_date')
     names = {}
@@ -253,6 +255,9 @@ def ingest_set(con, outdir, meta):
                  meta.get('analyzer', 'shared_core_analyze.py'), datetime.datetime.now().isoformat(timespec='seconds')))
     cur.execute('UPDATE sets SET reviewed_at = ? WHERE set_key = ?',
                 (meta.get('reviewed_at') or prev_reviewed or datetime.datetime.now().isoformat(timespec='seconds'), k))   # first review time, kept on re-ingest
+    # excluded: a reason (e.g. '1v1me' for a betting match that opens with a ~30 s warm-up). Kept in the database, left out of
+    # history, the published site and its stats. Set by META 'excluded' or `shared_core_db.py exclude`; kept on re-ingest.
+    cur.execute('UPDATE sets SET excluded = ? WHERE set_key = ?', (meta.get('excluded', prev_excluded), k))
     for n, g in enumerate(games):
         i = infos[g['game_id']]
         fm = (meta.get('focus_mr') or [None] * len(games))[n] if n < len(meta.get('focus_mr') or []) else None
@@ -460,7 +465,7 @@ def history(con, opp=None, opp_char=None, player=None, my_char=None, before=None
         return bool(st) and st[:16] < before[:16]   # to the minute; a set starting at `before` is the set itself
     me, op = _pid(con, player), _pid(con, opp)
     sets = [r for r in con.execute('SELECT set_key, played_date, ingested_at, format, ranked, focus_player_id, opp_player_id, focus_char, opp_char, '
-                                   'focus_games, opp_games, winner_player_id FROM sets ORDER BY played_date') if earlier(r[0], r[1], r[2])]
+                                   'focus_games, opp_games, winner_player_id FROM sets WHERE excluded IS NULL ORDER BY played_date') if earlier(r[0], r[1], r[2])]
     sets.sort(key=lambda r: (r[1], started(r[0], r[1], r[2])))   # same-day sets in played order
     out = {'before': before, 'vs_player': [], 'char_matchup': [], 'opp_reads': [], 'opp_habits': [], 'my_recent_habits': []}
     name = lambda p: (con.execute('SELECT name FROM players WHERE player_id=?', (p,)).fetchone() or ['?'])[0]
@@ -527,5 +532,29 @@ if __name__ == '__main__':
     elif cmd == 'sql':
         cur = con.execute(sys.argv[3]); print(' | '.join(d[0] for d in cur.description))
         for r in cur.fetchall(): print(' | '.join('' if v is None else str(v) for v in r))
+    elif cmd == 'flag':   # python shared_core_db.py flag DB "NAME|CFN" [FLAG] [--note "..."] [--remove]; FLAG defaults to 'notable'
+        a = [x for x in sys.argv[3:]]
+        note = a[a.index('--note') + 1] if '--note' in a else None
+        args = [x for i, x in enumerate(a) if not x.startswith('--') and (i == 0 or a[i - 1] != '--note')]
+        who, flag = args[0], (args[1] if len(args) > 1 else 'notable')
+        row = con.execute('SELECT p.player_id, p.name FROM players p WHERE p.cfn_id = ? OR lower(p.name) = lower(?) '
+                          'UNION SELECT n.player_id, p.name FROM player_names n JOIN players p USING (player_id) WHERE lower(n.name) = lower(?)',
+                          (who, who, who)).fetchall()
+        if len(row) != 1:
+            sys.exit(f'{who}: {len(row)} players match; use the CFN ID')
+        pid, name = row[0]
+        if '--remove' in a:
+            con.execute('DELETE FROM player_flags WHERE player_id = ? AND flag = ?', (pid, flag)); print('unflagged', name, flag)
+        else:
+            con.execute('INSERT OR REPLACE INTO player_flags VALUES (?,?,?,?)', (pid, flag, note, datetime.date.today().isoformat())); print('flagged', name, flag)
+        con.commit()
+    elif cmd == 'exclude':   # python shared_core_db.py exclude DB SETKEY [REASON] [--remove]; REASON defaults to '1v1me'
+        a = [x for x in sys.argv[3:] if not x.startswith('--')]
+        k, why = a[0], (a[1] if len(a) > 1 else '1v1me')
+        n = con.execute('UPDATE sets SET excluded = ? WHERE set_key = ?', (None if '--remove' in sys.argv else why, k)).rowcount
+        con.commit(); print(('included' if '--remove' in sys.argv else f'excluded ({why})') if n else 'no such set', k)
+    elif cmd == 'flags':   # list flagged players
+        for r in con.execute('SELECT p.name, p.cfn_id, f.flag, f.note, f.added FROM player_flags f JOIN players p USING (player_id) ORDER BY f.flag, lower(p.name)'):
+            print(' | '.join('' if v is None else str(v) for v in r))
     elif cmd == 'init':
         print('ok')

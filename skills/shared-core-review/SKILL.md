@@ -53,6 +53,7 @@ Work on a `$HOME` copy of sf6.db (SQLite on the device mount fails), then copy i
 - The ingest computes both players' eight spectra (definitions: `shared-core-player-spectra.md`), adding the set's replays to `beh_cache.json` first (`--no-spectra` skips it; `tools\spectra_backfill.py DB` fills any set without spectra), and links the stored prediction.
 - **Add every reviewed set**, including sets where the player isn't in it.
 - An incomplete set (e.g. a ranked FT2 left at 1-1) stays 1-1 with no winner and no prediction grade.
+- **1v1me betting matches:** a set whose rounds open with about 30 seconds of warm-up (jumping, random buttons, no real exchange) is a 1v1me betting match (2026-11-26). Tell the player before reviewing it. If it's confirmed, ingest it with META `excluded: "1v1me"`: it stays in sf6.db but is left out of history, predictions and the published site. To exclude a set that's already in the database, run `shared_core_db.py exclude DB SETKEY 1v1me`.
 - Grade the prediction (predicted vs actual, path, what happened, lessons) and store it in `review_docs.prediction`.
 - The long-term views are the SHOTOKAN site, published from sf6.db (no tracker sheet; retired 2026-11-25).
 - sf6.db also has the views `v_sets`, `v_player_matchups` (me vs an opponent) and `v_char_matchups` (my character vs theirs); the site is a view of it.

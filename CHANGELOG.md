@@ -2,6 +2,13 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 0.2.9 (2026-11-26): notable players, excluded sets
+- `shared_core_db.py`:
+    - New `player_flags` table and `flag` / `flags` commands, to mark notable / pro players.
+    - New `sets.excluded` and an `exclude` command: a set stays in the database but is left out of prediction history and the published site. META `excluded` sets it at ingest.
+- shared-core-review: a set whose rounds open with about 30 s of warm-up is a 1v1me betting match. Ask before reviewing it, and ingest it with `excluded: "1v1me"`.
+- README: database extras.
+
 ## 0.2.8 (2026-11-26): reviewed date
 - `shared_core_db.py`: new `sets.reviewed_at`, the time a set was first reviewed. It's set on the first ingest and kept on re-ingest (unlike `ingested_at`), or taken from META `reviewed_at`. Existing databases are backfilled from `ingested_at` (else 2026-11-26) when they're opened. SHOTOKAN Web sorts its latest reviewed sets by it.
 
