@@ -81,6 +81,28 @@ Across the database (without .shog), players average about 1.25 forward jumps, 2
 - These characters can throw a fireball (often OD) and Drive Rush behind it to start offense safely. Expect fireball > Drive Rush sequences as a normal way in, not a reckless one; judge whether the opponent had an answer (parry the fireball, Drive Impact, jump) and whether the follow-up was gapped.
 - **Juri, to a lesser degree:** with a stocked Fuhajin she can start offense behind the fireball, but she usually walks behind it rather than Drive Rushing.
 
+### A.K.I.
+Added 2026-11-26 from 20 Broski sets (about 2,000 MR) and 15 Zastorial sets (about 1,530 MR). Marked (suggested) until the player confirms.
+- **Move names (checked against SuperCombo inputs, 2026-11-26):**
+    - 2PP Sinister Slide (the analyzer's old "Snake Step (Akidako)"), with these follow-ups: ~P Venomous Fang, ~K Heel Strike, ~LPLK Entrapment (a grab).
+    - 236K Snake Step (the old "Cruel Fate (Jakeiko)").
+    - 214K Cruel Fate (Kyosyutotu).
+    - 214LP Nightshade Pulse, ~6P Nightshade Chaser; 214MP Orchid Spring; 214HP Toxic Wreath.
+    - j.2HP Gong Fu; 3MP Pu Lao.
+    - Supers: SA1 Deadly Implication, SA2 Tainted Talons, SA3 Claws of Ya Zi.
+    - Treat "Snake Step" in reviews before this date as Sinister Slide.
+- (suggested) **Throws are the win condition at high level.** Broski: throws 24.6% of his damage, 1.6 a round. He threw again right after a throw 80 times in 20 sets (Zastorial: 0.7 throws a round, 8.9% of damage, 13 repeats). The shimmy (a delayed 5HK / 2LP / 5LP / 2MK on the tech or throw attempt) made 538 damage a round. Count throw-after-throw and shimmy counter-hits when reviewing an A.K.I.
+- (suggested) **Fireball volume:** high-level A.K.I. throws about 4 Nightshade Pulses a round (Broski 4.3, Zastorial 1.9). Fireball Drive Rush nets about +280 to +330 per use. Its follow-up after the first blocked button should be a low or a throw; a second mid strike lost 470 on average (Zastorial).
+- (suggested) **Pressure Drive Rush off blocked 5HK / 5MP** into a throw, 3MP or delayed 5LK: Broski 0.39 a round, Zastorial 0.03. 3MP opened crouch-blockers in the captures (*likely* an overhead; check the wiki's Guard column).
+- (suggested) **Sinister Slide goes under projectiles:** Hadoken, Tiger Shot, Breathing Ring, Sun Shot (Broski: 14,366 vs Arjun). Entrapment beats crouch-blocking (Zastorial 6.5% of his damage; the A.K.I. mirror took 12,896 off Broski with it). Drive Rush and Drive Impact catch a predictable slide.
+- (suggested) **Weaknesses opponents exploited:**
+    - Serpent Lash used as a poke gets jumped (Sagat, Manon, Alex, the mirror) or counter-hit by long pokes. It works as a whiff punish.
+    - Jumping into dedicated anti-airs: Bison 2HP, Tiger Uppercut, Modern Ken Shoryuken.
+    - Pressing after the turn ends (Asahi's Mai swept Broski this way).
+    - Walk-in throws.
+    - Neutral jumps: Zastorial 2.2 a round vs Broski 1.2.
+- (suggested) **Baselines per round** (Broski / Zastorial): raw Drive Rush 3.2 / 2.4, Drive Parry 4.0 / 3.1, Drive Impact 0.17 / 0.40, counter hits 1.65 / 2.12, anti-airs 0.8 / 0.8, burnouts 0.20 / 0.13, super bars spent 0.79 / 0.46.
+
 ### C. Viper
 - **Aerial character, like Cammy:** her Burn Kick gives her a strong air game, so frequent jumps are part of her game plan rather than a leak by themselves. Judge the jumps by what they were meant to land on and how the Burn Kicks were spaced. (Baseline: too few rounds in the database so far.)
 

@@ -55,7 +55,7 @@ LENS_SHORT = {'Challenging pressure': 'challenging pressure', 'Challenging okize
               'Jumped': 'jumping', 'Jumped in on (no anti-air)': 'being jumped in on', 'Own offense beaten by a reversal': 'their offense beaten by a reversal',
               'Drive Rush / Impact checked': 'Drive Rush / Impact getting checked', 'Unsafe move punished': 'unsafe moves punished', 'Pressed after turn ended': 'pressing again after their turn started', 'Unclear / super': 'supers or unclear'}
 
-MOVE_NAMES = {'SOMERSAULT_Start': 'Flash Kick', 'SONICBOOM': 'Sonic Boom', 'Akidako_Ganzigarame': 'Snake Step grab (Akidako_Ganzigarame)'}
+MOVE_NAMES = {'SOMERSAULT_Start': 'Flash Kick', 'SONICBOOM': 'Sonic Boom', 'Akidako_Ganzigarame': 'Entrapment (Sinister Slide grab)'}
 SKIP_PATTERNS = ('first action after blocking',)
 
 def clean(h):

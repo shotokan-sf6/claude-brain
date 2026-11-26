@@ -239,7 +239,7 @@ def ingest_set(con, outdir, meta):
     fs = 'p1' if i0['p1_name'] == focus else 'p2'; os_ = 'p2' if fs == 'p1' else 'p1'
     fg = sum(g['winner'] == focus for g in games) + meta.get('extra_focus_wins', 0)
     og = len(games) - sum(g['winner'] == focus for g in games) + meta.get('extra_opp_wins', 0)
-    winner = names[focus] if fg > og else names[opp]
+    winner = None if meta.get('incomplete') else (names[focus] if fg > og else names[opp])   # incomplete set (e.g. FT2 left 1-0 / 1-1): no winner
     cur.execute('INSERT INTO sets (set_key, played_date, ranked, format, review, focus_player_id, opp_player_id, focus_char, opp_char, '
                 'focus_games, opp_games, winner_player_id, focus_mr_start, games_missing, note, dashboard, analyzer, ingested_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                 (k, seen, meta.get('ranked'), meta.get('format', 'FT2'), meta.get('review'), names[focus], names[opp],

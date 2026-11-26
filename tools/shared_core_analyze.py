@@ -106,8 +106,12 @@ CHAR_SPECIALS.update({
     'Mai': [('623K', 'Ryuuenjin (DP)'), ('236K', 'Hissatsu Shinobi Bachi'), ('214P', 'Ryuuenbu'), ('236P', 'Kachousen (fireball)')],
     'Guile': [('SONICBOOM', 'Sonic Boom'), ('SOMERSAULT', 'Flash Kick'), ('Sonicblade', 'Sonic Blade'), ('SONICBLADE', 'Sonic Blade')],
     # A.K.I.: internal Japanese names; Jatoben = Serpent Lash and ShienHou = Nightshade Pulse are solid, the Akidako / Jakeiko labels less so
-    'AKI': [('Jatoben', 'Serpent Lash'), ('ShienHou', 'Nightshade Pulse'), ('ShienSen', 'Nightshade Pulse follow-up'),
-            ('Akidako_Jarenko', 'Snake Step follow-up (Akidako)'), ('Akidako', 'Snake Step (Akidako)'), ('Jakeiko', 'Cruel Fate (Jakeiko)')],
+    # A.K.I. (2026-11-26, checked against SuperCombo inputs from the captures): Akidako is 2PP Sinister Slide (not Snake Step),
+    # Jakeiko is 236K Snake Step (not Cruel Fate), Kyosyutotu is 214K Cruel Fate; ShienSen / ShihouSan are 214MP / 214HP.
+    'AKI': [('Jatoben', 'Serpent Lash'), ('ShienHou', 'Nightshade Pulse'), ('ShienTui', 'Nightshade Chaser'), ('ShienSen', 'Orchid Spring'),
+            ('ShihouSan', 'Toxic Wreath'), ('Akidako_Ganzigarame_Miss', 'Entrapment (whiff)'), ('Akidako_Ganzigarame', 'Entrapment (Sinister Slide grab)'),
+            ('Akidako_Jarenko', 'Heel Strike (Sinister Slide)'), ('Akidako_Modokuga', 'Venomous Fang (Sinister Slide)'),
+            ('Akidako_END', 'Sinister Slide exit'), ('Akidako', 'Sinister Slide'), ('Jakeiko', 'Snake Step'), ('Kyosyutotu', 'Cruel Fate')],
     # Ken (2026-11-24, from his move export and capture sequences): SPA_JINRAI_1 is the first kick; SPA_JINRAI_L/M/H are the
     # follow-ups (M hit crouch-blockers, so it's the overhead Gorai Axe Kick; L hit standing blockers, the low Kazekama Shin Kick);
     # the _EX follow-ups (after OD Jinrai) are Kasai Thrust Kick. SYORYU_START_FUNJIN is both the OD Shoryuken and the one from Quick Dash
@@ -220,6 +224,89 @@ CHAR_NORMALS = {
 }
 
 
+# 2026-11-25 (PhenomTheMoose / CFN Good sets): names read from the move codes. Super slots (SA1/SA2/SA3) follow the SAA number;
+# special names are the well-known ones for each code. Codes not listed stay raw (unnamed) until checked.
+for _c, _rows in {
+    'Mai': [('SAA_1_POWERUP', 'SA1 (powered up)'), ('SAA_1', 'SA1'), ('SAA_2', 'SA2'), ('SA3_HIT', 'SA3'), ('START_HIT', 'SA3'), ('CA_HIT', 'Critical Art')],
+    'Jamie': [('SAA3_GETUGASAIHOU', 'SA3 Getsuga Saiho'), ('SAA_GETUGASAIHOU', 'SA3 Getsuga Saiho'), ('SAA2', 'SA2'), ('SAA1', 'SA1'), ('MASIN_MAX', 'SA2 (max)')],
+    'Rashid': [('SAA1_G', 'SA1 Super Rashid Kick'), ('SAA1', 'SA1 Super Rashid Kick'), ('SAA2', 'SA2 Ysaar'), ('SAA3', 'SA3 Altair'), ('SA3', 'SA3 Altair')],
+    'Dhalsim': [('SAA_YOGAINFERNO', 'SA1 Yoga Inferno'), ('SAA_YOGASUNBURST', 'SA2 Yoga Sunburst'), ('SAA_YOGAGAIA', 'SA3 Yoga Gaia')],
+    'Kimberly': [('SAA_Lv1', 'SA1 Bushin Beats'), ('SAA_Lv2', 'SA2 Bushin Scramble'), ('SAA_Lv3', 'SA3 Bushin Ninjastar Cypher')],
+    'Marisa': [('SAA1', 'SA1 Javelin of Marisa'), ('SAA2', 'SA2 Phalanx'), ('SAA3', 'SA3 Goddess of the Hunt')],
+    'Manon': [('SAA_1', 'SA1'), ('SAA_2', 'SA2'), ('SAA_3', 'SA3')],
+    'Sagat': [('START_HIT', 'SA3 Tiger Vanquisher')],   # 3 bars spent with it (2026-11-25)
+}.items():
+    CHAR_SUPERS.setdefault(_c, [])[:0] = _rows
+for _c, _rows in {
+    'Jamie': [('SPA2_EX', 'Freeflow Strikes (OD)'), ('SPA2', 'Freeflow Strikes')],
+    'Rashid': [('SPINING_MIXER', 'Spinning Mixer'), ('EAGLE_SPIKE', 'Eagle Spike'), ('WHIRLWINDSHOT', 'Whirlwind Shot'), ('ARABIAN_CYCLONE', 'Arabian Cyclone'),
+               ('ARABIAN_SKYHIGH', 'Arabian Skyhigh'), ('WING_STROKE', 'Wing Stroke')],
+    'Dhalsim': [('YOGAFIRE', 'Yoga Fire'), ('YOGAFRAME', 'Yoga Flame'), ('YOGABLAST', 'Yoga Blast'), ('YOGAARCH', 'Yoga Arch'), ('YOGACOMET', 'Yoga Comet'),
+                ('YOGAFLOAT', 'Yoga Float'), ('YOGATELEPORT', 'Yoga Teleport')],
+    'Kimberly': [('Hayagake', 'Sprint (Hayagake)'), ('Tengu', 'Tengu Stone')],
+    'Marisa': [('Scutum_NGA', 'Scutum (counter-throw)'), ('Gradius_MAX', 'Gladius (charged)')],
+}.items():
+    CHAR_SPECIALS.setdefault(_c, [])[:0] = _rows
+for _c, _rows in {
+    'Dhalsim': [('ATK_82K', 'j.2K (drill)'), ('ATK_82P', 'j.2P (drill)')],
+    'Mai': [('ATK_4HK_TC', '4HK target combo')],
+    'Marisa': [('ATK_5HP_MAX', '5[HP] (charged)'), ('ATK_4HP_MAX', '4[HP] (charged)'), ('ATK_6HK_MAX', '6[HK] (charged)'), ('ATK_5HK_MAX', '5[HK] (charged)'),
+               ('ATK_3HP_MAX', '3[HP] (charged)'), ('ATK_2HK_MAX', '2[HK] (charged)')],
+}.items():
+    CHAR_NORMALS.setdefault(_c, [])[:0] = _rows
+
+
+# 2026-11-26 (Zastorial / A.K.I. sets): super slots follow the SAA number; specials are the well-known names for each code.
+for _c, _rows in {
+    'AKI': [('SAA_01', 'SA1'), ('SAA_02', 'SA2'), ('SAA_03', 'SA3')],
+    'C.Viper': [('SAA_02', 'SA2'), ('SAA_01', 'SA1'), ('SAA_03', 'SA3')],
+    'Dhalsim': [('SAA_LV3', 'SA3 Yoga Gaia')],
+    'Yasmine': [('SAA_SA1', 'SA1'), ('SA3_HIT', 'SA3'), ('SA3', 'SA3')],
+    'Alex': [('SAA1', 'SA1'), ('SAA2', 'SA2'), ('SAA3', 'SA3')],
+    'Ingrid': [('START', 'SA3 Cosmic Ray')],   # bare START spent 3 bars (2026-11-26)
+}.items():
+    CHAR_SUPERS.setdefault(_c, [])[:0] = _rows
+for _c, _rows in {
+    'Chun-Li': [('KIKOUKEN', 'Kikoken'), ('TENNSHOU', 'Tenshokyaku'), ('HYAKURETSU', 'Hyakuretsukyaku'), ('SPINNINGBIRD', 'Spinning Bird Kick')],
+    'C.Viper': [('THN', 'Thunder Knuckle'), ('BURNING', 'Burning Kick')],
+    'Alex': [('AirKneeSmash', 'Air Knee Smash')],
+    'Yasmine': [('ATK_SPA_236P', '236P special'), ('236P', '236P special'), ('214P', '214P special'), ('623K', '623K special'), ('236K', '236K special')],
+}.items():
+    CHAR_SPECIALS.setdefault(_c, [])[:0] = _rows
+CHAR_NORMALS.setdefault('Kimberly', [])[:0] = [('ATK_GOKUSA_Kim_5MP_5HP_TC', '5MP~HP target combo')]
+
+
+# 2026-11-26: names from the SuperCombo wiki move lists, matched to the internal codes by the inputs in the captures
+# (motion + button at each move's start, across all captures in replays\).
+for _c, _rows in {
+    'AKI': [('SAA_01', 'SA1 Deadly Implication'), ('SAA_02', 'SA2 Tainted Talons'), ('SAA_03', 'SA3 Claws of Ya Zi')],
+    'Elena': [('SAA_01', 'SA1 Meteor Volley'), ('SAA_02', 'SA2 Revival Dance'), ('SA3', 'SA3 Song of the Grasslands')],
+}.items():
+    CHAR_SUPERS.setdefault(_c, [])[:0] = _rows
+for _c, _rows in {
+    # Jamie: SPA1 214P, SPA3 623K, SPA_4 j.214K (air), SPA5 63214K (NGA = the grab part on hit), SPA6 236K
+    'Jamie': [('SPA1', 'Swagger Step'), ('SPA3', 'Arrow Kick'), ('4_', 'Luminous Dive Kick'), ('SPA5', 'Tenshin'), ('SPA6', 'Bakkai')],
+    # Elena: 00 = 214K, 01 = 236K, 02 = 623K, 03 = 236P and its 6P / 6LK / 6MK / 6HK follow-ups, 04 = 214P
+    'Elena': [('00_SPIN_SYTHE', 'Spinning Scythe'), ('01_RHINO_HORN', 'Rhino Horn'), ('02_WHEEL', 'Scratch Wheel'), ('03_MOVE_1', 'Lynx Song'),
+              ('03_MOVE', 'Lynx Whirl'), ('03_LP', 'Lynx Song > Leopard Snap'), ('03_MP', 'Lynx Song > Harvest Circle'), ('03_HP', 'Lynx Song > Mallet Smash'),
+              ('04_ADD', 'Moon Glider follow-up'), ('04', 'Moon Glider')],
+    # Alex: SP0 = 236P (L/M Flash Axe, H/OD Flash Chop), SP1 = 63214P Power Bomb (NGS = the attempt, NGA = the grab on hit)
+    'Alex': [('SP0_H', 'Flash Chop'), ('SP0_EX', 'Flash Chop'), ('SP0', 'Flash Axe'), ('SP1_NGA', 'Power Bomb'), ('SP1_NGS', 'Power Bomb (attempt)'),
+             ('SP1', 'Power Bomb')],
+}.items():
+    CHAR_SPECIALS.setdefault(_c, [])[:0] = _rows
+for _c, _rows in {
+    'Jamie': [('ATK_22P', 'The Devil Inside (drink)')],
+    'AKI': [('ATK_82HP', 'j.2HP (Gong Fu)'), ('SPD_Akidako_Ganzigarame_Miss', 'Entrapment (whiff)'), ('SPD_Akidako_Ganzigarame', 'Entrapment (Sinister Slide grab)')],
+    # Alex: ATK_S_* are Prowler Stance (2PP) and its follow-ups
+    'Alex': [('ATK_S_STD_CRH', 'Prowler Stance'), ('ATK_S_DASH_ATTACK', 'Prowler > Slashing Elbow'), ('ATK_S_DASH_F', 'Prowler > Low Rush'),
+             ('ATK_S_DASH_B', 'Prowler > Low Retreat'), ('ATK_S_LP', 'Prowler > Palm Jab'), ('ATK_S_MP', 'Prowler > Shoulder Launcher'),
+             ('ATK_S_HP_MAX', 'Prowler > Heavy Lariat (hold)'), ('ATK_S_HP', 'Prowler > Heavy Lariat'), ('ATK_S_LK', 'Prowler > Tactical Hop'),
+             ('ATK_S_MK', 'Prowler > Air Stampede'), ('ATK_S_HK', 'Prowler > Sweep Combination'), ('ATK_S_NGA', 'Prowler throw'), ('ATK_S_NGS', 'Prowler throw'),
+             ('ATK_5HK_MAX', '5[HK] (hold)'), ('ATK_5HP_MAX', '5[HP] (hold)'), ('ATK_92HP', 'j.2HP (Flying Cross Chop)')],
+}.items():
+    CHAR_NORMALS.setdefault(_c, [])[:0] = _rows
+
 def pretty(n, char=None):
     """game move name -> readable label"""
     for k, lab in CHAR_NORMALS.get(char, []):   # unique attacks and target combos, which read as plain normals otherwise
@@ -251,7 +338,7 @@ def pretty(n, char=None):
     if m: return re.sub(r'_(Y\d|B|C|F)$', '', m.group(1))
     for pre, lab in (('SPA_', ''), ('SA1', 'SA1 '), ('SA2', 'SA2 '), ('SAA_', 'Super '), ('CAA_', 'Critical Art '),
                      ('NGA', 'Throw'), ('NGS', 'Throw attempt'), ('DPA', 'Drive Parry'), ('ATK_CTA_4', 'Drive Reversal'),
-                     ('ATK_CTA_RUSH', 'Drive Rush'), ('ATK_CTA_DASH', 'Drive Rush'), ('ATK_CTA', 'Drive Impact')):
+                     ('ATK_CTA_RUSH', 'Drive Rush'), ('ATK_CTA_DASH', 'Drive Rush'), ('DRIVE_RUSH', 'Drive Rush'), ('ATK_CTA', 'Drive Impact')):
         if n.startswith(pre): return (lab + n[len(pre):]).strip() if lab in ('', 'SA1 ', 'SA2 ', 'Super ', 'Critical Art ') else lab
     return n
 
@@ -282,7 +369,7 @@ def analyze(path, game_no, focus):
     # sf6_moves files are available (env SF6_MOVES=dir), pick each side's character by
     # which move list covers the most of its action ids, and re-attach the move names.
     mdir = os.environ.get('SF6_MOVES')
-    # names Sean typed into Move Export v4 for characters the game doesn't name (sf6_moves/char_names.json: {"33": "Yasmine"})
+    # names the player typed into Move Export v4 for characters the game doesn't name (sf6_moves/char_names.json: {"33": "Yasmine"})
     cnames = {}
     if mdir and os.path.exists(os.path.join(mdir, 'char_names.json')):
         cnames = json.load(open(os.path.join(mdir, 'char_names.json')))
@@ -607,7 +694,7 @@ def analyze(path, game_no, focus):
         prev = None
         for k, f in enumerate(fr):
             n = mname(names, side, f[side]['action_id'])
-            if n != prev and n.startswith(('ATK_CTA_RUSH', 'ATK_CTA_DASH')):
+            if n != prev and n.startswith(('ATK_CTA_RUSH', 'ATK_CTA_DASH', 'DRIVE_RUSH')):   # Chun-Li / C. Viper carry a bare DRIVE_RUSH
                 o = f[opp]
                 st = o.get('act_st_name')
                 # a cancel costs 3 bars in one drop (about 10 frames in); Drive Parry > Drive Rush costs 0.5 + 0.5, even in a blockstring
@@ -843,7 +930,7 @@ def analyze(path, game_no, focus):
                     if st_ == 'HOLD': nxt = 'thrown'; break
                     if st_ == 'DAMAGE': nxt = 'hit'; break
                     n_ = mname(names, side, fr[j][side].get('action_id'))
-                    if j > k1 and n_.startswith('ATK_CTA_RUSH'): nxt = 'raw drive rush'; break
+                    if j > k1 and n_.startswith(('ATK_CTA_RUSH', 'DRIVE_RUSH')): nxt = 'raw drive rush'; break
                     if j > k1 and fr[j][o].get('act_st_name') == 'DAMAGE': nxt = 'punished them'; break
                 parries.append(dict(game_id=rid, round=fr[k0]['round'] + 1, round_timer=fr[k0]['round_timer'], player=side_name[side],
                                     frames=k1 - k0, drive_before=round(d0 / 10000, 2), cost=round(cost / 10000, 2), hits_parried=sum(1 for u in ups if u > REGEN),
