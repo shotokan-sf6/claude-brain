@@ -374,7 +374,7 @@ def build_set(sid, order, key, D):
     for i, p in enumerate((ME, opp)):
         a, lean, conf, e_ = arche(p)
         if p == ME:
-            cn = 'What costs you in this set: ' + (', '.join(lf(k)[1].lower() for k, _ in leaks[:2]) or 'nothing stands out') + '.'
+            cn = 'What costs you in this set: ' + ('; '.join(lf(k)[1].lower() for k, _ in leaks[:2]) or 'nothing stands out') + '.'
         else:
             cn = 'How to beat this: ' + ('block their early presses and frame-trap them' if T[p]['after block']['press'] > T[p]['after block']['nothing'] else 'they hold block: throw them and take their Drive') \
                  + ('; anti-air their jumps' if jumps[p] >= 6 else '') + ('; throw their Drive Parry' if dp[p] >= 8 else '') + '.'

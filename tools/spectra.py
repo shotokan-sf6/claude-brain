@@ -39,19 +39,21 @@ AXES = [
     dict(key='variety', axis='Variety', left='Scripted', right='Mixed'),
     dict(key='resources', axis='Resource use', left='Conservative', right='Spendthrift'),
     dict(key='space', axis='Space', left='Gives ground', right='Takes ground'),
+    dict(key='cashin', axis='Cash-in', left='Speculative', right='Cashes in'),
 ]
 REVERSED = {'temperament', 'temperament_off', 'elasticity'}   # a higher raw value points to the left end
 # cut points (20/40/60/80th percentiles of the pool, 2026-11-18); a raw value below cut[0] scores 1, above cut[3] scores 5
 CUTS = {
     'temperament': [0.30, 0.38, 0.43, 0.51],   # impulsive share: higher = more impulsive (score reversed)
-    'elasticity': [0.57, 0.73, 0.82, 0.98],      # later-use ratio: higher = more inelastic (score reversed)
+    'elasticity': [0.0, 0.18, 0.40, 0.71],       # 2026-11-27: second-half share of the opponent's best first-half weapon's damage per round; higher = inelastic (reversed)
     'risk': [2.0, 2.5, 3.5, 4.0],              # risky options per round: higher = more risk
     'temperament_off': [0.07, 0.12, 0.17, 0.26],  # share of immediate re-presses after a blocked attack (score reversed)
     'initiative': [0.37, 0.42, 0.47, 0.56],     # forward-movement share and exchanges started
     'composure': [1.02, 1.15, 1.34, 1.48],      # action rate after adversity / otherwise (most players speed up a bit)
     'variety': [0.51, 0.57, 0.6, 0.69],         # normalized entropy of after-block / wake-up choices
     'resources': [1.26, 1.5, 1.7, 1.94],        # gauge bars spent per round (recalibrated 2026-11-18 after counting the spend that triggers burnout)
-    'space': [-0.15, -0.05, 0.05, 0.15],        # share of live time cornering the opponent minus share cornered (corner_time, 2026-11-27)
+    'space': [-0.15, -0.05, 0.05, 0.15],
+    'cashin': [0.31, 0.42, 0.52, 0.65],         # share of Drive + super spent inside combos that landed (2026-11-27)        # share of live time cornering the opponent minus share cornered (corner_time, 2026-11-27)
 }
 DEFAULT_CUTS = {k: list(v) for k, v in CUTS.items()}
 CUTS_META = {'source': 'built-in (2026-11-18, 33 player-sets)'}
@@ -87,7 +89,8 @@ def score(key, v):
 
 
 WORDS = {'risk': ['Very low', 'Low', 'Medium', 'High', 'Very high'],
-         'space': ['Gives ground', 'Leans to giving ground', 'Even', 'Leans to taking ground', 'Takes ground']}
+         'space': ['Gives ground', 'Leans to giving ground', 'Even', 'Leans to taking ground', 'Takes ground'],
+         'cashin': ['Speculative', 'Leans speculative', 'Mixed', 'Leans to cashing in', 'Cashes in']}
 for _a in AXES:
     WORDS.setdefault(_a['key'], [f"Very {_a['left'].lower()}", f"Leans {_a['left'].lower()}", 'In between', f"Leans {_a['right'].lower()}", f"Very {_a['right'].lower()}"])
 import os as _os
@@ -139,43 +142,27 @@ def raw(player, games, hits, tim, ev, use, beh=None):
     t = [x for x in tim if x['player'] == player and not str(x['action']).startswith('blocked')]
     imp = [x for x in t if str(x['action']).split(':')[0] in PRESS and x['frames_until'] is not None and x['frames_until'] <= 2]
     temp = (len(imp) / len(t)) if len(t) >= 8 else None
-    # elasticity (Sean, 2026-11-21): reusing a punished move only counts as inelastic when the plan is losing
-    # (lost that game, or behind in the set going into it) or the move keeps getting punished in that game.
-    # Keeping a winning plan is neutral, not inelastic.
-    num = den = 0.0; moves_seen = C.Counter(); kept_winning = C.Counter(); costly = C.Counter()
-    def _pun(h):
-        return (h['victim'] == player and h['victim_move']
-                and (h['hit_kind'] in ('counter hit', 'punish counter') or h['lens'] in ('Unsafe move punished', 'Pressed after turn ended', 'Whiff punished', 'Own offense beaten by a reversal', 'Drive Rush / Impact checked'))
-                and not str(h['victim_move']).startswith(SKIP_MOVES) and _core(h['victim_move']) not in LIGHTS)
-    won = {g['game_id']: (g.get('winner') == player) for g in games}
-    known = all(g.get('winner') for g in games)
-    for gi in range(1, len(gids)):
-        before = gids[:gi]
-        pun = C.Counter(_core(h['victim_move']) for h in hits if h['game_id'] in before and _pun(h))
-        again = C.Counter(); again_dmg = C.Counter()
+    # elasticity (Adaptability, redefined 2026-11-27): did the opponent's best weapon keep working? The move that did the
+    # most damage to this player in the first half of the set's rounds (2,500+), and its damage per round in the second
+    # half as a share of the first half. Lower = they adjusted (score reversed). Needs 4+ rounds.
+    order = [(g['game_id'], r) for g in games for r in range(1, rounds.get(g['game_id'], 0) + 1)]
+    elas = None; elas_ev = 'not enough evidence (under 4 rounds, or no opponent move did 2,500+ in the first half)'
+    if len(order) >= 4:
+        half = len(order) // 2; first = set(order[:half]); second = set(order[half:])
+        d1 = C.Counter(); d2 = C.Counter()
         for h in hits:
-            if h['game_id'] == gids[gi] and _pun(h):
-                again[_core(h['victim_move'])] += 1; again_dmg[_core(h['victim_move'])] += h.get('damage') or 0
-        w_before = sum(won[g] for g in before); behind = w_before < len(before) - w_before
-        losing = (not known) or behind or not won[gids[gi]]
-        rb = sum(rounds[g] for g in before) or 1; rg = rounds[gids[gi]] or 1
-        cu = [C.Counter() for _ in use]
-        for k, u in enumerate(use):
-            for m_, n_ in u.get(player, {}).items(): cu[k][_core(m_)] += n_
-        for m, w in pun.items():
-            ub = sum(cu[k].get(m, 0) for k in range(gi)) / rb
-            if ub <= 0: continue
-            ug = cu[gi].get(m, 0) / rg
-            still_costing = again[m] >= 2 or again_dmg[m] >= 2000
-            # in a game they won (and weren't behind), a reused move only counts if it cost a real chunk of life
-            if not losing and again_dmg[m] < 3500:
-                if ug > 0: kept_winning[m] += w
-                continue
-            ww = w * (1.5 if still_costing else 1.0)
-            if still_costing: costly[m] += 1
-            num += ww * ug; den += ww * ub; moves_seen[m] += w
-    elas = (num / den) if den > 0 and sum(moves_seen.values()) >= 2 else None
-    elas_winning = elas is None and sum(kept_winning.values()) >= 2
+            if h['victim'] != player: continue
+            k_ = (h['game_id'], h['round'])
+            if k_ in first: d1[h['starter']] += h.get('damage') or 0
+            elif k_ in second: d2[h['starter']] += h.get('damage') or 0
+        if d1:
+            top, dmg1 = d1.most_common(1)[0]
+            if dmg1 >= 2500:
+                r1 = dmg1 / len(first); r2 = d2[top] / len(second)
+                elas = min(3.0, r2 / r1)
+                elas_ev = (f"the opponent's best weapon in the first {len(first)} rounds was {top} ({dmg1:,} damage, {r1:,.0f} a round); "
+                           f"in the last {len(second)} rounds it did {r2:,.0f} a round ({elas:.0%} of before)")
+    elas_winning = False
     # risk
     R = sum(rounds.values()) or 1
     U = C.Counter()
@@ -209,20 +196,22 @@ def raw(player, games, hits, tim, ev, use, beh=None):
         elif n >= 5: var_parts.append((n, 0.0))
     var = (sum(n * v for n, v in var_parts) / sum(n for n, _ in var_parts)) if var_parts else None
     space, space_ev = _space(player, gids)
+    # cash-in: share of the Drive and super they spent that went into combos that landed (hits rows: spend inside each combo)
+    tot_spent = ((b.get('drive_spent', 0) + b.get('super_spent', 0)) / 10000) if b else 0
+    on_hits = sum((h.get('drive_spent') or 0) + (h.get('super_spent') or 0) for h in hits if h['attacker'] == player)
+    cashin = min(1.0, on_hits / tot_spent) if tot_spent >= 3 else None
+    cash_ev = (f"{on_hits:.1f} of {tot_spent:.1f} Drive and super bars spent went into combos that landed ({cashin:.0%}); the rest went on rushes, parries, OD moves and cancels that didn't connect"
+               if cashin is not None else 'under 3 bars spent')
     ev_ = dict(temperament=(f"{len(imp)} of {len(t)} after-block / wake-up choices were a button, special, jump or parry on reversal timing (0-2 frames)" if temp is not None else 'too few after-block / wake-up situations'),
-               elasticity=((f"while losing (or while the moves kept costing), used the moves that got punished at {elas:.0%} of their earlier rate ({', '.join(m for m, _ in moves_seen.most_common(3))})"
-                           + (f"; still getting punished for {', '.join(costly)}" if costly else '')
-                           + (f"; kept {', '.join(m for m, _ in kept_winning.most_common(2))} in games they were winning (not counted)" if kept_winning else '')) if elas is not None
-                          else (f"kept a winning plan: reused {', '.join(m for m, _ in kept_winning.most_common(3))} after it got punished, but they were winning and it stopped costing them, so that isn't inelastic" if elas_winning
-                                else 'not enough evidence (one game, or no punished move came up again while losing)')),
+               elasticity=elas_ev,
                temperament_off=(f"once free after their attack was blocked, pressed again within 3 frames {b['off_imp']} of {b['off_n']} times" if toff is not None else 'too few blocked attacks'),
                initiative=(f"walked / dashed forward in {b['fwd'] / max(1, b['fwd'] + b['back']):.0%} of neutral movement and started {b['starts']} of {b['starts_all']} neutral exchanges" if ini is not None else 'too few neutral exchanges'),
                composure=(f"pressed {comp:.0%} as often after taking a 2,000+ combo or losing a round as otherwise" if comp is not None else 'not enough time after big damage or a lost round'),
                variety=(f"spread of choices after blocking and on wake-up: {var:.0%} of the maximum" if var is not None else 'too few after-block / wake-up choices'),
                resources=(f"{res:.1f} gauge bars spent per round ({b.get('drive_spent', 0) / 10000:.0f} Drive bars, {b.get('super_spent', 0) / 10000:.0f} super bars, {nburn} burnouts over {R} rounds)" if res is not None else 'no frame data'),
-               space=space_ev,
+               space=space_ev, cashin=cash_ev,
                risk=f"{risk:.1f} risky options per round: {wake_rev} wake-up reversals, {U.get('Drive Impact', 0)} Drive Impacts, {U.get('Drive Reversal', 0)} Drive Reversals, {raw_dr} raw Drive Rushes (half weight), {supers} supers, {jumps} forward jumps over {R} rounds")
-    return dict(temperament=temp, temperament_off=toff, elasticity=elas, elasticity_winning=elas_winning, risk=risk, initiative=ini, composure=comp, variety=var, resources=res, space=space), ev_
+    return dict(temperament=temp, temperament_off=toff, elasticity=elas, elasticity_winning=elas_winning, risk=risk, initiative=ini, composure=comp, variety=var, resources=res, space=space, cashin=cashin), ev_
 
 
 def spectra(player, games, hits, tim, ev, use):

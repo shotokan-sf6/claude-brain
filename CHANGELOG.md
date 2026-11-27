@@ -2,6 +2,11 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 0.2.14 (2026-11-27): Cash-in spectrum, Adaptability redefined
+- Bundled tools: Adaptability now measures whether the opponent's best first-half weapon still worked in the second half; new Cash-in spectrum (share of Drive and super spent inside combos that landed); generated counter-notes use semicolons between points.
+- shared-core-player-spectra reference updated (ten spectra).
+- full-review-report: story polarity must be exactly `Worked well` or `To improve`.
+
 ## 0.2.13 (2026-11-27): Space spectrum, archetype calibration
 - Bundled tools: ninth spectrum Space (Gives ground ↔ Takes ground, from corner time); `spectra_calibrate.py --axes`; new `archetype_calibrate.py` (generated archetypes from pool-calibrated cut points: Aggressive / Fundamentalist / Defensive / Balanced, characters' jump norms factored in).
 - shared-core-player-spectra reference and quick-review-report updated.

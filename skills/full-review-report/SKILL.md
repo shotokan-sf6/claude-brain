@@ -49,7 +49,7 @@ Pass these in META `review_docs`, then re-ingest with `shared_core_db.py ingest`
 
 | Dataset | Rows (today's sets) | What goes in it |
 |---|---|---|
-| `story` | about 12 | Ranked headlines of what decided the set: category, polarity, headline, detail, evidence (round @ timer), the guideline skill it draws on, "try this" |
+| `story` | about 12 | Ranked headlines of what decided the set: category, polarity (exactly `Worked well` or `To improve`: the set page's Top highs / Top lows read these words), headline, detail, evidence (round @ timer), the guideline skill it draws on, "try this" |
 | `story_games` | one per game | Result, set score after, summary, turning point |
 | `habits` | about 8 | Kind (Strength / Leak / Pattern), area, habit, where seen, times, fix, origin, confidence |
 | `archetypes` | one per player | Archetype, lean, confidence, evidence, risk tolerance and temperament (DoctaAfrikan's), how to counter, adaptation; `spectra_override` keyed by internal key when the computed spectrum is wrong (`shared-core-player-spectra.md`) |
