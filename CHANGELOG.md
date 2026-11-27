@@ -2,6 +2,9 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 0.2.12 (2026-11-27): jumping out of a throw
+- sf6-coach-shog: jumping out of a throw is a read, never a reaction (a held wake-up jump always beats a meaty throw).
+
 ## 0.2.11 (2026-11-27): skills synced
 - sf6-character-notes: A.K.I. fireballs (light 52f and OD 44f only; no light / heavy rules), Sinister Slide follow-up names and the rule to name the ending.
 - sf6-fgc-glossary: Homura (Mai's SA1 flame stocks).
