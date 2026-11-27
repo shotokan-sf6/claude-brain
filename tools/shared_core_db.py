@@ -294,6 +294,11 @@ def ingest_set(con, outdir, meta):
     pwin = L('punish_windows') if os.path.exists(f'{outdir}/punish_windows.json') else []
     cur.executemany('INSERT INTO punish_windows VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [(k, x['game_id'], x['round'], x['round_timer'], names[x['defender']], names[x['attacker']], x['move'], x['adv'],
                                                                                     x['distance'], x['range'], x['result'], x['action'], x['wiki_adv'], x['check']) for x in pwin])
+    if os.path.exists(f'{outdir}/corner.json'):   # time cornered per round (tools/corner_time.py); totals go into set_stats / game_stats below
+        import corner_time
+        crn = L('corner')
+        for g in games:
+            corner_time.store(con, k, g['game_id'], [r for r in crn if r['game_id'] == g['game_id']], names)
     for pid, m in set_stats(hits, events, timings, games, names, presses, pwin).items():
         cur.executemany('INSERT INTO set_stats VALUES (?,?,?,?)', [(k, pid, a, b) for a, b in m.items()])
     cur.execute('DELETE FROM game_stats WHERE set_key=?', (k,))
@@ -302,6 +307,8 @@ def ingest_set(con, outdir, meta):
         for name, pid in names.items():
             m = set_stats(only(hits), only(events), only(timings), [g], {name: pid}, only(presses) if presses else None, only(pwin))[pid]
             cur.executemany('INSERT OR REPLACE INTO game_stats VALUES (?,?,?,?,?,?)', [(k, gid, pid, charof.get((gid, name)), a, b) for a, b in m.items()])
+    if os.path.exists(f'{outdir}/corner.json'):
+        corner_time.write_stats(con, k, crn, names, per_game={g['game_id']: [r for r in crn if r['game_id'] == g['game_id']] for g in games})
     rep = os.path.join(outdir, 'report.md')
     if os.path.exists(rep):
         import ast, re

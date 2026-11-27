@@ -2,6 +2,12 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 0.2.10 (2026-11-27): corner time, batch progress bar
+- Bundled tools from shotokan-sf6/tools (2026-11-27):
+    - New `corner_time.py`: seconds each player spends cornered per round (within 1.5 of the wall, opponent on the inner side, live play only). The analyzer writes `corner.json` and report.md lines; ingest stores `corner_time` and `cornered_frames` / `cornering_frames` / `active_frames` / `cornered_entries` in `set_stats` and `game_stats`; `--backfill DB` fills older sets.
+    - `batch/batch_record.py`: a progress bar after each replay, with time left.
+- README: corner time and the progress bar.
+
 ## 0.2.9 (2026-11-26): notable players, excluded sets
 - `shared_core_db.py`:
     - New `player_flags` table and `flag` / `flags` commands, to mark notable / pro players.

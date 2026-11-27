@@ -1051,13 +1051,15 @@ def analyze(path, game_no, focus):
                 if done is not None and j - done > 25: break
             decisions.append(dict(game_id=rid, round=fr[k]['round'] + 1, round_timer=fr[k]['round_timer'], side=side, player=side_name[side],
                                   move=mv, ctx=ctx, dist=round(dist, 2), opp=opp_doing, outcome=out_, damage=dmg))
-    return dict(decisions=decisions, info=info, rows=rows, events=events, winners=winners, timings=timings, usage=usage, side_name=side_name, side_char=side_char, resources=resources, parries=parries, presses=presses, punish_windows=punish_windows)
+    import corner_time   # time each player spends cornered, per round (corner.json)
+    corner = [dict(r, game_id=rid, set_id='Set 1') for r in corner_time.corner_rows(fr, side_name)]
+    return dict(decisions=decisions, info=info, rows=rows, events=events, winners=winners, timings=timings, usage=usage, side_name=side_name, side_char=side_char, resources=resources, parries=parries, presses=presses, punish_windows=punish_windows, corner=corner)
 
 
 def main():
     out, focus, fmt, paths = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4:]
     os.makedirs(out, exist_ok=True)
-    games, hits, events, timings, report, resources, parries, presses, pwin = [], [], [], [], [], [], [], [], []
+    games, hits, events, timings, report, resources, parries, presses, pwin, corner = [], [], [], [], [], [], [], [], [], []
     score = C.Counter(); opp = None
     for g, p in enumerate(paths, 1):
         A = analyze(p, g, focus)
@@ -1067,7 +1069,7 @@ def main():
         games.append(dict(game_id=A['info']['replay_id'], set_id='Set 1', game_no=g, winner=winner,
                           round_score=f"{rs[focus]}-{rs[opp]}", round_winners=', '.join(A['winners']),
                           set_score_after=f"{score[focus]}-{score[opp]}"))
-        hits += A['rows']; events += A['events']; timings += A['timings']; resources += [dict(r, set_id='Set 1') for r in A['resources']]; parries += [dict(x, set_id='Set 1') for x in A['parries']]; presses += [dict(x, set_id='Set 1') for x in A['presses']]; pwin += [dict(x, set_id='Set 1') for x in A['punish_windows']]
+        hits += A['rows']; events += A['events']; timings += A['timings']; resources += [dict(r, set_id='Set 1') for r in A['resources']]; parries += [dict(x, set_id='Set 1') for x in A['parries']]; presses += [dict(x, set_id='Set 1') for x in A['presses']]; pwin += [dict(x, set_id='Set 1') for x in A['punish_windows']]; corner += A['corner']
         report.append((A, g))
     key = lambda n: re.sub(r'[^a-z0-9]', '', n.lower())
     winner = max(score, key=score.get)
@@ -1075,13 +1077,14 @@ def main():
                  **{key(focus) + '_games': score[focus], key(opp) + '_games': score[opp]}, winner=winner,
                  progression=', '.join(x['set_score_after'] for x in games), max_deficit_overcome=None, note=None)]
     for i, e in enumerate(events, 1): e['event_id'] = f'E{i:02d}'; e['set_id'] = 'Set 1'
-    for n, obj in (('sets', sets), ('games', games), ('hits', hits), ('events', events), ('timings', timings), ('resources', resources), ('parries', parries), ('presses', presses), ('punish_windows', pwin)):
+    for n, obj in (('sets', sets), ('games', games), ('hits', hits), ('events', events), ('timings', timings), ('resources', resources), ('parries', parries), ('presses', presses), ('punish_windows', pwin), ('corner', corner)):
         json.dump(obj, open(f'{out}/{n}.json', 'w'), indent=1, ensure_ascii=False)
     # ---- report for writing the story
     L = []
     for A, g in report:
         L.append(f"# Game {g} {A['info']['replay_id']}: {A['side_name']['p1']} ({A['side_char']['p1']}) vs {A['side_name']['p2']} ({A['side_char']['p2']}); round winners {A['winners']}")
         for e in A['events']: L.append(f"  event R{e['round']} @{e['round_timer']}: {e['player']} {e['type']} {e['note'] or ''}")
+        for c in A['corner']: L.append(f"  corner R{c['round']} {c['player']}: cornered {c['cornered_frames'] / 60:.1f}s of {c['active_frames'] / 60:.1f}s ({c['cornered_entries']} times, longest {c['longest_cornered'] / 60:.1f}s)")
         for r in A['rows']:
             L.append(f"  {r['hit_id']} R{r['round']} @{r['round_timer']} {r['attacker']:>7} {r['damage']:>5} {r['starter']:<22} {r['hit_kind']:<14} {r['situation']:<8} aa={int(r['anti_air'])} victim:{r['victim_state']} lens={r['lens']} | victim was: {r['victim_move']}")
         for p, u in A['usage'].items(): L.append(f"  usage {p}: {u[:30]}")

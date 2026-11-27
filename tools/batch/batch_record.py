@@ -143,6 +143,23 @@ def record_one(rid, obs):
     return "ok"
 
 
+def progress(results, total, t0, timed):
+    """One line: bar, done/total, ok/skipped/failed counts, ETA from the average time of recorded (not skipped) replays."""
+    done = len(results)
+    ok = sum(1 for v in results.values() if v == "ok")
+    sk = sum(1 for v in results.values() if v == "skipped")
+    fl = done - ok - sk
+    width = 30
+    fill = int(width * done / total) if total else width
+    bar = "#" * fill + "-" * (width - fill)
+    eta = ""
+    if timed and done < total:
+        left = (sum(timed) / len(timed)) * (total - done)
+        eta = f", about {int(left // 3600)}h{int(left % 3600 // 60):02d}m left"
+    el = time.time() - t0
+    log(f"[{bar}] {done}/{total} ({100 * done // total}%) - ok {ok}, skipped {sk}, failed {fl}; {int(el // 60)}m elapsed{eta}")
+
+
 def probe():
     log("probe: printing screen changes; navigate SF6 by hand, Ctrl+C to stop")
     last = None
@@ -175,8 +192,12 @@ def main():
     if not ids:
         sys.exit("No replay IDs given.")
     obs = None if a.no_obs else Obs()
-    results = {}
-    for rid in ids:
+    results, timed, t0 = {}, [], time.time()
+    total = len(ids)
+    log(f"queue: {total} replays")
+    for n, rid in enumerate(ids, 1):
+        log(f"--- {n}/{total}: {rid}")
+        t1 = time.time()
         for attempt in range(a.retries + 1):
             try:
                 results[rid] = record_one(rid, obs); break
@@ -184,6 +205,9 @@ def main():
                 log(f"{rid}: FAILED ({e}){' - retrying' if attempt < a.retries else ''}")
                 results[rid] = f"failed: {e}"
                 command("idle"); time.sleep(3)
+        if results.get(rid) != "skipped":
+            timed.append(time.time() - t1)
+        progress(results, total, t0, timed)
     command("idle")
     log("done: " + ", ".join(f"{k} {v}" for k, v in results.items()))
 
