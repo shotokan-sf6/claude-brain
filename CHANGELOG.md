@@ -2,6 +2,11 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 0.2.17 (2026-11-27): jump-ins and anti-air rate
+- Bundled tools: new analyzer step `shared_core_antiair.py` (every jump-in, how it ended, and whether the defender was free to anti-air it; anti-air rate over the free ones), `jump_ins` table and stats in `shared_core_db.py`, new `defense_backfill.py` for sets already in the database.
+- quick-review-report: jump-ins and the anti-air rate.
+- `shared_core_whiffs.py`: a whiff-punish chance is now strict (15+ frames, punisher free, in reach) even when the whiff was punished, so whiff_punishes / whiff_chances is a real rate; punishes outside a chance keep their reason and are still listed in report.md.
+
 ## 0.2.16 (2026-11-27): whiff punishes
 - Bundled tools: new analyzer step `shared_core_whiffs.py` (whiffed ground normals and throws, recovery window, distance, punished or missed; a chance needs 15+ frames, the punisher free and in reach), `whiff_windows` table and whiff stats in `shared_core_db.py`, new `whiff_reach.py`; frame data gains startup / active / recovery for all 32 characters and measured button reach.
 - quick-review-report, full-review-report: whiff punishes. sf6-coach-shog: whiff punishes need a 15-frame window.

@@ -992,6 +992,10 @@ def analyze(path, game_no, focus):
     # (wiki startup + active, frame_data "frames") and whether the other player punished them, in reach and >= 15 frames
     import shared_core_whiffs
     whiffs = shared_core_whiffs.whiff_windows(fr, names, side_name, side_char, other, frame_data, mname, pretty, rid)
+    # ---- jump-ins (shared_core_antiair.py): every forward / neutral jump at the opponent, how it ended (anti-aired, hit,
+    # blocked, empty...) and whether the defender was free to anti-air it
+    import shared_core_antiair
+    jumpins = shared_core_antiair.jump_ins(fr, names, side_name, side_char, other, mname, pretty, rid)
 
     # button economy (Theory #4): new attack / special / super / throw states per player per round. A press is a
     # "decision press" when the opponent isn't being hit, knocked down or getting up, so combo and oki presses
@@ -1058,13 +1062,13 @@ def analyze(path, game_no, focus):
                                   move=mv, ctx=ctx, dist=round(dist, 2), opp=opp_doing, outcome=out_, damage=dmg))
     import corner_time   # time each player spends cornered, per round (corner.json)
     corner = [dict(r, game_id=rid, set_id='Set 1') for r in corner_time.corner_rows(fr, side_name)]
-    return dict(decisions=decisions, info=info, rows=rows, events=events, winners=winners, timings=timings, usage=usage, side_name=side_name, side_char=side_char, resources=resources, parries=parries, presses=presses, punish_windows=punish_windows, whiffs=whiffs, corner=corner)
+    return dict(decisions=decisions, info=info, rows=rows, events=events, winners=winners, timings=timings, usage=usage, side_name=side_name, side_char=side_char, resources=resources, parries=parries, presses=presses, punish_windows=punish_windows, whiffs=whiffs, jump_ins=jumpins, corner=corner)
 
 
 def main():
     out, focus, fmt, paths = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4:]
     os.makedirs(out, exist_ok=True)
-    games, hits, events, timings, report, resources, parries, presses, pwin, corner, whf = [], [], [], [], [], [], [], [], [], [], []
+    games, hits, events, timings, report, resources, parries, presses, pwin, corner, whf, jin = [], [], [], [], [], [], [], [], [], [], [], []
     score = C.Counter(); opp = None
     for g, p in enumerate(paths, 1):
         A = analyze(p, g, focus)
@@ -1074,7 +1078,7 @@ def main():
         games.append(dict(game_id=A['info']['replay_id'], set_id='Set 1', game_no=g, winner=winner,
                           round_score=f"{rs[focus]}-{rs[opp]}", round_winners=', '.join(A['winners']),
                           set_score_after=f"{score[focus]}-{score[opp]}"))
-        hits += A['rows']; events += A['events']; timings += A['timings']; resources += [dict(r, set_id='Set 1') for r in A['resources']]; parries += [dict(x, set_id='Set 1') for x in A['parries']]; presses += [dict(x, set_id='Set 1') for x in A['presses']]; pwin += [dict(x, set_id='Set 1') for x in A['punish_windows']]; whf += A['whiffs']; corner += A['corner']
+        hits += A['rows']; events += A['events']; timings += A['timings']; resources += [dict(r, set_id='Set 1') for r in A['resources']]; parries += [dict(x, set_id='Set 1') for x in A['parries']]; presses += [dict(x, set_id='Set 1') for x in A['presses']]; pwin += [dict(x, set_id='Set 1') for x in A['punish_windows']]; whf += A['whiffs']; jin += A['jump_ins']; corner += A['corner']
         report.append((A, g))
     key = lambda n: re.sub(r'[^a-z0-9]', '', n.lower())
     winner = max(score, key=score.get)
@@ -1082,7 +1086,7 @@ def main():
                  **{key(focus) + '_games': score[focus], key(opp) + '_games': score[opp]}, winner=winner,
                  progression=', '.join(x['set_score_after'] for x in games), max_deficit_overcome=None, note=None)]
     for i, e in enumerate(events, 1): e['event_id'] = f'E{i:02d}'; e['set_id'] = 'Set 1'
-    for n, obj in (('sets', sets), ('games', games), ('hits', hits), ('events', events), ('timings', timings), ('resources', resources), ('parries', parries), ('presses', presses), ('punish_windows', pwin), ('whiffs', whf), ('corner', corner)):
+    for n, obj in (('sets', sets), ('games', games), ('hits', hits), ('events', events), ('timings', timings), ('resources', resources), ('parries', parries), ('presses', presses), ('punish_windows', pwin), ('whiffs', whf), ('jump_ins', jin), ('corner', corner)):
         json.dump(obj, open(f'{out}/{n}.json', 'w'), indent=1, ensure_ascii=False)
     # ---- report for writing the story
     L = []
@@ -1122,12 +1126,23 @@ def main():
     for p in sorted(set(x['punisher'] for x in whf)):
         xs = [x for x in whf if x['punisher'] == p]; ch = [x for x in xs if x['chance']]
         L.append(f"  {p}: {len(ch)} chances, punished {sum(x['result'] == 'punished' for x in ch)}, missed {sum(x['result'] == 'missed' for x in ch)}, "
-                 f"pressed without a hit {sum(x['result'] == 'pressed' for x in ch)}; not chances {dict(C.Counter(x['why'] for x in xs if not x['chance']))}")
+                 f"pressed without a hit {sum(x['result'] == 'pressed' for x in ch)}; also punished outside a chance {sum(x['result'] == 'punished' and not x['chance'] for x in xs)}; not chances {dict(C.Counter(x['why'] for x in xs if not x['chance']))}")
     for x in whf:
-        if x['chance'] or x['why'] == 'edge of reach':
+        if x['chance'] or x['why'] == 'edge of reach' or x['result'] == 'punished':
             L.append(f"  {x['game_id'][:3]} R{x['round']} @{x['round_timer']} {x['whiffer']} whiffed {x['move']} ({x['window']}f) at {x['distance']}: {x['punisher']} "
-                     f"{x['result'] if x['chance'] else 'edge of reach (a step forward needed)'}{' with ' + x['punish'] if x['punish'] else ''}{' (' + x['pressed'] + ')' if x['pressed'] else ''}"
+                     f"{x['result'] if x['chance'] else 'punished (' + x['why'] + ')' if x['result'] == 'punished' else 'edge of reach (a step forward needed)'}{' with ' + x['punish'] if x['punish'] else ''}{' (' + x['pressed'] + ')' if x['pressed'] else ''}"
                      f"{'; fastest in reach ' + x['best'] if x['best'] and x['result'] != 'punished' else ''} [was {x['punisher_state']}]")
+    import shared_core_antiair as AA
+    L.append('# Jump-ins (forward / neutral jumps at the defender; free = could have anti-aired; busy = in their own move, stun or knockdown)')
+    for p in sorted(set(x['defender'] for x in jin)):
+        m = AA.summary(jin, p)
+        rate = lambda a, b: f"{a}/{b} ({100 * a / b:.0f}%)" if b else '0/0'
+        L.append(f"  {p}: faced {m['jump_ins']}, free for {m['jump_ins_free']}: anti-aired {rate(m['jump_ins_anti_aired'], m['jump_ins_free'])}, stopped {rate(m['jump_ins_stopped'], m['jump_ins_free'])}; "
+                 f"hit {m['jump_ins_hit']}, blocked {m['jump_ins_blocked']} (opened afterwards {m['jump_ins_blocked_opened']}), empty {m['jump_ins_empty']}; busy {m['jump_ins_busy']} (hit {m['jump_ins_busy_hit']}, blocked {m['jump_ins_busy_blocked']})")
+    for x in jin:
+        L.append(f"  {x['game_id'][:3]} R{x['round']} @{x['round_timer']} {x['jumper']} {x['direction']} jump{' ' + x['jump_attack'] if x['jump_attack'] else ''} at {x['defender']}: {x['result']}"
+                 f"{' with ' + x['anti_air_with'] if x['anti_air_with'] else ''}{' (pressed ' + x['pressed'] + ')' if x['pressed'] and not x['anti_air_with'] else ''}"
+                 f"{', opened up after' if x['opened'] else ''} [{'free' if x['defender_free'] else 'busy'}, from {x['distance']}]")
     L.append('# Timings (frames until first action after blockstun ends / on wake-up)')
     for p in set(t['player'] for t in timings):
         for ev in ('after block', 'wake-up'):

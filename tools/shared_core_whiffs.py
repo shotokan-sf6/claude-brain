@@ -6,7 +6,8 @@ ran to the end of its committed frames (margin_frame), or was cut short by getti
 its last active frame (wiki startup + active, frame_data/<char>.json "frames") and lasts until margin_frame.
 
 Each window is classed for the player who could punish it:
-  punished      they hit the whiffer during the window (any window, any range)
+  punished      they hit the whiffer during the window (any window, any range). `chance` stays strict: a punish of a
+                short window or from out of reach keeps its `why`, so the rate punished / chances counts only real chances
   missed        a chance they didn't take: window >= MIN_WINDOW frames, they were free (walking, standing, crouching,
                 dashing) when recovery started, and one of their ground normals reaches that far with startup no longer
                 than the window, but no hit came
@@ -87,13 +88,13 @@ def whiff_windows(fr, names, side_name, side_char, other, frame_data, mname, pre
             else:
                 res = 'no chance'
             why = None
-            if not hit and not chance:
+            if not chance:   # also for punished whiffs: a punish outside a chance came from spacing or a step in
                 why = ('short window' if win < MIN_WINDOW else 'busy' if not free else
                        'no reach data' if not fdp.get('reach') else 'edge of reach' if best_button(fdp, dx, win, edge=True) else 'out of reach')
                 if why == 'edge of reach': best = best_button(fdp, dx, win, edge=True)
             out.append(dict(game_id=rid, round=f['round'] + 1, round_timer=f['round_timer'], whiffer=side_name[w], punisher=side_name[p],
                             move=key, window=win, distance=round(dx, 2), punisher_state=pst, result=res, why=why,
                             punish=pretty(hit, side_char[p]) if hit else None, pressed=pretty(tried, side_char[p]) if (tried and not hit) else None,
-                            best=best[0] if best else None, best_startup=best[1] if best else None, chance=bool(chance or hit)))
+                            best=best[0] if best else None, best_startup=best[1] if best else None, chance=bool(chance)))
             i = j + 1
     return out
