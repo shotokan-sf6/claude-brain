@@ -1,6 +1,7 @@
 """Recalibrate the spectra cut points from the reviewed pool, leaving out the configured player.
 
-  python spectra_calibrate.py DB [--min-games 10] [--dry]
+  python spectra_calibrate.py DB [--min-games 10] [--dry] [--axes space,risk]
+  --axes recalibrates only those axis keys; the others keep their current cut points.
 
 The cut points are the 20/40/60/80th percentiles of each axis's raw value over every player-set in sf6.db except
 the configured player's (settings 'me', else shotokan.json / SHOTOKAN_PLAYER), so a 1-5 score compares a player
@@ -59,8 +60,9 @@ def wpercentiles(vals, qs=(0.2, 0.4, 0.6, 0.8)):
     return out
 
 
-def calibrate(db, min_games=10, dry=False):
+def calibrate(db, min_games=10, dry=False, only=None):
     con = sqlite3.connect(db); con.row_factory = sqlite3.Row
+    SP.load_cuts(con)   # current cut points (kept for axes not in --axes); also gives spectra the connection for corner time
     me = me_id(con)
     if me is None:
         sys.exit('No configured player found (settings "me", shotokan.json or SHOTOKAN_PLAYER): can\'t leave them out.')
@@ -77,6 +79,8 @@ def calibrate(db, min_games=10, dry=False):
     for a in SP.AXES:
         ax = a['key']
         vals = [(raws[k][pid][ax], w_player[pid] / nsets[pid]) for k in keys for pid in raws[k] if pid != me and raws[k][pid].get(ax) is not None]
+        if only and ax not in only:
+            cuts[ax] = list(SP.CUTS[ax]); continue
         cuts[ax] = wpercentiles(vals) if len(vals) >= 10 else SP.DEFAULT_CUTS[ax]
     name = con.execute('select name from players where player_id=?', (me,)).fetchone()[0]
     meta = dict(calibrated_at=datetime.datetime.now().isoformat(timespec='seconds'), excluded_player=name,
@@ -109,4 +113,6 @@ if __name__ == '__main__':
     a = [x for x in sys.argv[1:] if not x.startswith('--')]
     mg = int(sys.argv[sys.argv.index('--min-games') + 1]) if '--min-games' in sys.argv else 10
     if '--min-games' in sys.argv: a = [x for x in a if x != str(mg)]
-    calibrate(a[0], mg, '--dry' in sys.argv)
+    ax = sys.argv[sys.argv.index('--axes') + 1].split(',') if '--axes' in sys.argv else None
+    if ax: a = [x for x in a if x != ','.join(ax)]
+    calibrate(a[0], mg, '--dry' in sys.argv, ax)

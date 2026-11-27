@@ -38,6 +38,7 @@ AXES = [
     dict(key='composure', axis='Composure', left='Steady', right='Tilts'),
     dict(key='variety', axis='Variety', left='Scripted', right='Mixed'),
     dict(key='resources', axis='Resource use', left='Conservative', right='Spendthrift'),
+    dict(key='space', axis='Space', left='Gives ground', right='Takes ground'),
 ]
 REVERSED = {'temperament', 'temperament_off', 'elasticity'}   # a higher raw value points to the left end
 # cut points (20/40/60/80th percentiles of the pool, 2026-11-18); a raw value below cut[0] scores 1, above cut[3] scores 5
@@ -50,16 +51,21 @@ CUTS = {
     'composure': [1.02, 1.15, 1.34, 1.48],      # action rate after adversity / otherwise (most players speed up a bit)
     'variety': [0.51, 0.57, 0.6, 0.69],         # normalized entropy of after-block / wake-up choices
     'resources': [1.26, 1.5, 1.7, 1.94],        # gauge bars spent per round (recalibrated 2026-11-18 after counting the spend that triggers burnout)
+    'space': [-0.15, -0.05, 0.05, 0.15],        # share of live time cornering the opponent minus share cornered (corner_time, 2026-11-27)
 }
 DEFAULT_CUTS = {k: list(v) for k, v in CUTS.items()}
 CUTS_META = {'source': 'built-in (2026-11-18, 33 player-sets)'}
+
+
+CON = None   # sf6.db connection, for corner time (corner_time table); set by load_cuts / the callers
 
 
 def load_cuts(con):
     """Use the cut points calibrated by spectra_calibrate.py (settings 'spectra_cuts' in sf6.db) when there are any.
     They are the 20/40/60/80th percentiles of every player-set except the configured player's, each other player
     weighted equally (less below 10 games). Falls back to the built-in cut points."""
-    global CUTS_META
+    global CUTS_META, CON
+    CON = con
     try:
         row = con.execute("select value from settings where key='spectra_cuts'").fetchone()
     except Exception:
@@ -80,7 +86,8 @@ def score(key, v):
     return 6 - b if key in REVERSED else b
 
 
-WORDS = {'risk': ['Very low', 'Low', 'Medium', 'High', 'Very high']}
+WORDS = {'risk': ['Very low', 'Low', 'Medium', 'High', 'Very high'],
+         'space': ['Gives ground', 'Leans to giving ground', 'Even', 'Leans to taking ground', 'Takes ground']}
 for _a in AXES:
     WORDS.setdefault(_a['key'], [f"Very {_a['left'].lower()}", f"Leans {_a['left'].lower()}", 'In between', f"Leans {_a['right'].lower()}", f"Very {_a['right'].lower()}"])
 import os as _os
@@ -105,6 +112,23 @@ def _rounds(games):
         try: out[g['game_id']] = sum(int(x) for x in str(g['round_score']).split('-'))
         except Exception: out[g['game_id']] = 3
     return out
+
+
+def _space(player, gids):
+    """(share of live time cornering the opponent - share cornered, evidence) from corner_time; None without data."""
+    if CON is None or not gids: return None, 'no corner data'
+    q = ','.join('?' * len(gids))
+    try:
+        pids = [r[0] for r in CON.execute('select player_id from players where name=? union select player_id from player_names where name=?', (player, player))]
+        if not pids: return None, 'no corner data'
+        pq = ','.join('?' * len(pids))
+        mine = CON.execute(f'select sum(active_frames), sum(cornered_frames) from corner_time where replay_id in ({q}) and player_id in ({pq})', (*gids, *pids)).fetchone()
+        them = CON.execute(f'select sum(cornered_frames) from corner_time where replay_id in ({q}) and player_id not in ({pq})', (*gids, *pids)).fetchone()
+    except Exception:
+        return None, 'no corner data'
+    act, cor, cng = mine[0] or 0, mine[1] or 0, them[0] or 0
+    if act < 3600: return None, 'under a minute of live play with corner data'
+    return (cng - cor) / act, f"cornered the opponent {cng / act:.0%} of live time and was cornered {cor / act:.0%} ({act / 60:.0f}s of play)"
 
 
 def raw(player, games, hits, tim, ev, use, beh=None):
@@ -184,6 +208,7 @@ def raw(player, games, hits, tim, ev, use, beh=None):
             var_parts.append((n, H / math.log(min(n, 8))))
         elif n >= 5: var_parts.append((n, 0.0))
     var = (sum(n * v for n, v in var_parts) / sum(n for n, _ in var_parts)) if var_parts else None
+    space, space_ev = _space(player, gids)
     ev_ = dict(temperament=(f"{len(imp)} of {len(t)} after-block / wake-up choices were a button, special, jump or parry on reversal timing (0-2 frames)" if temp is not None else 'too few after-block / wake-up situations'),
                elasticity=((f"while losing (or while the moves kept costing), used the moves that got punished at {elas:.0%} of their earlier rate ({', '.join(m for m, _ in moves_seen.most_common(3))})"
                            + (f"; still getting punished for {', '.join(costly)}" if costly else '')
@@ -195,8 +220,9 @@ def raw(player, games, hits, tim, ev, use, beh=None):
                composure=(f"pressed {comp:.0%} as often after taking a 2,000+ combo or losing a round as otherwise" if comp is not None else 'not enough time after big damage or a lost round'),
                variety=(f"spread of choices after blocking and on wake-up: {var:.0%} of the maximum" if var is not None else 'too few after-block / wake-up choices'),
                resources=(f"{res:.1f} gauge bars spent per round ({b.get('drive_spent', 0) / 10000:.0f} Drive bars, {b.get('super_spent', 0) / 10000:.0f} super bars, {nburn} burnouts over {R} rounds)" if res is not None else 'no frame data'),
+               space=space_ev,
                risk=f"{risk:.1f} risky options per round: {wake_rev} wake-up reversals, {U.get('Drive Impact', 0)} Drive Impacts, {U.get('Drive Reversal', 0)} Drive Reversals, {raw_dr} raw Drive Rushes (half weight), {supers} supers, {jumps} forward jumps over {R} rounds")
-    return dict(temperament=temp, temperament_off=toff, elasticity=elas, elasticity_winning=elas_winning, risk=risk, initiative=ini, composure=comp, variety=var, resources=res), ev_
+    return dict(temperament=temp, temperament_off=toff, elasticity=elas, elasticity_winning=elas_winning, risk=risk, initiative=ini, composure=comp, variety=var, resources=res, space=space), ev_
 
 
 def spectra(player, games, hits, tim, ev, use):

@@ -2,6 +2,10 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 0.2.13 (2026-11-27): Space spectrum, archetype calibration
+- Bundled tools: ninth spectrum Space (Gives ground ↔ Takes ground, from corner time); `spectra_calibrate.py --axes`; new `archetype_calibrate.py` (generated archetypes from pool-calibrated cut points: Aggressive / Fundamentalist / Defensive / Balanced, characters' jump norms factored in).
+- shared-core-player-spectra reference and quick-review-report updated.
+
 ## 0.2.12 (2026-11-27): jumping out of a throw
 - sf6-coach-shog: jumping out of a throw is a read, never a reaction (a held wake-up jump always beats a meaty throw).
 

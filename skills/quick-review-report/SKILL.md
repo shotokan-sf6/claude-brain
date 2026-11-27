@@ -11,7 +11,7 @@ Everything here comes from the capture data in sf6.db and the analyzer output. N
 
 ## 1. Generated reads and habits
 `python tools\quick_review_reads.py DB OUTDIR --write-reads --set SET_KEY` (on the `$HOME` copy of sf6.db, then copy it back; no `-journal` left).
-- **Quick set:** writes one read per player (archetype, lean, confidence, evidence, counter note, risk tolerance, temperament) and the habits (kind Strength / Leak / Pattern, area, seen, times, fix), with source "generated from capture stats". It also refreshes the set's spectra.
+- **Quick set:** writes one read per player (archetype from pool-calibrated cut points, `toolsrchetype_calibrate.py`, see `shared-core-player-spectra.md`; lean, confidence, evidence, counter note, risk tolerance, temperament) and the habits (kind Strength / Leak / Pattern, area, seen, times, fix), with source "generated from capture stats". It also refreshes the set's spectra.
 - **Full or Tournament set:** the script leaves a set with review docs alone (hand-written reads and habits win). Run it without `--write-reads` and use its `archetypes.json` and `habits.json` in OUTDIR as the draft for `full-review-report`.
 - Ignore its other output files (the retired quick-dashboard datasets).
 - These reads and habits are what the site shows for a Quick set (set page, player profile habit counts, archetype stats), so the thresholds in `quick_review_reads.py` are where Quick reviews are tuned.

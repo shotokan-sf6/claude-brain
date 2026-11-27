@@ -15,6 +15,50 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import paths
 
 ME = paths.PLAYER   # the player in focus (shotokan.json / SHOTOKAN_PLAYER); callers may set it
+ARCH_FEATS = {}     # last build_set's archetype features per player (read by archetype_calibrate.py)
+ARCH = None         # calibrated archetype cuts (archetype_calibrate.py, settings 'archetype_cuts'); None = the old fixed rule
+
+
+def load_arch_cuts(con):
+    global ARCH
+    try:
+        row = con.execute("select value from settings where key='archetype_cuts'").fetchone()
+        ARCH = json.loads(row[0]) if row else None
+    except Exception:
+        ARCH = None
+    return ARCH
+
+
+def _pct(v, deciles):
+    """0-1 position of v among the pool, from its 0/10/.../100th percentiles (linear between them)."""
+    if v is None or not deciles: return None
+    if v <= deciles[0]: return 0.0
+    for i in range(1, len(deciles)):
+        if v <= deciles[i]:
+            lo, hi = deciles[i - 1], deciles[i]
+            return (i - 1 + ((v - lo) / (hi - lo) if hi > lo else 0.5)) / (len(deciles) - 1)
+    return 1.0
+
+
+def arch_features(press, n_choices, drw, jumps, ch, rounds, char):
+    """per-round features behind the calibrated archetype (jumps relative to the character's pool baseline)."""
+    R = max(1, rounds)
+    base = ((ARCH or {}).get('jump_base') or {}).get(char, (ARCH or {}).get('jump_base_all', 1.5))
+    return dict(press_rate=press / n_choices if n_choices >= 6 else None, drive_pressure=drw / R, jumps_rel=jumps / R - base, counter=ch / R)
+
+
+def classify(f):
+    """Aggressive / Defensive / Fundamentalist / Balanced from pool percentiles (archetype_calibrate.py)."""
+    d = ARCH['deciles']
+    parts = [x for x in (_pct(f['press_rate'], d['press_rate']), _pct(f['drive_pressure'], d['drive_pressure']), _pct(f['jumps_rel'], d['jumps_rel'])) if x is not None]
+    agg = sum(parts) / len(parts) if parts else 0.5
+    cp = _pct(f['counter'], d['counter'])
+    c = ARCH['cuts']
+    if agg >= c['aggressive']: a = 'Aggressive'
+    elif cp is not None and cp >= c['fundamentals'] and agg < c['fund_max_agg']: a = 'Fundamentalist'
+    elif agg <= c['defensive']: a = 'Defensive'
+    else: a = 'Balanced'
+    return a, agg, cp
 CHAR_ALIAS = {'char_33': 'Yasmine', 'E_Honda': 'E. Honda', 'M_Bison': 'M. Bison', 'Dee_Jay': 'Dee Jay'}
 TEXT_DS = ('story', 'story_games', 'habits', 'archetypes', 'fixes', 'training', 'findings', 'punish', 'set_gameplan', 'prediction', 'tournament')
 fmt = lambda n: f'{int(round(n)):,}'
@@ -304,9 +348,14 @@ def build_set(sid, order, key, D):
         rate = (ab['press'] + wk['press']) / max(1, ab['n'] + wk['n'])
         # raw Drive Rush counts half: a cheap, generally safe way to start pressure (1 bar, a hit if checked)
         drw = 0.5 * drk[p]['raw drive rush'] + drk[p]['pressure drive rush cancel']
-        agg = rate > 0.35 or drw >= 8 or jumps[p] >= 12 or len(burn[p]) >= 2
-        dfn = rate < 0.15 and dr[p] <= 3 and jumps[p] <= 4
-        a = 'Aggressive' if agg and not dfn else 'Defensive' if dfn else 'Balanced'
+        nr = sum(SP._rounds(games).values()) if games else 1
+        feats = arch_features(ab['press'] + wk['press'], ab['n'] + wk['n'], drw, jumps[p], len(ch[p]), nr, char(fchar if p == ME else oppc))
+        if ARCH and ARCH.get('deciles'):
+            a, aggp, cpp = classify(feats)
+        else:
+            agg = rate > 0.35 or drw >= 8 or jumps[p] >= 12 or len(burn[p]) >= 2
+            dfn = rate < 0.15 and dr[p] <= 3 and jumps[p] <= 4
+            a = 'Aggressive' if agg and not dfn else 'Defensive' if dfn else 'Balanced'; aggp = cpp = None
         lean = []
         if jumps[p] >= 10: lean.append(f'air-heavy ({jumps[p]} forward jumps)')
         if dr[p] >= 6: lean.append(f'{dr[p]} raw / pressure Drive Rushes')
@@ -316,8 +365,12 @@ def build_set(sid, order, key, D):
         ev_ = (f"After blocking: {ab['press']} of {ab['n']} first actions were attacks ({ab['f0']} on the first free frame), {ab['nothing']} held still. "
                f"On wake-up: {wk['press']} of {wk['n']} were attacks. {jumps[p]} forward jumps, Drive Rush: {drk[p]['raw drive rush']} raw, {drk[p]['pressure drive rush cancel']} pressure cancels, {drk[p]['combo drive rush cancel']} combo cancels, {dp[p]} Drive Parries, {di[p]} Drive Impacts, "
                f"{len(burn[p])} burnouts. Anti-airs landed: {len(aa[p])}. Counter hits: {len(ch[p])}. Throws landed: {len(thr[p])}, throw techs: {len(techs[p])}.")
+        if aggp is not None:
+            ev_ += f" Aggression {aggp:.0%} of the pool (pressing after blocking / on wake-up, Drive Rush pressure, jumps vs the character's norm)" + (f"; counter hits and punish counters {cpp:.0%}." if cpp is not None else '.')
+        ARCH_FEATS[p] = feats
         return a, ', '.join(lean) or 'no strong lean', conf, ev_
     arch = []
+    ARCH_FEATS.clear()
     for i, p in enumerate((ME, opp)):
         a, lean, conf, e_ = arche(p)
         if p == ME:
@@ -470,6 +523,7 @@ def main(db, out, write_reads=False, only=None):
     os.makedirs(out, exist_ok=True)
     con = sqlite3.connect(db); con.row_factory = sqlite3.Row
     SP.load_cuts(con)   # calibrated spectra cut points, as the ingest uses
+    load_arch_cuts(con)
     allD = C.defaultdict(list); allS = []
     if only:
         rows = []
