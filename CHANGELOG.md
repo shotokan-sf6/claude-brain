@@ -2,6 +2,9 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 0.2.15 (2026-11-27): lean tags
+- Bundled tools: generated reads' lean is up to two number-free tags from pool percentiles (Drive Rush pressure, stays grounded, counter-pokes and punishes, throw-heavy and so on).
+
 ## 0.2.14 (2026-11-27): Cash-in spectrum, Adaptability redefined
 - Bundled tools: Adaptability now measures whether the opponent's best first-half weapon still worked in the second half; new Cash-in spectrum (share of Drive and super spent inside combos that landed); generated counter-notes use semicolons between points.
 - shared-core-player-spectra reference updated (ten spectra).

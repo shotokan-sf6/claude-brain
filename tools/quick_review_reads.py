@@ -40,11 +40,31 @@ def _pct(v, deciles):
     return 1.0
 
 
-def arch_features(press, n_choices, drw, jumps, ch, rounds, char):
-    """per-round features behind the calibrated archetype (jumps relative to the character's pool baseline)."""
+def arch_features(press, n_choices, drw, jumps, ch, rounds, char, throws=0, anti_airs=0, parries=0):
+    """per-round features behind the calibrated archetype (jumps relative to the character's pool baseline), plus the
+    lean features (throws, anti-airs, Drive Parries per round)."""
     R = max(1, rounds)
     base = ((ARCH or {}).get('jump_base') or {}).get(char, (ARCH or {}).get('jump_base_all', 1.5))
-    return dict(press_rate=press / n_choices if n_choices >= 6 else None, drive_pressure=drw / R, jumps_rel=jumps / R - base, counter=ch / R)
+    return dict(press_rate=press / n_choices if n_choices >= 6 else None, drive_pressure=drw / R, jumps_rel=jumps / R - base, counter=ch / R,
+                throws=throws / R, anti_airs=anti_airs / R, parries=parries / R)
+
+
+# lean tags: (feature, tag when in the pool's top 20%, tag when in the bottom 20%); no numbers, so the same style reads the same
+LEAN_TAGS = [('drive_pressure', 'Drive Rush pressure', 'rarely Drive Rushes'), ('press_rate', 'presses on defense', 'holds block'),
+             ('jumps_rel', 'jumps a lot for the character', 'stays grounded'), ('counter', 'counter-pokes and punishes', None),
+             ('throws', 'throw-heavy', None), ('anti_airs', 'anti-airs a lot', None), ('parries', 'Drive Parry-heavy', None)]
+
+
+def lean_tags(f, n=2):
+    """up to n tags for where the player stands out most against the pool (top or bottom 20%)."""
+    if not ARCH or not ARCH.get('deciles'): return []
+    out = []
+    for ft, hi, lo in LEAN_TAGS:
+        q = _pct(f.get(ft), ARCH['deciles'].get(ft))
+        if q is None: continue
+        if q >= 0.8: out.append((q - 0.5, hi))
+        elif lo and q <= 0.2: out.append((0.5 - q, lo))
+    return [t for _, t in sorted(out, reverse=True)[:n]]
 
 
 def classify(f):
@@ -349,18 +369,20 @@ def build_set(sid, order, key, D):
         # raw Drive Rush counts half: a cheap, generally safe way to start pressure (1 bar, a hit if checked)
         drw = 0.5 * drk[p]['raw drive rush'] + drk[p]['pressure drive rush cancel']
         nr = sum(SP._rounds(games).values()) if games else 1
-        feats = arch_features(ab['press'] + wk['press'], ab['n'] + wk['n'], drw, jumps[p], len(ch[p]), nr, char(fchar if p == ME else oppc))
+        feats = arch_features(ab['press'] + wk['press'], ab['n'] + wk['n'], drw, jumps[p], len(ch[p]), nr, char(fchar if p == ME else oppc),
+                              len(thr[p]), len(aa[p]), dp[p])
         if ARCH and ARCH.get('deciles'):
             a, aggp, cpp = classify(feats)
         else:
             agg = rate > 0.35 or drw >= 8 or jumps[p] >= 12 or len(burn[p]) >= 2
             dfn = rate < 0.15 and dr[p] <= 3 and jumps[p] <= 4
             a = 'Aggressive' if agg and not dfn else 'Defensive' if dfn else 'Balanced'; aggp = cpp = None
-        lean = []
-        if jumps[p] >= 10: lean.append(f'air-heavy ({jumps[p]} forward jumps)')
-        if dr[p] >= 6: lean.append(f'{dr[p]} raw / pressure Drive Rushes')
-        if dp[p] >= 10: lean.append(f'{dp[p]} Drive Parries')
-        if rate > 0.35: lean.append('presses early after blocking / on wake-up')
+        lean = lean_tags(feats)
+        if not lean and not (ARCH and ARCH.get('deciles')):   # no calibration yet: the old fixed rule
+            if jumps[p] >= 10: lean.append(f'air-heavy ({jumps[p]} forward jumps)')
+            if dr[p] >= 6: lean.append(f'{dr[p]} raw / pressure Drive Rushes')
+            if dp[p] >= 10: lean.append(f'{dp[p]} Drive Parries')
+            if rate > 0.35: lean.append('presses early after blocking / on wake-up')
         conf = 'Medium' if len(games) >= 3 else 'Low'
         ev_ = (f"After blocking: {ab['press']} of {ab['n']} first actions were attacks ({ab['f0']} on the first free frame), {ab['nothing']} held still. "
                f"On wake-up: {wk['press']} of {wk['n']} were attacks. {jumps[p]} forward jumps, Drive Rush: {drk[p]['raw drive rush']} raw, {drk[p]['pressure drive rush cancel']} pressure cancels, {drk[p]['combo drive rush cancel']} combo cancels, {dp[p]} Drive Parries, {di[p]} Drive Impacts, "

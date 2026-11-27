@@ -7,7 +7,9 @@ Features per player-set, per round (quick_review_reads.arch_features):
   drive_pressure  (0.5 x raw Drive Rush + pressure Drive Rush cancels) per round
   jumps_rel       forward jumps per round minus the character's pool average (so a Cammy isn't Aggressive for being Cammy)
   counter         counter hits + punish counters per round
-Aggression = the mean of the player-set's pool percentiles on the first three. Labels:
+Aggression = the mean of the player-set's pool percentiles on the first three. Throws, anti-airs and Drive Parries per
+round are calibrated too, for the lean tags (quick_review_reads.lean_tags: where the player is in the pool's top or
+bottom 20%, up to two tags, no numbers). Labels:
   Aggressive      aggression in the pool's top 30%
   Fundamentalist  counter in the pool's top 30% and aggression below the pool's 60th percentile
   Defensive       aggression in the pool's bottom 30% (and not Fundamentalist)
@@ -63,7 +65,7 @@ def calibrate(db, dry=False, rewrite=True):
     # pass 2: deciles, then the aggression distribution for the cut points
     pool = [(k, p) for k in keys for p in raw[k] if p != me]
     dec = {}
-    for ft in ('press_rate', 'drive_pressure', 'jumps_rel', 'counter'):
+    for ft in ('press_rate', 'drive_pressure', 'jumps_rel', 'counter', 'throws', 'anti_airs', 'parries'):
         vals = [(raw[k][p][ft], wt[p]) for k, p in pool if raw[k][p][ft] is not None]
         dec[ft] = wpercentiles(vals, DECILES)
     W.ARCH = dict(deciles=dec, jump_base=jump_base, jump_base_all=jump_all, cuts=dict(aggressive=1, defensive=0, fundamentals=1, fund_max_agg=0))
