@@ -55,6 +55,7 @@ The site's separate "Commonly Used" category (92 terms: footsies, frame trap, me
 - **Raging Demon**: Akuma's cinematic grab super.
 - **Delta motion**: an old charge-super input ([1]319).
 - **Cowardcopter**: air tatsu used to fly out of the corner.
+- **Homura (焔)**: Japanese players' name for Mai's SA1 flame stocks, which power up her specials. "With Homura up" means she has stocks. English auto-captions of Japanese videos sometimes render it "home run". (Added by the player; not from Infil's glossary.)
 - **Naming swap**: Boxer = Balrog (M. Bison in Japan), Claw = Vega (Balrog in Japan), Dictator = M. Bison (Vega in Japan), Gouki = Akuma.
 
 ## Older Street Fighter mechanics (recognise only)

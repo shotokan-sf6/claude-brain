@@ -10,7 +10,7 @@ Records SF6 replays by replay ID with `<coaching folder>\tools\batch\batch_recor
 2. starts OBS recording when the match starts and stops it when the match ends,
 3. moves the video and the capture into the replays folder (`SHOTOKAN_REPLAYS`, or `<SHOTOKAN_HOME>\replays`) as `<ID>.mp4` and `<ID>.json`.
 
-IDs that already have both files are skipped. A failed ID is retried once (`--retries N` changes that), then skipped. Progress goes to `tools\batch\batch_record.log`.
+IDs that already have both files are skipped. A failed ID is retried once (`--retries N` changes that), then skipped. Progress goes to the output and `tools\batch\batch_record.log`: a `--- n/total: <ID>` line before each replay and, after each one, a progress bar (`[####----] n/total (pct%) - ok, skipped, failed; elapsed, time left`), with time left estimated from recorded replays only. When the player asks how a run is going, read the last progress line; it shows status counts only, no results.
 
 ## Rules
 - The script takes over the game (it presses keys in SF6). Run it only when the player asks to record.

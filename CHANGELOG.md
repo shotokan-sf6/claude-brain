@@ -2,6 +2,13 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 0.2.11 (2026-11-27): skills synced
+- sf6-character-notes: A.K.I. fireballs (light 52f and OD 44f only; no light / heavy rules), Sinister Slide follow-up names and the rule to name the ending.
+- sf6-fgc-glossary: Homura (Mai's SA1 flame stocks).
+- quick-review-report: corner time among the numbers to pull.
+- shared-core-review: one manifest at a time for several sets; game count as a hint; "(known: ...)" predictions.
+- batch-record-replays: the progress bar and how to read it.
+
 ## 0.2.10 (2026-11-27): corner time, batch progress bar
 - Bundled tools from shotokan-sf6/tools (2026-11-27):
     - New `corner_time.py`: seconds each player spends cornered per round (within 1.5 of the wall, opponent on the inner side, live play only). The analyzer writes `corner.json` and report.md lines; ingest stores `corner_time` and `cornered_frames` / `cornering_frames` / `active_frames` / `cornered_entries` in `set_stats` and `game_stats`; `--backfill DB` fills older sets.

@@ -84,7 +84,8 @@ Across the database (without .shog), players average about 1.25 forward jumps, 2
 ### A.K.I.
 Added 2026-11-26 from 20 Broski sets (about 2,000 MR) and 15 Zastorial sets (about 1,530 MR). Marked (suggested) until the player confirms.
 - **Move names (checked against SuperCombo inputs, 2026-11-26):**
-    - 2PP Sinister Slide (the analyzer's old "Snake Step (Akidako)"), with these follow-ups: ~P Venomous Fang, ~K Heel Strike, ~LPLK Entrapment (a grab).
+    - 2PP Sinister Slide (the analyzer's old "Snake Step (Akidako)"), with these follow-ups: ~P Venomous Fang (fireball skip), ~K Heel Strike (kicks), ~LPLK Entrapment (command grab). She can also cancel the stance without a follow-up (the player, 2026-11-27).
+    - **Rule (the player, 2026-11-27):** when a review suggests Sinister Slide for an A.K.I., always say which ending to use (Venomous Fang, Heel Strike, Entrapment or the stance cancel) and why, e.g. Venomous Fang to go under a fireball or Entrapment against someone crouch-blocking. Never write just "use Sinister Slide".
     - 236K Snake Step (the old "Cruel Fate (Jakeiko)").
     - 214K Cruel Fate (Kyosyutotu).
     - 214LP Nightshade Pulse, ~6P Nightshade Chaser; 214MP Orchid Spring; 214HP Toxic Wreath.
@@ -92,6 +93,9 @@ Added 2026-11-26 from 20 Broski sets (about 2,000 MR) and 15 Zastorial sets (abo
     - Supers: SA1 Deadly Implication, SA2 Tainted Talons, SA3 Claws of Ya Zi.
     - Treat "Snake Step" in reviews before this date as Sinister Slide.
 - (suggested) **Throws are the win condition at high level.** Broski: throws 24.6% of his damage, 1.6 a round. He threw again right after a throw 80 times in 20 sets (Zastorial: 0.7 throws a round, 8.9% of damage, 13 repeats). The shimmy (a delayed 5HK / 2LP / 5LP / 2MK on the tech or throw attempt) made 538 damage a round. Count throw-after-throw and shimmy counter-hits when reviewing an A.K.I.
+- **Her fireball is not a standard fireball (the player, 2026-11-27).** A.K.I. has only two fireballs: light Nightshade Pulse (214LP) and OD (214PP). The medium and heavy versions (214MP Orchid Spring, 214HP Toxic Wreath) aren't traditional fireballs, so the usual light / medium / heavy fireball rules (`sf6-fireball-101-exdojo`: light to react, heavy to force a commitment and end your turn) don't apply to her.
+    - **Slow startup:** the light fireball takes 52f to come out and the OD one 44f. That makes them easier than most fireballs to perfect parry or jump over on reaction (Structure note #2: well past the 12-15f reaction window), so a defender who just blocks them is giving up an answer.
+    - **What it's for:** starting offense. She uses it for fireball Drive Rush, or walks or dashes in behind it to start pressure. Judge her fireballs by what she does behind them, not as zoning.
 - (suggested) **Fireball volume:** high-level A.K.I. throws about 4 Nightshade Pulses a round (Broski 4.3, Zastorial 1.9). Fireball Drive Rush nets about +280 to +330 per use. Its follow-up after the first blocked button should be a low or a throw; a second mid strike lost 470 on average (Zastorial).
 - (suggested) **Pressure Drive Rush off blocked 5HK / 5MP** into a throw, 3MP or delayed 5LK: Broski 0.39 a round, Zastorial 0.03. 3MP opened crouch-blockers in the captures (*likely* an overhead; check the wiki's Guard column).
 - (suggested) **Sinister Slide goes under projectiles:** Hadoken, Tiger Shot, Breathing Ring, Sun Shot (Broski: 14,366 vs Arjun). Entrapment beats crouch-blocking (Zastorial 6.5% of his damage; the A.K.I. mirror took 12,896 off Broski with it). Drive Rush and Drive Impact catch a predictable slide.

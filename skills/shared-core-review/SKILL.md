@@ -39,6 +39,9 @@ Review and analyze games in the order they were played, not recorded, unless the
 ## 4. Prediction first (always)
 Before opening any capture, analyzer output or video of a set, write the pre-set prediction with `replay-review-prediction`, even when the player doesn't ask:
 1. `python tools\shared_core_blind_manifest.py <first game played> --out manifest.json` (first game's header only).
+   - **Several sets: one manifest at a time.** Build each set's manifest right before writing its prediction, never a batch for the whole session: each manifest carries the player's MR before that set, so a later set's manifest gives away the result of every set before it (2026-11-24 ranked session). Process the sets in played order: manifest, prediction stored, analyzer, ingest, then the next set.
+   - The number of games in a set is itself a hint (an FT2 that went 2 games was a sweep); say so in the prediction's `seen_before_writing`.
+   - If a result was seen before the prediction anyway, still write it, mark `predicted` with "(known: ...)" so accuracy counts leave it out.
 2. `python tools\shared_core_db.py history DB --opp NAME|CFN --opp-char C --my-char C --before <first game's time>` for pre-set history (only earlier sets).
 3. Write prediction.json and store it with `python tools\shared_core_db.py predict DB prediction.json` before the analyzer runs. It can't be changed once the set is ingested.
 
