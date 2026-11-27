@@ -63,5 +63,253 @@
   "j.214214P": -26,
   "236236P": -35
  },
- "aliases": {}
+ "aliases": {},
+ "frames": {
+  "5LP": [
+   5,
+   2,
+   8
+  ],
+  "5MP": [
+   6,
+   3,
+   18
+  ],
+  "5HP": [
+   9,
+   3,
+   20
+  ],
+  "5LK": [
+   5,
+   3,
+   11
+  ],
+  "5MK": [
+   8,
+   3,
+   18
+  ],
+  "5HK": [
+   12,
+   4,
+   17
+  ],
+  "2LP": [
+   4,
+   3,
+   7
+  ],
+  "2MP": [
+   6,
+   3,
+   13
+  ],
+  "2HP": [
+   8,
+   6,
+   17
+  ],
+  "2LK": [
+   5,
+   3,
+   7
+  ],
+  "2MK": [
+   7,
+   3,
+   16
+  ],
+  "2HK": [
+   8,
+   3,
+   24
+  ],
+  "3MK": [
+   11,
+   10,
+   16
+  ],
+  "4HK": [
+   22,
+   2,
+   19
+  ],
+  "LPLK": [
+   5,
+   3,
+   23
+  ],
+  "4LPLK": [
+   5,
+   3,
+   23
+  ]
+ },
+ "frames_note": "frames: wiki Startup / Active / Recovery for ground normals and throws (LPLK), pulled 2026-11-27. Startup = first number, active = all active frames including gaps (recovery starts after the last), recovery = first number. Hold moves use the unheld startup.",
+ "reach": {
+  "2HK": [
+   1.94,
+   1.94,
+   6
+  ],
+  "2HP": [
+   0.97,
+   0.97,
+   9
+  ],
+  "2LK": [
+   1.41,
+   1.47,
+   22
+  ],
+  "2LP": [
+   1.23,
+   1.39,
+   61
+  ],
+  "2MK": [
+   1.45,
+   1.48,
+   22
+  ],
+  "2MP": [
+   1.48,
+   2.07,
+   21
+  ],
+  "3MK": [
+   1.56,
+   1.68,
+   25
+  ],
+  "4HK": [
+   1.31,
+   1.31,
+   10
+  ],
+  "5HK": [
+   0.71,
+   0.81,
+   22
+  ],
+  "5HP": [
+   1.39,
+   1.48,
+   86
+  ],
+  "5LK": [
+   1.4,
+   1.43,
+   11
+  ],
+  "5LP": [
+   0.99,
+   0.99,
+   2
+  ],
+  "5MK": [
+   1.52,
+   1.58,
+   47
+  ],
+  "5MP": [
+   1.09,
+   1.22,
+   44
+  ],
+  "6HK": [
+   0.99,
+   0.99,
+   7
+  ],
+  "8HK": [
+   1.42,
+   1.42,
+   7
+  ],
+  "8HP": [
+   1.07,
+   1.07,
+   6
+  ],
+  "8LK": [
+   0.42,
+   0.42,
+   4
+  ],
+  "8MK": [
+   0.7,
+   1.33,
+   11
+  ]
+ },
+ "reach_note": "reach: posX distance (centre to centre) when the normal made contact (hit or block), [90th percentile, max, contacts], measured by whiff_reach.py from 720 captures. reach_vs_move: the same, only hits on an opponent who was attacking (their limb out, as when whiff punishing)",
+ "reach_vs_move": {
+  "2LP": [
+   1.15,
+   1.15,
+   9
+  ],
+  "2MK": [
+   0.99,
+   0.99,
+   1
+  ],
+  "2MP": [
+   2.07,
+   2.07,
+   5
+  ],
+  "4HK": [
+   0.7,
+   0.7,
+   1
+  ],
+  "5HK": [
+   0.7,
+   0.7,
+   1
+  ],
+  "5HP": [
+   1.48,
+   1.48,
+   6
+  ],
+  "5LK": [
+   1.19,
+   1.19,
+   2
+  ],
+  "5MK": [
+   1.56,
+   1.56,
+   11
+  ],
+  "5MP": [
+   1.07,
+   1.07,
+   2
+  ],
+  "6HK": [
+   0.75,
+   0.75,
+   1
+  ],
+  "8HP": [
+   0.7,
+   0.7,
+   1
+  ],
+  "8LK": [
+   0.05,
+   0.05,
+   1
+  ],
+  "8MK": [
+   0.58,
+   0.58,
+   4
+  ]
+ }
 }

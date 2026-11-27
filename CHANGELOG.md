@@ -2,6 +2,10 @@
 
 Notable changes to the SHOTOKAN Claude plugin, newest first. Every push adds its changes here.
 
+## 0.2.16 (2026-11-27): whiff punishes
+- Bundled tools: new analyzer step `shared_core_whiffs.py` (whiffed ground normals and throws, recovery window, distance, punished or missed; a chance needs 15+ frames, the punisher free and in reach), `whiff_windows` table and whiff stats in `shared_core_db.py`, new `whiff_reach.py`; frame data gains startup / active / recovery for all 32 characters and measured button reach.
+- quick-review-report, full-review-report: whiff punishes. sf6-coach-shog: whiff punishes need a 15-frame window.
+
 ## 0.2.15 (2026-11-27): lean tags
 - Bundled tools: generated reads' lean is up to two number-free tags from pool percentiles (Drive Rush pressure, stays grounded, counter-pokes and punishes, throw-heavy and so on).
 

@@ -56,6 +56,7 @@ How to apply it in a review:
 2. A move in the 15-25 frame range, such as a Drive Impact, a slow overhead or a jump from far, is reactable only if the player was looking for it. Say whether they had reason to expect it (shown habit, situation) or were juggling several threats.
 3. When a player misses a reactable answer, check how many options the opponent had shown in that situation. If they were stacked, judge it as a mental-stack problem: narrow what to look for, rather than "react faster".
 4. Sound cues (e.g. a Drive Rush or Drive Impact sound) are about 2-5 frames faster than sight. Mention them when they would help.
+5. **Whiff punishes need a recovery window of at least 15 frames** (2026-11-27). Players can't reliably whiff punish lights or fast mediums on reaction. When one gets punished anyway, it came from a spacing trap or a pre-pressed button, not a reaction, so never list a shorter window as a missed whiff punish. The analyzer's "Whiff punishes" section (`tools\shared_core_whiffs.py`) applies this.
 
 ## Structure note #3: conditioning, and whether the player knows they're doing it
 Every repeated action teaches the opponent something. Most of it is involuntary: players react to cues they've been hit by before (classical conditioning: a walk-up after a knockdown starts to trigger a tech by itself), and they do more of what paid off and less of what got punished (operant conditioning). Conditioning fades when it stops being reinforced (an unpunished habit grows back) and returns under pressure even after it seemed gone.

@@ -50,5 +50,238 @@
  },
  "aliases": {
   "Air Knee Smash": "623?K"
+ },
+ "frames": {
+  "2HK": [
+   10,
+   3,
+   26
+  ],
+  "2HP": [
+   9,
+   6,
+   22
+  ],
+  "2LK": [
+   5,
+   3,
+   11
+  ],
+  "2LP": [
+   5,
+   3,
+   8
+  ],
+  "2LPLK": [
+   5,
+   3,
+   23
+  ],
+  "2MK": [
+   8,
+   3,
+   18
+  ],
+  "2MP": [
+   8,
+   2,
+   16
+  ],
+  "4LPLK": [
+   5,
+   3,
+   23
+  ],
+  "4MK": [
+   7,
+   3,
+   15
+  ],
+  "5HK": [
+   16,
+   3,
+   23
+  ],
+  "5HP": [
+   12,
+   5,
+   19
+  ],
+  "5LK": [
+   6,
+   2,
+   13
+  ],
+  "5LP": [
+   4,
+   2,
+   9
+  ],
+  "5MK": [
+   9,
+   3,
+   19
+  ],
+  "5MP": [
+   7,
+   4,
+   14
+  ],
+  "6MP": [
+   22,
+   2,
+   19
+  ],
+  "LPLK": [
+   5,
+   3,
+   23
+  ]
+ },
+ "frames_note": "frames: wiki Startup / Active / Recovery for ground normals and throws (LPLK), pulled 2026-11-27. Startup = first number, active = all active frames including gaps (recovery starts after the last), recovery = first number. Hold moves use the unheld startup.",
+ "reach": {
+  "2HK": [
+   1.6,
+   1.6,
+   2
+  ],
+  "2HP": [
+   1.03,
+   1.09,
+   12
+  ],
+  "2LK": [
+   1.65,
+   1.8,
+   16
+  ],
+  "2LP": [
+   1.58,
+   1.63,
+   12
+  ],
+  "2MK": [
+   1.69,
+   1.69,
+   7
+  ],
+  "2MP": [
+   1.53,
+   1.69,
+   15
+  ],
+  "4MK": [
+   1.07,
+   1.07,
+   9
+  ],
+  "5HK": [
+   1.65,
+   1.72,
+   19
+  ],
+  "5HP": [
+   1.71,
+   1.72,
+   14
+  ],
+  "5LK": [
+   1.6,
+   1.63,
+   13
+  ],
+  "5LP": [
+   1.29,
+   1.37,
+   25
+  ],
+  "5MK": [
+   1.89,
+   1.89,
+   2
+  ],
+  "5MP": [
+   1.53,
+   1.61,
+   31
+  ],
+  "8HK": [
+   1.52,
+   1.52,
+   6
+  ],
+  "8HP": [
+   1.42,
+   1.42,
+   4
+  ],
+  "8LK": [
+   0.73,
+   0.86,
+   11
+  ],
+  "8MK": [
+   1.63,
+   1.63,
+   5
+  ]
+ },
+ "reach_note": "reach: posX distance (centre to centre) when the normal made contact (hit or block), [90th percentile, max, contacts], measured by whiff_reach.py from 720 captures. reach_vs_move: the same, only hits on an opponent who was attacking (their limb out, as when whiff punishing)",
+ "reach_vs_move": {
+  "2LK": [
+   1.8,
+   1.8,
+   7
+  ],
+  "2LP": [
+   1.51,
+   1.51,
+   1
+  ],
+  "2MP": [
+   0.8,
+   0.8,
+   2
+  ],
+  "4MK": [
+   0.79,
+   0.79,
+   2
+  ],
+  "5HK": [
+   1.65,
+   1.65,
+   1
+  ],
+  "5HP": [
+   1.63,
+   1.63,
+   2
+  ],
+  "5LK": [
+   0.75,
+   0.75,
+   1
+  ],
+  "5LP": [
+   1.31,
+   1.31,
+   9
+  ],
+  "5MP": [
+   1.53,
+   1.53,
+   5
+  ],
+  "8HP": [
+   0.25,
+   0.25,
+   1
+  ],
+  "8LK": [
+   0.68,
+   0.68,
+   4
+  ]
  }
 }

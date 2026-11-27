@@ -75,5 +75,228 @@
   "Gou Shoryuken": "623?P",
   "Adamant Flame": "214?P",
   "Tatsumaki Zanku-Kyaku": "214?K"
+ },
+ "frames": {
+  "2HK": [
+   9,
+   3,
+   23
+  ],
+  "2HP": [
+   8,
+   8,
+   19
+  ],
+  "2LK": [
+   5,
+   2,
+   10
+  ],
+  "2LP": [
+   4,
+   2,
+   9
+  ],
+  "2MK": [
+   8,
+   3,
+   19
+  ],
+  "2MP": [
+   6,
+   3,
+   14
+  ],
+  "4HK": [
+   12,
+   5,
+   27
+  ],
+  "4LPLK": [
+   5,
+   3,
+   23
+  ],
+  "5HK": [
+   13,
+   15,
+   15
+  ],
+  "5HP": [
+   9,
+   5,
+   18
+  ],
+  "5LK": [
+   5,
+   3,
+   11
+  ],
+  "5LP": [
+   4,
+   3,
+   7
+  ],
+  "5MK": [
+   7,
+   5,
+   15
+  ],
+  "5MP": [
+   6,
+   4,
+   11
+  ],
+  "6HP": [
+   13,
+   4,
+   20
+  ],
+  "6MK": [
+   10,
+   3,
+   15
+  ],
+  "6MP": [
+   20,
+   5,
+   18
+  ],
+  "LPLK": [
+   5,
+   3,
+   23
+  ]
+ },
+ "frames_note": "frames: wiki Startup / Active / Recovery for ground normals and throws (LPLK), pulled 2026-11-27. Startup = first number, active = all active frames including gaps (recovery starts after the last), recovery = first number. Hold moves use the unheld startup.",
+ "reach": {
+  "2HK": [
+   1.32,
+   1.32,
+   1
+  ],
+  "2HP": [
+   0.7,
+   0.7,
+   1
+  ],
+  "2LK": [
+   1.13,
+   1.35,
+   13
+  ],
+  "2LP": [
+   1.38,
+   1.64,
+   36
+  ],
+  "2MK": [
+   1.27,
+   1.3,
+   25
+  ],
+  "2MP": [
+   1.61,
+   1.67,
+   31
+  ],
+  "4HK": [
+   0.7,
+   0.7,
+   1
+  ],
+  "5HK": [
+   0.7,
+   0.7,
+   1
+  ],
+  "5HP": [
+   1.4,
+   1.54,
+   25
+  ],
+  "5LK": [
+   1.42,
+   1.5,
+   33
+  ],
+  "5LP": [
+   1.33,
+   1.38,
+   12
+  ],
+  "5MP": [
+   1.19,
+   1.3,
+   27
+  ],
+  "6HP": [
+   1.43,
+   1.48,
+   14
+  ],
+  "6MK": [
+   1.64,
+   1.64,
+   8
+  ],
+  "6MP": [
+   1.44,
+   1.44,
+   4
+  ],
+  "8HP": [
+   1.42,
+   1.42,
+   1
+  ],
+  "8LK": [
+   0.5,
+   0.5,
+   1
+  ],
+  "8MK": [
+   0.6,
+   0.6,
+   2
+  ]
+ },
+ "reach_note": "reach: posX distance (centre to centre) when the normal made contact (hit or block), [90th percentile, max, contacts], measured by whiff_reach.py from 720 captures. reach_vs_move: the same, only hits on an opponent who was attacking (their limb out, as when whiff punishing)",
+ "reach_vs_move": {
+  "2LP": [
+   1.64,
+   1.64,
+   7
+  ],
+  "2MK": [
+   1.12,
+   1.12,
+   2
+  ],
+  "2MP": [
+   1.6,
+   1.67,
+   11
+  ],
+  "5HP": [
+   1.08,
+   1.08,
+   4
+  ],
+  "5LK": [
+   1.43,
+   1.5,
+   15
+  ],
+  "5LP": [
+   1.33,
+   1.33,
+   4
+  ],
+  "6HP": [
+   1.36,
+   1.36,
+   3
+  ]
  }
 }

@@ -53,5 +53,243 @@
   "214214P": -29,
   "214214K": -38
  },
- "aliases": {}
+ "aliases": {},
+ "frames": {
+  "2HK": [
+   10,
+   3,
+   25
+  ],
+  "2HP": [
+   9,
+   3,
+   20
+  ],
+  "2LK": [
+   5,
+   2,
+   9
+  ],
+  "2LP": [
+   4,
+   3,
+   8
+  ],
+  "2MK": [
+   8,
+   3,
+   17
+  ],
+  "2MP": [
+   6,
+   4,
+   16
+  ],
+  "4LPLK": [
+   5,
+   3,
+   23
+  ],
+  "5HK": [
+   10,
+   4,
+   20
+  ],
+  "5HP": [
+   12,
+   3,
+   21
+  ],
+  "5LK": [
+   5,
+   3,
+   11
+  ],
+  "5LP": [
+   4,
+   3,
+   8
+  ],
+  "5MK": [
+   8,
+   3,
+   18
+  ],
+  "5MP": [
+   8,
+   4,
+   12
+  ],
+  "6HK": [
+   11,
+   21,
+   16
+  ],
+  "6MP": [
+   22,
+   3,
+   20
+  ],
+  "LPLK": [
+   5,
+   3,
+   23
+  ]
+ },
+ "frames_note": "frames: wiki Startup / Active / Recovery for ground normals and throws (LPLK), pulled 2026-11-27. Startup = first number, active = all active frames including gaps (recovery starts after the last), recovery = first number. Hold moves use the unheld startup.",
+ "reach": {
+  "2HP": [
+   1.33,
+   1.43,
+   47
+  ],
+  "2LK": [
+   1.25,
+   1.37,
+   22
+  ],
+  "2LP": [
+   1.33,
+   1.54,
+   61
+  ],
+  "2MK": [
+   1.61,
+   1.82,
+   87
+  ],
+  "2MP": [
+   1.57,
+   1.81,
+   38
+  ],
+  "5HK": [
+   0.86,
+   0.86,
+   1
+  ],
+  "5HP": [
+   1.27,
+   1.36,
+   45
+  ],
+  "5LK": [
+   1.61,
+   1.61,
+   30
+  ],
+  "5LP": [
+   1.47,
+   1.47,
+   7
+  ],
+  "5MK": [
+   1.72,
+   1.9,
+   36
+  ],
+  "5MP": [
+   1.18,
+   1.33,
+   38
+  ],
+  "6HK": [
+   1.47,
+   1.48,
+   11
+  ],
+  "6MP": [
+   0.7,
+   0.7,
+   1
+  ],
+  "8HK": [
+   0.82,
+   0.82,
+   8
+  ],
+  "8HP": [
+   1.36,
+   1.36,
+   4
+  ],
+  "8MK": [
+   1.19,
+   1.19,
+   5
+  ]
+ },
+ "reach_note": "reach: posX distance (centre to centre) when the normal made contact (hit or block), [90th percentile, max, contacts], measured by whiff_reach.py from 720 captures. reach_vs_move: the same, only hits on an opponent who was attacking (their limb out, as when whiff punishing)",
+ "reach_vs_move": {
+  "2HP": [
+   1.06,
+   1.06,
+   2
+  ],
+  "2LK": [
+   1.25,
+   1.25,
+   3
+  ],
+  "2LP": [
+   1.36,
+   1.54,
+   17
+  ],
+  "2MK": [
+   1.66,
+   1.72,
+   14
+  ],
+  "2MP": [
+   1.81,
+   1.81,
+   9
+  ],
+  "5HP": [
+   1.01,
+   1.01,
+   4
+  ],
+  "5LK": [
+   1.61,
+   1.61,
+   8
+  ],
+  "5LP": [
+   1.47,
+   1.47,
+   2
+  ],
+  "5MK": [
+   1.9,
+   1.9,
+   5
+  ],
+  "5MP": [
+   1.14,
+   1.14,
+   4
+  ],
+  "6HK": [
+   1.48,
+   1.48,
+   1
+  ],
+  "8HK": [
+   0.11,
+   0.11,
+   2
+  ],
+  "8HP": [
+   1.08,
+   1.08,
+   1
+  ],
+  "8MK": [
+   0.64,
+   0.64,
+   2
+  ]
+ }
 }

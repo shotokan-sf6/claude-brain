@@ -64,5 +64,278 @@
   "214214P": -29,
   "236236K": -42
  },
- "aliases": {}
+ "aliases": {},
+ "frames": {
+  "5LP": [
+   7,
+   2,
+   11
+  ],
+  "5MP": [
+   9,
+   4,
+   16
+  ],
+  "5HP": [
+   10,
+   3,
+   23
+  ],
+  "5LK": [
+   5,
+   2,
+   12
+  ],
+  "5MK": [
+   8,
+   3,
+   16
+  ],
+  "5HK": [
+   10,
+   7,
+   16
+  ],
+  "2LP": [
+   4,
+   2,
+   10
+  ],
+  "2MP": [
+   6,
+   3,
+   13
+  ],
+  "2HP": [
+   7,
+   5,
+   24
+  ],
+  "2LK": [
+   5,
+   3,
+   11
+  ],
+  "2MK": [
+   8,
+   3,
+   19
+  ],
+  "2HK": [
+   10,
+   3,
+   24
+  ],
+  "6MP": [
+   21,
+   2,
+   21
+  ],
+  "4HP": [
+   16,
+   3,
+   20
+  ],
+  "4HK": [
+   12,
+   4,
+   24
+  ],
+  "6HP": [
+   16,
+   3,
+   15
+  ],
+  "LPLK": [
+   5,
+   3,
+   23
+  ],
+  "4LPLK": [
+   5,
+   3,
+   23
+  ]
+ },
+ "frames_note": "frames: wiki Startup / Active / Recovery for ground normals and throws (LPLK), pulled 2026-11-27. Startup = first number, active = all active frames including gaps (recovery starts after the last), recovery = first number. Hold moves use the unheld startup.",
+ "reach": {
+  "2HK": [
+   1.55,
+   1.55,
+   2
+  ],
+  "2HP": [
+   1.18,
+   1.18,
+   1
+  ],
+  "2LK": [
+   1.27,
+   1.44,
+   19
+  ],
+  "2LP": [
+   1.47,
+   1.53,
+   98
+  ],
+  "2MK": [
+   1.5,
+   1.68,
+   49
+  ],
+  "2MP": [
+   1.58,
+   1.87,
+   94
+  ],
+  "4HK": [
+   0.7,
+   0.7,
+   7
+  ],
+  "4HP": [
+   1.22,
+   1.22,
+   6
+  ],
+  "5HK": [
+   1.43,
+   1.59,
+   18
+  ],
+  "5HP": [
+   1.26,
+   1.41,
+   51
+  ],
+  "5LK": [
+   1.64,
+   1.65,
+   21
+  ],
+  "5LP": [
+   1.37,
+   1.47,
+   24
+  ],
+  "5MK": [
+   1.41,
+   1.45,
+   16
+  ],
+  "5MP": [
+   1.35,
+   1.36,
+   12
+  ],
+  "6HP": [
+   0.98,
+   1.28,
+   13
+  ],
+  "6MP": [
+   0.75,
+   0.75,
+   4
+  ],
+  "8HK": [
+   1.36,
+   1.59,
+   15
+  ],
+  "8HP": [
+   0.93,
+   0.93,
+   9
+  ],
+  "8LK": [
+   0.22,
+   0.22,
+   2
+  ],
+  "8MK": [
+   0.53,
+   0.53,
+   7
+  ]
+ },
+ "reach_note": "reach: posX distance (centre to centre) when the normal made contact (hit or block), [90th percentile, max, contacts], measured by whiff_reach.py from 720 captures. reach_vs_move: the same, only hits on an opponent who was attacking (their limb out, as when whiff punishing)",
+ "reach_vs_move": {
+  "2LK": [
+   0.86,
+   0.86,
+   1
+  ],
+  "2LP": [
+   1.41,
+   1.53,
+   16
+  ],
+  "2MK": [
+   1.57,
+   1.68,
+   17
+  ],
+  "2MP": [
+   1.66,
+   1.87,
+   20
+  ],
+  "4HP": [
+   1.22,
+   1.22,
+   2
+  ],
+  "5HK": [
+   0.81,
+   0.81,
+   2
+  ],
+  "5HP": [
+   1.41,
+   1.41,
+   6
+  ],
+  "5LK": [
+   1.65,
+   1.65,
+   4
+  ],
+  "5LP": [
+   1.26,
+   1.26,
+   6
+  ],
+  "5MK": [
+   1.17,
+   1.17,
+   4
+  ],
+  "5MP": [
+   1.36,
+   1.36,
+   3
+  ],
+  "6HP": [
+   1.28,
+   1.28,
+   1
+  ],
+  "8HK": [
+   1.36,
+   1.36,
+   5
+  ],
+  "8HP": [
+   0.7,
+   0.7,
+   3
+  ],
+  "8MK": [
+   0.0,
+   0.0,
+   1
+  ]
+ }
 }

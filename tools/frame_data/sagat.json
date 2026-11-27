@@ -71,5 +71,273 @@
   "Tiger Uppercut": "623?P",
   "Tiger Knee Crush": "236?K",
   "Tiger Nexus": "214?K"
+ },
+ "frames": {
+  "5LP": [
+   5,
+   3,
+   11
+  ],
+  "5MP": [
+   6,
+   4,
+   15
+  ],
+  "5HP": [
+   15,
+   4,
+   22
+  ],
+  "5LK": [
+   7,
+   2,
+   15
+  ],
+  "5MK": [
+   11,
+   4,
+   19
+  ],
+  "5HK": [
+   10,
+   6,
+   21
+  ],
+  "2LP": [
+   4,
+   2,
+   10
+  ],
+  "2MP": [
+   7,
+   3,
+   16
+  ],
+  "2HP": [
+   11,
+   4,
+   21
+  ],
+  "2LK": [
+   5,
+   3,
+   12
+  ],
+  "2MK": [
+   9,
+   3,
+   18
+  ],
+  "2HK": [
+   11,
+   3,
+   26
+  ],
+  "6MP": [
+   22,
+   3,
+   19
+  ],
+  "4HP": [
+   8,
+   8,
+   25
+  ],
+  "6LK": [
+   18,
+   3,
+   18
+  ],
+  "6HK": [
+   16,
+   4,
+   21
+  ],
+  "LPLK": [
+   5,
+   3,
+   23
+  ],
+  "4LPLK": [
+   5,
+   3,
+   23
+  ]
+ },
+ "frames_note": "frames: wiki Startup / Active / Recovery for ground normals and throws (LPLK), pulled 2026-11-27. Startup = first number, active = all active frames including gaps (recovery starts after the last), recovery = first number. Hold moves use the unheld startup.",
+ "reach": {
+  "2HP": [
+   1.8,
+   1.91,
+   68
+  ],
+  "2LK": [
+   1.46,
+   1.8,
+   52
+  ],
+  "2LP": [
+   1.55,
+   1.67,
+   130
+  ],
+  "2MK": [
+   1.95,
+   2.23,
+   116
+  ],
+  "2MP": [
+   1.73,
+   2.0,
+   191
+  ],
+  "5HK": [
+   0.99,
+   0.99,
+   4
+  ],
+  "5HP": [
+   1.54,
+   1.74,
+   67
+  ],
+  "5LK": [
+   1.7,
+   2.01,
+   48
+  ],
+  "5LP": [
+   1.66,
+   1.73,
+   83
+  ],
+  "5MK": [
+   1.87,
+   1.96,
+   49
+  ],
+  "5MP": [
+   1.24,
+   1.38,
+   232
+  ],
+  "6HK": [
+   1.07,
+   1.07,
+   6
+  ],
+  "6LK": [
+   1.39,
+   1.56,
+   132
+  ],
+  "6MP": [
+   1.11,
+   1.23,
+   38
+  ],
+  "8HK": [
+   1.2,
+   1.2,
+   3
+  ],
+  "8HP": [
+   1.34,
+   1.46,
+   24
+  ],
+  "8LK": [
+   0.6,
+   0.6,
+   6
+  ],
+  "8MK": [
+   1.8,
+   1.85,
+   19
+  ]
+ },
+ "reach_note": "reach: posX distance (centre to centre) when the normal made contact (hit or block), [90th percentile, max, contacts], measured by whiff_reach.py from 720 captures. reach_vs_move: the same, only hits on an opponent who was attacking (their limb out, as when whiff punishing)",
+ "reach_vs_move": {
+  "2HP": [
+   1.77,
+   1.77,
+   8
+  ],
+  "2LK": [
+   1.8,
+   1.8,
+   4
+  ],
+  "2LP": [
+   1.55,
+   1.66,
+   27
+  ],
+  "2MK": [
+   1.92,
+   1.95,
+   12
+  ],
+  "2MP": [
+   1.75,
+   1.92,
+   34
+  ],
+  "5HP": [
+   1.49,
+   1.53,
+   13
+  ],
+  "5LK": [
+   1.68,
+   1.7,
+   14
+  ],
+  "5LP": [
+   1.63,
+   1.63,
+   8
+  ],
+  "5MK": [
+   1.67,
+   1.82,
+   12
+  ],
+  "5MP": [
+   1.15,
+   1.25,
+   18
+  ],
+  "6HK": [
+   0.75,
+   0.75,
+   1
+  ],
+  "6LK": [
+   0.88,
+   1.15,
+   16
+  ],
+  "6MP": [
+   1.08,
+   1.08,
+   1
+  ],
+  "8HP": [
+   1.01,
+   1.01,
+   5
+  ],
+  "8LK": [
+   0.6,
+   0.6,
+   3
+  ],
+  "8MK": [
+   1.85,
+   1.85,
+   4
+  ]
  }
 }

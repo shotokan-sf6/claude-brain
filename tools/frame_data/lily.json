@@ -60,5 +60,178 @@
   "236236K": -60,
   "j.236236K": -54
  },
- "aliases": {}
+ "aliases": {},
+ "frames": {
+  "5LP": [
+   5,
+   3,
+   8
+  ],
+  "5MP": [
+   9,
+   4,
+   17
+  ],
+  "5HP": [
+   10,
+   3,
+   22
+  ],
+  "5LK": [
+   4,
+   3,
+   8
+  ],
+  "5MK": [
+   7,
+   3,
+   15
+  ],
+  "5HK": [
+   14,
+   4,
+   21
+  ],
+  "2LP": [
+   6,
+   3,
+   8
+  ],
+  "2MP": [
+   8,
+   3,
+   18
+  ],
+  "2HP": [
+   10,
+   6,
+   22
+  ],
+  "2LK": [
+   5,
+   2,
+   12
+  ],
+  "2MK": [
+   9,
+   3,
+   18
+  ],
+  "2HK": [
+   11,
+   10,
+   24
+  ],
+  "6HP": [
+   16,
+   2,
+   24
+  ],
+  "3HP": [
+   25,
+   3,
+   18
+  ],
+  "4HP": [
+   14,
+   4,
+   18
+  ],
+  "LPLK": [
+   5,
+   3,
+   23
+  ],
+  "4LPLK": [
+   5,
+   3,
+   23
+  ]
+ },
+ "frames_note": "frames: wiki Startup / Active / Recovery for ground normals and throws (LPLK), pulled 2026-11-27. Startup = first number, active = all active frames including gaps (recovery starts after the last), recovery = first number. Hold moves use the unheld startup.",
+ "reach": {
+  "2HP": [
+   1.94,
+   1.94,
+   5
+  ],
+  "2LK": [
+   1.35,
+   1.35,
+   4
+  ],
+  "2LP": [
+   1.78,
+   1.89,
+   12
+  ],
+  "4HP": [
+   1.87,
+   1.87,
+   2
+  ],
+  "5HP": [
+   1.71,
+   1.71,
+   1
+  ],
+  "5LK": [
+   0.99,
+   0.99,
+   4
+  ],
+  "5LP": [
+   1.66,
+   1.66,
+   4
+  ],
+  "5MK": [
+   1.31,
+   1.31,
+   2
+  ],
+  "5MP": [
+   1.75,
+   1.75,
+   2
+  ],
+  "6MP": [
+   1.24,
+   1.24,
+   1
+  ],
+  "8MK": [
+   0.37,
+   0.37,
+   1
+  ]
+ },
+ "reach_note": "reach: posX distance (centre to centre) when the normal made contact (hit or block), [90th percentile, max, contacts], measured by whiff_reach.py from 720 captures. reach_vs_move: the same, only hits on an opponent who was attacking (their limb out, as when whiff punishing)",
+ "reach_vs_move": {
+  "2HP": [
+   1.8,
+   1.8,
+   2
+  ],
+  "2LP": [
+   1.89,
+   1.89,
+   2
+  ],
+  "4HP": [
+   1.79,
+   1.79,
+   1
+  ],
+  "5MK": [
+   1.31,
+   1.31,
+   1
+  ],
+  "8MK": [
+   0.37,
+   0.37,
+   1
+  ]
+ }
 }

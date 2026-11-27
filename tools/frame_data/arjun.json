@@ -51,5 +51,198 @@
   "214214P": -41,
   "236236P": -41
  },
- "aliases": {}
+ "aliases": {},
+ "frames": {
+  "2HK": [
+   14,
+   3,
+   25
+  ],
+  "2HP": [
+   10,
+   7,
+   22
+  ],
+  "2LK": [
+   5,
+   3,
+   12
+  ],
+  "2LP": [
+   5,
+   3,
+   9
+  ],
+  "2MK": [
+   8,
+   3,
+   18
+  ],
+  "2MP": [
+   9,
+   3,
+   22
+  ],
+  "4LPLK": [
+   5,
+   3,
+   23
+  ],
+  "5HK": [
+   14,
+   4,
+   21
+  ],
+  "5HP": [
+   15,
+   2,
+   24
+  ],
+  "5LK": [
+   6,
+   3,
+   14
+  ],
+  "5LP": [
+   4,
+   3,
+   9
+  ],
+  "5MK": [
+   7,
+   3,
+   19
+  ],
+  "5MP": [
+   11,
+   3,
+   19
+  ],
+  "6HK": [
+   19,
+   3,
+   21
+  ],
+  "6HP": [
+   22,
+   3,
+   21
+  ],
+  "LPLK": [
+   5,
+   3,
+   23
+  ]
+ },
+ "frames_note": "frames: wiki Startup / Active / Recovery for ground normals and throws (LPLK), pulled 2026-11-27. Startup = first number, active = all active frames including gaps (recovery starts after the last), recovery = first number. Hold moves use the unheld startup.",
+ "reach": {
+  "2HK": [
+   1.24,
+   1.24,
+   3
+  ],
+  "2HP": [
+   1.01,
+   1.23,
+   11
+  ],
+  "2LK": [
+   1.55,
+   1.69,
+   24
+  ],
+  "2LP": [
+   1.69,
+   1.78,
+   80
+  ],
+  "2MK": [
+   1.57,
+   1.81,
+   21
+  ],
+  "2MP": [
+   1.54,
+   1.54,
+   10
+  ],
+  "5LK": [
+   1.58,
+   1.76,
+   25
+  ],
+  "5LP": [
+   1.38,
+   1.42,
+   30
+  ],
+  "5MK": [
+   1.34,
+   1.34,
+   5
+  ],
+  "5MP": [
+   1.68,
+   2.51,
+   74
+  ],
+  "8HP": [
+   1.21,
+   1.28,
+   18
+  ],
+  "8LK": [
+   1.25,
+   1.25,
+   5
+  ],
+  "8MK": [
+   1.71,
+   1.71,
+   9
+  ]
+ },
+ "reach_note": "reach: posX distance (centre to centre) when the normal made contact (hit or block), [90th percentile, max, contacts], measured by whiff_reach.py from 720 captures. reach_vs_move: the same, only hits on an opponent who was attacking (their limb out, as when whiff punishing)",
+ "reach_vs_move": {
+  "2LK": [
+   1.68,
+   1.68,
+   1
+  ],
+  "2LP": [
+   1.76,
+   1.78,
+   16
+  ],
+  "2MK": [
+   1.81,
+   1.81,
+   3
+  ],
+  "5LK": [
+   1.58,
+   1.58,
+   6
+  ],
+  "5LP": [
+   1.36,
+   1.36,
+   9
+  ],
+  "5MP": [
+   2.39,
+   2.39,
+   6
+  ],
+  "8HP": [
+   0.72,
+   0.72,
+   4
+  ],
+  "8MK": [
+   1.04,
+   1.04,
+   1
+  ]
+ }
 }

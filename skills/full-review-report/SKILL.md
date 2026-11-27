@@ -37,6 +37,7 @@ WebFetch is blocked by the wiki's bot check. Use the built-in browser (load the 
 - To compare players' decisions (where they press, which buttons, what it leads to), run `python tools\full_review_decision_presses.py DB --player NAME[,ALIAS] ... [--char C]`.
 - Run the report checks in `full-review-report-checks.md`: standard opponent checks, missed anti-airs and Drive Rush checks, covering the whole match, where the player gets hit, where the player deals damage.
 - Missed punishes: go through every close punish window the player didn't punish (report.md "Block punish windows"). Give the move, its block advantage, the player's best punish at that range from their character's frame data, and what they did instead. A Drive Parry after blocking a DP or another big-recovery move is a missed punish, not a defensive choice.
+- Missed whiff punishes: report.md "Whiff punishes" lists each chance (window >= 15 frames, punisher free, in reach). Check the misses on video before writing them up (reach is approximate), and say whether the player was waiting for the whiff (shimmy / walk-back spacing, a reaction they could have had) or busy thinking about something else (Structure note #2's mental stack).
 
 ## 4. Judge decisions: chess or poker?
 - **Chess** decisions have a stock best answer (the optimal punish, spending everything when it kills, the combo route, the on-paper answer in a rare spot): give the answer and say plainly when it was missed.
